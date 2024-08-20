@@ -8,6 +8,7 @@ import { GestionCandidatosComponent } from './components/gestion-candidatos/gest
 import { GestionEleccionComponent } from './components/gestion-eleccion/gestion-eleccion.component';
 import { GestionUsuariosComponent } from './components/gestion-usuarios/gestion-usuarios.component';
 import { GestionResultadosComponent } from './components/gestion-resultados/gestion-resultados.component';
+import { MenuVotoComponent } from './components/menu-voto/menu-voto.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Página principal
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'gestion-eleccion', component: GestionEleccionComponent, canActivate: [AuthGuard]},
   { path: 'gestion-usuarios', component: GestionUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-resultados', component: GestionResultadosComponent, canActivate:[AuthGuard]},
+  { path: 'menu-voto', component: MenuVotoComponent, canActivate: [AuthGuard]},
   { path: 'acerca-de', component: AcercaDeComponent },
   { path: 'ayuda-soporte', component: AyudaSoporteComponent},
   { path: '**', redirectTo: 'login', pathMatch: 'full' } // Redirección por defecto

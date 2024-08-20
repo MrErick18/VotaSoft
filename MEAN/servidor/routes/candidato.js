@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const candidatoController = require("../controller/candidato");
+const candidatoController = require("../controller/candidatoController");
 
 router.post('/', candidatoController.crearCandidato);
 router.get('/', candidatoController.obtenerCandidato);

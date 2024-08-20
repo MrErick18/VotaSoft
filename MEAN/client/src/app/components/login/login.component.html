@@ -1,0 +1,35 @@
+<div class="login-container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <h2 class="text-center">Iniciar Sesión</h2>
+        <div class="form-group">
+            <label for="numDoc">Número de Documento</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="fas fa-user"></i>
+                </span>
+                <input type="text" id="numDoc" class="form-control" placeholder="Número de Documento"
+                    formControlName="numDoc" />
+            </div>
+            <div *ngIf="loginForm.get('numDoc')?.invalid && loginForm.get('numDoc')?.touched">
+                <small class="text-danger">Número de documento es requerido.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="contraseña">Contraseña</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <input type="password" id="contrasena" class="form-control" placeholder="Contraseña"
+                    formControlName="contrasena" />
+            </div>
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                <small class="text-danger">Contraseña es requerida (mínimo 6 caracteres).</small>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">Iniciar Sesión</button>
+        <div class="text-center mt-3">
+            <a href="#">¿Olvidaste la contraseña?</a> | <a href="#">Regístrate aquí</a>
+        </div>
+    </form>
+</div>

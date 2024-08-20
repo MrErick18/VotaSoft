@@ -1,8 +1,11 @@
 const Administrador = require("../models/Administrador");
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 exports.crearAdministrador = async(req, res) =>{
     try {
         let administrador;
+        req.body.contrasena = bcrypt.hashSync(req.body.contrasena, 12);
         administrador = new Administrador(req.body);
         await administrador.save();
         res.send(administrador)
@@ -69,4 +72,29 @@ exports.eliminarAdministrador = async(req, res) => {
         console.log("Error", error);
         res.status(500).send('Ocurrio Un Error ' + error);        
     }
+}
+
+exports.loginAdministrador = async(req, res) => {
+    try {
+        let  administrador = await Administrador.findOne({numDoc: req.body.numDoc});
+        if(!administrador){
+            res.status(400).json({msg: "Error en usuario/contraseña"});
+        }
+        const eq = bcrypt.compareSync(req.body.contrasena, administrador.contrasena);
+        if(!eq){
+            res.status(400).json({msg: "Error en usuario/contraseña"})
+        }
+        res.json({msg: "Login Correcto" , token: createToken(administrador)});
+    } catch (error) {
+        console.log("Error", error);
+        res.status(500).send('Ocurrio Un Error ' + error);    
+    }
+}
+
+function createToken(administrador){
+    const payload = {
+        administrador_id : administrador._id,
+        numDoc: administrador.numDoc
+    }
+    return jwt.sign(payload, "porque si")
 }

@@ -1,0 +1,41 @@
+.login-container {
+    width: 350px;
+    margin: 100px auto;
+    padding: 30px;
+    margin-left: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo img {
+    display: block;
+    margin: 0 auto 20px;
+    width: 80%;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn {
+    width: 100%;
+}
+
+.input-group-text {
+    background-color: #138D75;
+    color: white;
+}
+
+.input-group-text .fas {
+    color: white;
+}
+
+.text-center a {
+    color: #138D75;
+}

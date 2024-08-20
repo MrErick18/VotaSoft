@@ -8,5 +8,7 @@ router.get('/', administradorController.obtenerAdministrador);
 router.put('/:id', administradorController.actualizarAdministrador);
 router.get('/:id', administradorController.buscarAdministrador);
 router.delete('/:id', administradorController.eliminarAdministrador);
+router.post('/login', administradorController.loginAdministrador);
+
 
 module.exports = router;

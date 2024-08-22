@@ -7,7 +7,7 @@ import { Administrador } from '../models/administrador';
   providedIn: 'root'
 })
 export class AdministradorService {
-  private url = 'http://localhost:4000/api/administradores/'; // URL base de la API
+  private url = 'http://localhost:4000/api/administrador/'; // URL base de la API
 
   constructor(private http: HttpClient) { }
 
@@ -29,5 +29,9 @@ export class AdministradorService {
 
   eliminarAdministrador(id: string): Observable<any> {
     return this.http.delete(`${this.url}${id}`);
+  }
+
+  verificarNumeroDocumento(numDoc: string): Observable<any> {
+    return this.http.get(`${this.url}verificar/${numDoc}`);
   }
 }

@@ -2,18 +2,23 @@ const Administrador = require("../models/Administrador");
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-exports.crearAdministrador = async(req, res) =>{
+exports.crearAdministrador = async (req, res) => {
     try {
+        const existeAdministrador = await Administrador.findOne({ numDoc: req.body.numDoc });
+        if (existeAdministrador) {
+            return res.status(400).json({ msg: "El número de documento ya está en uso" });
+        }
+
         let administrador;
         req.body.contrasena = bcrypt.hashSync(req.body.contrasena, 12);
         administrador = new Administrador(req.body);
         await administrador.save();
-        res.send(administrador)
+        res.send(administrador);
     } catch (error) {
         console.log(error);
-        res.status(500).send('Ocurrio un Error')        
+        res.status(500).send('Ocurrió un Error');
     }
-}
+};
 
 exports.obtenerAdministrador = async(req, res) =>{
     try{
@@ -97,4 +102,15 @@ function createToken(administrador){
         numDoc: administrador.numDoc
     }
     return jwt.sign(payload, "porque si")
+}
+
+exports.verificarNumeroDocumento = async (req, res) => {
+    try {
+        const numDoc = req.params.numDoc;
+        const administrador = await Administrador.findOne({ numDoc: numDoc });
+        res.json(!!administrador); // Devuelve true si existe, false si no
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Ocurrió un error al verificar el número de documento');
+    }
 }

@@ -1,1 +1,106 @@
-<p>registro-administrador works!</p>
+<div class="container">
+    <h2 class="text-center mb-4">Formulario de registro de administrador</h2>
+    <p class="text-center mb-4">Por favor complete los siguientes detalles para registrarse como administrador.</p>
+
+    <form [formGroup]="adminForm" (ngSubmit)="onSubmit()">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" formControlName="nombre" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('nombre')?.touched && adminForm.get('nombre')?.invalid}"
+                        placeholder="Ingrese su nombre">
+                    <div *ngIf="adminForm.get('nombre')?.touched && adminForm.get('nombre')?.invalid" class="invalid-feedback">
+                        El nombre es obligatorio.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" formControlName="apellido" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('apellido')?.touched && adminForm.get('apellido')?.invalid}"
+                        placeholder="Ingrese su apellido">
+                    <div *ngIf="adminForm.get('apellido')?.touched && adminForm.get('apellido')?.invalid" class="invalid-feedback">
+                        El apellido es obligatorio.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="tipoDoc">Tipo de documento</label>
+                    <select id="tipoDoc" formControlName="tipoDoc" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('tipoDoc')?.touched && adminForm.get('tipoDoc')?.invalid}">
+                        <option value="" disabled selected>Seleccione un tipo de documento</option>
+                        <option value="CC">Cédula de Ciudadania</option>
+                        <option value="CE">Cédula Extranjera</option>
+                        <option value="PPT">Permiso por Protecion Temporal</option>
+                        <option value="PA">Pasaporte</option>
+                    </select>
+                    <div *ngIf="adminForm.get('tipoDoc')?.touched && adminForm.get('tipoDoc')?.invalid" class="invalid-feedback">
+                        El tipo de documento es obligatorio.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="numDoc">Número de documento (usuario)</label>
+                    <input type="text" id="numDoc" formControlName="numDoc" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('numDoc')?.touched && adminForm.get('numDoc')?.invalid}"
+                        placeholder="Ingrese el número de documento">
+                    <div *ngIf="adminForm.get('numDoc')?.touched && adminForm.get('numDoc')?.invalid" class="invalid-feedback">
+                        El número de documento es obligatorio.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena" formControlName="contrasena" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('contrasena')?.touched && adminForm.get('contrasena')?.invalid}"
+                        placeholder="Ingrese su contraseña">
+                    <div *ngIf="adminForm.get('contrasena')?.touched && adminForm.get('contrasena')?.invalid" class="invalid-feedback">
+                        La contraseña es obligatoria.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="correo">Email</label>
+                    <input type="email" id="correo" formControlName="correo" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('correo')?.touched && adminForm.get('correo')?.invalid}"
+                        placeholder="Ingrese su dirección de correo electrónico">
+                    <div *ngIf="adminForm.get('correo')?.touched && adminForm.get('correo')?.invalid" class="invalid-feedback">
+                        El correo electrónico es obligatorio y debe ser válido.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="cargo">Cargo</label>
+                    <input type="text" id="cargo" formControlName="cargo" class="form-control"
+                        [ngClass]="{'is-invalid': adminForm.get('cargo')?.touched && adminForm.get('cargo')?.invalid}"
+                        placeholder="Ingrese su cargo">
+                    <div *ngIf="adminForm.get('cargo')?.touched && adminForm.get('cargo')?.invalid" class="invalid-feedback">
+                        El cargo es obligatorio.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 text-right">
+                <br>
+                <button type="button" class="btn btn-danger mr-2" (click)="goBack()">Volver</button>
+                &nbsp;
+                <button type="submit" class="btn btn-primary" [disabled]="adminForm.invalid">Registrar</button>
+            </div>
+        </div>
+    </form>
+</div>

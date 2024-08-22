@@ -1,0 +1,33 @@
+.navbar-custom {
+    background-color: rgba(0, 128, 128, 0.9); /* Color verde azulado con opacidad */
+  }
+  .navbar-brand {
+    font-weight: bold;
+    color: #ffffff; /* Texto en blanco */
+  }
+  .navbar-nav .nav-link {
+    color: #ffffff; /* Texto en blanco */
+    margin-right: 30px; /* Aumenta la separación entre las opciones */
+  }
+  .navbar-nav .nav-link:hover {
+    color: #cccccc; /* Color de texto al pasar el cursor */
+  }
+  .sidebar {
+    background-color: #343a40; /* Color gris oscuro para la barra lateral */
+    height: 100vh;
+    padding-top: 20px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 15px 20px; /* Aumenta la separación entre los elementos */
+    color: #ffffff; /* Texto en blanco para la barra lateral */
+    text-decoration: none;
+  }
+  .sidebar a:hover {
+    background-color: #495057; /* Fondo gris más claro al pasar el cursor */
+    color: #ffffff;
+  }
+  .content {
+    margin-left: 220px; /* Aumenta el espacio para la barra lateral */
+    padding: 20px;
+  }

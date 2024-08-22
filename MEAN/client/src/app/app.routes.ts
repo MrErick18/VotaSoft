@@ -9,10 +9,12 @@ import { GestionEleccionComponent } from './components/gestion-eleccion/gestion-
 import { GestionUsuariosComponent } from './components/gestion-usuarios/gestion-usuarios.component';
 import { GestionResultadosComponent } from './components/gestion-resultados/gestion-resultados.component';
 import { MenuVotoComponent } from './components/menu-voto/menu-voto.component';
+import { RegistroAdministradorComponent } from './components/registro-administrador/registro-administrador.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Página principal
   { path: 'login', component: LoginComponent }, // Ruta de login
+  { path: 'registro-administrador', component: RegistroAdministradorComponent},
   { path: 'menu-principal', component: MenuPrincipalComponent, canActivate: [AuthGuard] },
   { path: 'gestion-candidato', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-eleccion', component: GestionEleccionComponent, canActivate: [AuthGuard]},

@@ -10,6 +10,7 @@ import { GestionUsuariosComponent } from './components/gestion-usuarios/gestion-
 import { GestionResultadosComponent } from './components/gestion-resultados/gestion-resultados.component';
 import { MenuVotoComponent } from './components/menu-voto/menu-voto.component';
 import { RegistroAdministradorComponent } from './components/registro-administrador/registro-administrador.component';
+import { IngresoVotoComponent } from './components/ingreso-voto/ingreso-voto.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Página principal
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'gestion-usuarios', component: GestionUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-resultados', component: GestionResultadosComponent, canActivate:[AuthGuard]},
   { path: 'menu-voto', component: MenuVotoComponent, canActivate: [AuthGuard]},
+  {path: 'ingreso-voto', component: IngresoVotoComponent, canActivate: [AuthGuard]},
   { path: 'acerca-de', component: AcercaDeComponent },
   { path: 'ayuda-soporte', component: AyudaSoporteComponent},
   { path: '**', redirectTo: 'login', pathMatch: 'full' } // Redirección por defecto

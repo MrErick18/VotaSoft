@@ -11,10 +11,12 @@ import { GestionResultadosComponent } from './components/gestion-resultados/gest
 import { MenuVotoComponent } from './components/menu-voto/menu-voto.component';
 import { RegistroAdministradorComponent } from './components/registro-administrador/registro-administrador.component';
 import { IngresoVotoComponent } from './components/ingreso-voto/ingreso-voto.component';
+import { OlvideContrasenaComponent } from './components/olvide-contrasena/olvide-contrasena.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Página principal
   { path: 'login', component: LoginComponent }, // Ruta de login
+  { path: 'olvide-contrasena', component: OlvideContrasenaComponent},
   { path: 'registro-administrador', component: RegistroAdministradorComponent},
   { path: 'menu-principal', component: MenuPrincipalComponent, canActivate: [AuthGuard] },
   { path: 'gestion-candidato', component: GestionCandidatosComponent, canActivate: [AuthGuard]},

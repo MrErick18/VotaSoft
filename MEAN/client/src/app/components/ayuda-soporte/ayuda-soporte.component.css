@@ -1,0 +1,19 @@
+.soporte-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.soporte-item {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+}
+
+.icon {
+    width: 85px;
+    /* Ajusta el tamaño del ícono */
+    height: auto;
+    margin-right: 10px;
+}

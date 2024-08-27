@@ -1,33 +1,33 @@
 const Usuarios = require("../models/Usuarios");
 
-exports.crearUsuarios = async(req, res) => {
+exports.crearUsuarios = async (req, res) => {
     try {
         let usuarios;
         usuarios = new Usuarios(req.body);
         await usuarios.save();
         res.send(usuarios)
-    } catch(error){
+    } catch (error) {
         console.log(error);
         res.status(500).send('Ocurrio un Error')
     }
 }
 
-exports.obtenerUsuarios = async(req, res) =>{
-    try{
+exports.obtenerUsuarios = async (req, res) => {
+    try {
         const usuarios = await Usuarios.find();
         res.json(usuarios)
-    }catch(error){
+    } catch (error) {
         console.log(error);
         res.status(500).send('Ocurrio un error')
-        
+
     }
 }
 
-exports.actualizarUsusarios = async(req, res) => {
+exports.actualizarUsusarios = async (req, res) => {
     try {
-        const { nombre, apellidos, tipoDoc, numDoc} = req.body;
+        const { nombre, apellidos, tipoDoc, numDoc } = req.body;
         let usuarios = await Usuarios.findById(req.params.id);
-        if (!usuarios) {return res.status(400).json({ msg: "Usuario No Existe" });}
+        if (!usuarios) { return res.status(400).json({ msg: "Usuario No Existe" }); }
         usuarios.nombre = nombre;
         usuarios.apellidos = apellidos;
         usuarios.tipoDoc = tipoDoc;
@@ -41,29 +41,50 @@ exports.actualizarUsusarios = async(req, res) => {
     }
 }
 
-exports.buscarUsuarios = async(req, res) => {
-    try{
-        let usuarios = await usuarios.findById(req.params.id);
-        if(!usuarios){
-            res.status(400).json({msg: 'Este Usuario no Existe'});
+exports.buscarUsuarios = async (req, res) => {
+    try {
+      const { tipoDoc, numDoc } = req.query; // Obtén los datos de la query string
+      const usuario = await Usuarios.findOne({ tipoDoc, numDoc }); // Busca el usuario por tipoDoc y numDoc
+  
+      if (!usuario) {
+        return res.status(404).json({ msg: 'Usuario no encontrado' }); // Si no lo encuentra, retorna un mensaje 404
+      }
+  
+      res.json(usuario); // Si lo encuentra, devuelve el usuario
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Error en el servidor');
+    }
+  };
+  
+
+exports.eliminarUsuarios = async (req, res) => {
+    try {
+        let usuarios = await Usuarios.findById(req.params.id);
+        if (!usuarios) {
+            res.status(400).json({ msg: "Este Usuarios No Existe" });
         }
-        res.json(usuarios);
-    }catch(error){ 
-        console.log(error);        
-        res.status(500).send('Ocurrio Un Error Al Eliminar Usuario')
+        await Usuairos.findByIdAndDelete(req.params.id);
+        res.json({ msg: "Usuarios Eliminado" });
+    } catch (error) {
+        console.log("Error", error);
+        res.status(500).send('Ocurrio Un Error ' + error);
     }
 }
 
-exports.eliminarUsuarios = async(req, res) => {
-    try{
-        let usuarios = await Usuarios.findById(req.params.id);
-        if(!usuarios){
-            res.status(400).json({msg: "Este Usuarios No Existe"});
+exports.validarUsuario = async (req, res) => {
+    try {
+        const { tipoDoc, numDoc } = req.query;
+        const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
+
+        if (!usuario) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
         }
-        await Usuairos.findByIdAndDelete(req.params.id);
-        res.json({msg: "Usuarios Eliminado"});
-    }catch (error) {
-        console.log("Error", error);
-        res.status(500).send('Ocurrio Un Error ' + error);        
+
+        res.json(usuario);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Ocurrió un error');
     }
-}
+};
+

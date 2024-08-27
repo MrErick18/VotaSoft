@@ -8,5 +8,7 @@ router.get('/', usuariosController.obtenerUsuarios);
 router.put('/:id', usuariosController.actualizarUsusarios);
 router.get('/:id', usuariosController.buscarUsuarios);
 router.delete('/:id', usuariosController.eliminarUsuarios);
+router.get('/validar', usuariosController.validarUsuario);
+
 
 module.exports = router;

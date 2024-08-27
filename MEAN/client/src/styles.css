@@ -31,3 +31,7 @@
     margin-left: 220px; /* Aumenta el espacio para la barra lateral */
     padding: 20px;
   }
+
+  body {
+    background-color: #f4f4f4;
+  }

@@ -1,6 +1,7 @@
 const Administrador = require("../models/Administrador");
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { transporter } = require("../config/mailer");
 
 exports.crearAdministrador = async (req, res) => {
     try {
@@ -114,3 +115,36 @@ exports.verificarNumeroDocumento = async (req, res) => {
         res.status(500).send('Ocurrió un error al verificar el número de documento');
     }
 }
+
+exports.enviarCorreo = async (req, res) => {
+    try {
+        const { correo } = req.body;
+        await transporter.sendMail({
+            from: '"Visualizacion de Contraseña 👻" <votasoftsoporte@gmail.com>',
+            to: correo,
+            subject: "Visualizacion de Contraseña ✔",
+            text: "Hello world?",
+        });
+        res.status(200).json({ message: 'Correo enviado' }); // Enviar JSON en lugar de texto plano
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ocurrió un Error' }); // Enviar JSON en lugar de texto plano
+    }
+};
+
+
+exports.verificarCorreo = async (req, res) => {
+    try {
+        const { correo } = req.params;
+        const administrador = await Administrador.findOne({ correo: correo });
+        
+        if (administrador) {
+            res.status(200).json({ exists: true }); // Devuelve JSON con una clave 'exists'
+        } else {
+            res.status(404).json({ exists: false }); // Devuelve JSON con una clave 'exists'
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al verificar el correo' }); // Manejo de errores
+    }
+};

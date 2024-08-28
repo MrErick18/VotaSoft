@@ -34,4 +34,12 @@ export class AdministradorService {
   verificarNumeroDocumento(numDoc: string): Observable<any> {
     return this.http.get(`${this.url}verificar/${numDoc}`);
   }
+
+  verificarCorreo(correo: string): Observable<any> {
+    return this.http.get<any>(`${this.url}verificarCorreo/${correo}`);
+  }
+     
+  enviarCorreoRecuperacion(correo: string): Observable<any> {
+  return this.http.post<any>(`${this.url}enviarCorreo`, { correo });
+}
 }

@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Recuperar Contraseña</title>
-  <link rel="stylesheet" href="../olvide-contrasena/olvide-contrasena.component.css">
-</head>
-<body>
-  <div class="custom-form-container">
-    <div class="container">
-      <h2>¿Olvidó su contraseña?</h2>
-      <p>Ingrese su correo para recuperar su contraseña.</p>
-      <form>
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" required>
-        <div class="button-container">
-          <button type="button" onclick="volverAlInicio()">Volver al inicio</button>
-          <button type="submit">Enviar</button>
-        </div>
-      </form>
-    </div>
+<div class="custom-form-container">
+  <div class="container">
+    <h2>¿Olvidó su contraseña?</h2>
+    <p>Ingrese su correo para recuperar su contraseña.</p>
+    <form (ngSubmit)="enviarCorreo()">
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" [(ngModel)]="correo" required>
+      <div class="button-container">
+        <button type="button" onclick="volverAlInicio()">Volver al inicio</button>
+        <button type="submit">Enviar</button>
+      </div>
+    </form>
   </div>
-  <script src="script.js"></script>
-</body>
-</html>
+</div>

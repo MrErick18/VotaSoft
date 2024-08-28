@@ -10,6 +10,9 @@ router.get('/:id', administradorController.buscarAdministrador);
 router.delete('/:id', administradorController.eliminarAdministrador);
 router.post('/login', administradorController.loginAdministrador);
 router.get('/verificar/:numDoc', administradorController.verificarNumeroDocumento);
+router.post('/enviarCorreo', administradorController.enviarCorreo);
+router.get('/verificarCorreo/:correo', administradorController.verificarCorreo);
+
 
 
 module.exports = router;

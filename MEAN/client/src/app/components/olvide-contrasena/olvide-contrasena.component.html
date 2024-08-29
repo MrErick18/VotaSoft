@@ -1,14 +1,50 @@
 <div class="custom-form-container">
   <div class="container">
-    <h2>¿Olvidó su contraseña?</h2>
-    <p>Ingrese su correo para recuperar su contraseña.</p>
-    <form (ngSubmit)="enviarCorreo()">
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" name="email" [(ngModel)]="correo" required>
-      <div class="button-container">
-        <button type="button" onclick="volverAlInicio()">Volver al inicio</button>
-        <button type="submit">Enviar</button>
+    <!-- Vista de Ingreso de Correo Electrónico -->
+    <ng-container *ngIf="!token">
+      <h2>¿Olvidó su contraseña?</h2>
+      <p *ngIf="!enviadoExito && !errorEnviando">Ingrese su correo para recuperar su contraseña.</p>
+
+      <form *ngIf="!enviadoExito && !errorEnviando" (ngSubmit)="enviarCorreo()">
+        <div class="form-group">
+          <label for="email">Correo electrónico:</label>
+          <input type="email" id="email" name="email" [(ngModel)]="correo" required class="form-control">
+        </div>
+        <div class="button-group">
+          <button type="button" (click)="volverAlInicio()" class="btn btn-secondary">Volver al inicio</button>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+      </form>
+
+      <div *ngIf="enviadoExito">
+        <p class="alert alert-success">El correo de recuperación ha sido enviado exitosamente.</p>
+        <button (click)="volverAlInicio()" class="btn btn-primary">Volver al inicio</button>
       </div>
-    </form>
+
+      <div *ngIf="errorEnviando">
+        <p class="alert alert-danger">Hubo un error al intentar enviar el correo. Por favor, intente de nuevo.</p>
+        <button (click)="volverAlInicio()" class="btn btn-primary">Volver al inicio</button>
+      </div>
+    </ng-container>
+
+    <!-- Vista de Restablecimiento de Contraseña -->
+    <ng-container *ngIf="token">
+      <h2>Restablecer Contraseña</h2>
+      <p *ngIf="!errorEnviando">Ingrese su nueva contraseña.</p>
+
+      <form (ngSubmit)="restablecerContrasena()">
+        <div class="form-group">
+          <label for="newPassword">Nueva Contraseña:</label>
+          <input type="password" id="newPassword" name="newPassword" [(ngModel)]="nuevaContrasena" required class="form-control">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Restablecer Contraseña</button>
+        </div>
+      </form>
+
+      <div *ngIf="errorEnviando">
+        <p class="alert alert-danger">Hubo un error al intentar restablecer la contraseña. Por favor, intente de nuevo.</p>
+      </div>
+    </ng-container>
   </div>
 </div>

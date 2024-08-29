@@ -15,11 +15,13 @@ const AdministradorSchema = mongoose.Schema({
     },
     numDoc: {
         type: String,
-        require: true
+        require: true,
+        unique: true
     },
     correo: {
         type: String,
-        require: true
+        require: true,
+        unique: true
     },
     contrasena: {
         type: String,
@@ -28,7 +30,9 @@ const AdministradorSchema = mongoose.Schema({
     cargo: {
         type: String,
         require: true
-    }
-})
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
+});
 
 module.exports = mongoose.model('Administrador', AdministradorSchema);

@@ -38,8 +38,8 @@ export class AdministradorService {
   verificarCorreo(correo: string): Observable<any> {
     return this.http.get<any>(`${this.url}verificarCorreo/${correo}`);
   }
-     
-  enviarCorreoRecuperacion(correo: string): Observable<any> {
-  return this.http.post<any>(`${this.url}enviarCorreo`, { correo });
-}
+  
+  restablecerContrasena(token: string, nuevaContrasena: string): Observable<any> {
+    return this.http.post<any>(`${this.url}restablecerContrasena`, { token, nuevaContrasena });
+  }
 }

@@ -31,8 +31,6 @@ const AdministradorSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    resetPasswordToken: String,
-    resetPasswordExpires: Date
 });
 
 module.exports = mongoose.model('Administrador', AdministradorSchema);

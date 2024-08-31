@@ -1,1 +1,19 @@
-<p>gestion-eleccion works!</p>
+<section class="content">
+    <h1>Registro de Elecciones</h1>
+    <p>Completa la información requerida para hacer el respectivo registro de la elección.</p>
+    <form action="/submit-election" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre de la elección" required>
+
+        <label for="tipo">Tipo de Elección:</label>
+        <input type="text" id="tipo" name="tipo" placeholder="Ingrese el tipo de elección" required>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <label for="estado">Estado:</label>
+        <textarea id="estado" name="estado" placeholder="Ingrese el estado de la elección" required></textarea>
+
+        <input type="submit" value="Ingresar Elección">
+    </form>
+</section>

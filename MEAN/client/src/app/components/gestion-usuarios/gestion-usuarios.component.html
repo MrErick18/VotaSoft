@@ -1,1 +1,42 @@
-<p>gestion-usuarios works!</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Archivo de Usuarios</title>
+</head>
+<body>
+
+<div>
+    <div>
+        <h2>Subir archivo de usuarios</h2>
+        <input type="file" id="fileUpload" accept=".xlsx, .xls">
+        <button onclick="uploadFile()">Subir archivo</button>
+    </div>
+
+    <div>
+        <h2>Lista de usuarios</h2>
+        <input type="text" placeholder="Buscar usuario">
+        <button>Seleccionar</button>
+        <div>
+            <p>John Doe</p>
+            <p>johndoe&#64;example.com</p>
+        </div>
+        <div>
+            <p>Jane Smith</p>
+            <p>janesmith&#64;example.com</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function uploadFile() {
+        var fileInput = document.getElementById('fileUpload');
+        var file = fileInput.files[0];
+        if (file) {
+            alert('Archivo "' + file.name + '" subido exitosamente.');
+        } else {
+            alert('Por favor, seleccione un archivo para subir.');
+        }
+    }
+</script>
+
+</body>

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './gestion-eleccion.component.html',
-  styleUrl: './gestion-eleccion.component.css'
+  styleUrls: ['./gestion-eleccion.component.css']  // Corregido aquí
 })
 export class GestionEleccionComponent {
 

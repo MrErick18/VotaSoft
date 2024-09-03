@@ -25,10 +25,10 @@
                     <td>{{ candidato.propuestas }}</td>
                     <td>
                         <!-- Iconos para editar y eliminar -->
-                        <i [routerLink]="['/gestion-candidato', candidato._id]"
-                            class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>
-                        <i (click)="eliminarCandidato(candidato._id)" class="delete-icon text-danger fa-solid fa-trash"
-                            style="cursor: pointer;"></i>
+                        <i (click)="editarCandidato(candidato._id)" aria-label="Editar candidato"
+                        class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>                     
+                        <i (click)="eliminarCandidato(candidato._id)" aria-label="Eliminar candidato"
+                            class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
                     </td>
                 </tr>
             </tbody>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CandidatoService } from '../../services/candidato.service';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-lista-candidato',
@@ -14,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class ListaCandidatoComponent implements OnInit {
   candidatos: any[] = [];
 
-  constructor(private candidatoService: CandidatoService, private router: Router) {}
+  constructor(private candidatoService: CandidatoService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.obtenerCandidatos();
@@ -26,7 +27,7 @@ export class ListaCandidatoComponent implements OnInit {
         this.candidatos = data;
       },
       error => {
-        console.error('Error al obtener los candidatos:', error);
+        this.toastr.error('Error al obtener los candidatos', 'Error');
       }
     );
   }
@@ -37,16 +38,17 @@ export class ListaCandidatoComponent implements OnInit {
 
   editarCandidato(id: string): void {
     this.router.navigate(['/gestion-candidato', id]);
-  }
+  }  
 
   eliminarCandidato(id: string): void {
     if (confirm('¿Estás seguro de que deseas eliminar este candidato?')) {
       this.candidatoService.eliminarCandidato(id).subscribe(
         () => {
+          this.toastr.success('Candidato eliminado con éxito', 'Éxito');
           this.obtenerCandidatos();
         },
         error => {
-          console.error('Error al eliminar el candidato:', error);
+          this.toastr.error('Error al eliminar el candidato', 'Error');
         }
       );
     }

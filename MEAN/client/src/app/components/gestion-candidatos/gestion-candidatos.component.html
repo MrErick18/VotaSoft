@@ -1,29 +1,35 @@
 <div class="container">
-    <h1>Gestión de Candidatos</h1>
-    <div class="content">
-        <div class="photo-section">
-            <img src="assets/candidato.jpg" alt="Foto del Candidato" class="candidate-photo">
-            <form>
-                <label for="archivo">Subir archivo:</label>
-                <input type="file" id="archivo-button" name="archivo-button">
-                <button class="upload-button" type="submit">Enviar</button>
-            </form>
-            <p>Nombre:</p>
-            <p>Apellido:</p>
-            <p>Telefono:</p>
-            <p>Jornada:</p>
-        </div>
-        <div class="form-section">
-            <label for="nombre">Nombre Completo:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingrese el Nombre Completo del Candidato">
-
-            <label for="perfil">Perfil:</label>
-            <input type="text" id="perfil" name="perfil" placeholder="Ingrese el Perfil del Candidato">
-
-            <label for="propuestas">Propuestas:</label>
-            <textarea id="propuestas" name="propuestas" placeholder="Ingrese las Propuestas del Candidato"></textarea>
-
-            <button class="submit-button">Registrar Candidato</button>
-        </div>
+  <h1>Gestión de Candidatos</h1>
+  <div class="content d-flex">
+    <!-- Sección de vista previa -->
+    <div class="photo-section me-5">
+      <h3>Vista Previa</h3>
+      <img [src]="fotoPreview" alt="Foto del Candidato" class="candidate-photo mb-3" *ngIf="fotoPreview">
+      <p><strong>Nombre Completo:</strong> {{ candidatoForm.get('nombreCompleto')?.value }}</p>
+      <p><strong>Perfil:</strong> {{ candidatoForm.get('perfil')?.value }}</p>
+      <p><strong>Propuestas:</strong> {{ candidatoForm.get('propuestas')?.value }}</p>
     </div>
+
+    <!-- Sección del formulario -->
+    <div class="form-section">
+      <form [formGroup]="candidatoForm" (ngSubmit)="onSubmit()">
+        <label for="nombre">Nombre Completo:</label>
+        <input type="text" id="nombre" formControlName="nombreCompleto" placeholder="Ingrese el Nombre Completo del Candidato">
+
+        <label for="perfil">Perfil:</label>
+        <textarea id="perfil" formControlName="perfil" placeholder="Ingrese el Perfil del Candidato"></textarea>
+
+        <label for="propuestas">Propuestas:</label>
+        <textarea id="propuestas" formControlName="propuestas" placeholder="Ingrese las Propuestas del Candidato"></textarea>
+
+        <label for="archivo">Subir Foto:</label>
+        <input type="file" id="archivo-button" (change)="onFileChange($event)" accept="image/*">
+        
+        <!-- Botón para registrar o editar el candidato -->
+        <button type="submit" class="submit-button mt-3">
+          {{ isEditMode ? 'Editar Candidato' : 'Registrar Candidato' }}
+        </button>
+      </form>
+    </div>
+  </div>
 </div>

@@ -26,11 +26,12 @@ export const routes: Routes = [
   { path: 'lista-eleccion', component: ListaEleccionComponent, canActivate: [AuthGuard]},
   { path: 'lista-usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-candidato', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
+  { path: 'gestion-candidato/:id', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-eleccion', component: GestionEleccionComponent, canActivate: [AuthGuard]},
   { path: 'gestion-usuarios', component: GestionUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-resultados', component: GestionResultadosComponent, canActivate:[AuthGuard]},
   { path: 'menu-voto', component: MenuVotoComponent, canActivate: [AuthGuard]},
-  {path: 'ingreso-voto', component: IngresoVotoComponent, canActivate: [AuthGuard]},
+  { path: 'ingreso-voto', component: IngresoVotoComponent, canActivate: [AuthGuard]},
   { path: 'acerca-de', component: AcercaDeComponent },
   { path: 'ayuda-soporte', component: AyudaSoporteComponent},
   { path: '**', redirectTo: 'login', pathMatch: 'full' } // Redirección por defecto

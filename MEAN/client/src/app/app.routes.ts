@@ -28,6 +28,7 @@ export const routes: Routes = [
   { path: 'gestion-candidato', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-candidato/:id', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-eleccion', component: GestionEleccionComponent, canActivate: [AuthGuard]},
+  { path: 'gestion-eleccion/:id', component: GestionEleccionComponent, canActivate: [AuthGuard]},
   { path: 'gestion-usuarios', component: GestionUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-resultados', component: GestionResultadosComponent, canActivate:[AuthGuard]},
   { path: 'menu-voto', component: MenuVotoComponent, canActivate: [AuthGuard]},

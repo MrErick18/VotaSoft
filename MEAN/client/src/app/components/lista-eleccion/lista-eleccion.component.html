@@ -1,1 +1,35 @@
-<p>lista-eleccion works!</p>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Lista de Elecciones</h2>
+        <button class="btn btn-primary" (click)="crearEleccion()">Crear Elección</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eleccion of elecciones">
+                    <td>{{ eleccion.nombre }}</td>
+                    <td>{{ eleccion.tipo }}</td>
+                    <td>{{ eleccion.fecha | date }}</td>
+                    <td>{{ eleccion.estado }}</td>
+                    <td>
+                        <!-- Iconos para editar y eliminar -->
+                        <i (click)="editarEleccion(eleccion._id)" aria-label="Editar elección"
+                            class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>
+                        <i (click)="eliminarEleccion(eleccion._id)" aria-label="Eliminar elección"
+                            class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

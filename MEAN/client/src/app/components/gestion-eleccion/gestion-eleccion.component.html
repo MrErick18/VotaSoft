@@ -4,19 +4,16 @@
     <form [formGroup]="eleccionForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
-            <input id="nombre" class="form-control" formControlName="nombre" type="text"
-                placeholder="Ingrese el nombre de la elección" required>
+            <input id="nombre" class="form-control" formControlName="nombre" type="text" placeholder="Ingrese el nombre de la elección" required>
             <div *ngIf="eleccionForm.get('nombre')?.invalid && eleccionForm.get('nombre')?.touched" class="text-danger">
                 <small *ngIf="eleccionForm.get('nombre')?.hasError('required')">El nombre es requerido.</small>
-                <small *ngIf="eleccionForm.get('nombre')?.hasError('minlength')">El nombre debe tener al menos 3
-                    caracteres.</small>
             </div>
         </div>
 
         <div class="form-group">
             <label for="tipo">Tipo de Elección:</label>
             <select id="tipo" class="form-control" formControlName="tipo" required>
-                <option value="" disabled selected>Seleccione el tipo de elección</option>
+                <option value="" selected>Seleccione el tipo de elección</option>
                 <option value="Presidencial">Presidencial</option>
                 <option value="Congresional">Congresional</option>
                 <option value="Municipal">Municipal</option>
@@ -35,19 +32,19 @@
 
         <div class="form-group">
             <label for="fecha">Fecha:</label>
-            <input id="fecha" formControlName="fecha" type="date" [attr.min]="minDate" required>
+            <input id="fecha" class="form-control" formControlName="fecha" type="date" [attr.min]="minDate" [disabled]="isEditMode" required>
             <div *ngIf="eleccionForm.get('fecha')?.invalid && eleccionForm.get('fecha')?.touched" class="text-danger">
-              <small *ngIf="eleccionForm.get('fecha')?.hasError('required')">La fecha es requerida.</small>
+                <small *ngIf="eleccionForm.get('fecha')?.hasError('required')">La fecha es requerida.</small>
             </div>
-          </div>
+        </div>        
 
         <div class="form-group">
             <label for="estado">Estado:</label>
             <select id="estado" class="form-control" formControlName="estado" required>
-                <option value="" disabled selected>Seleccione el estado de la elección</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="en progreso">En Progreso</option>
-                <option value="finalizado">Finalizado</option>
+                <option value="" selected>Seleccione el estado de la elección</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En Curso">En Curso</option>
+                <option value="Finalizada">Finalizada</option>
             </select>
             <div *ngIf="eleccionForm.get('estado')?.invalid && eleccionForm.get('estado')?.touched" class="text-danger">
                 <small *ngIf="eleccionForm.get('estado')?.hasError('required')">El estado es requerido.</small>

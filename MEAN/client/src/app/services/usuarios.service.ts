@@ -10,7 +10,22 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) {}
 
+  obtenerUsuarios(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}`);
+  }
+
+  subirArchivo(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post<any>(`${this.apiUrl}/subirArchivo`, formData);
+  }
+
+  eliminarUsuario(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+  // Añade este método
   validarUsuario(tipoDoc: string, numDoc: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/validar?tipoDoc=${tipoDoc}&numDoc=${numDoc}`);
+    return this.http.post<any>(`${this.apiUrl}/validar`, { tipoDoc, numDoc });
   }
 }

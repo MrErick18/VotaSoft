@@ -14,7 +14,7 @@ import { IngresoVotoComponent } from './components/ingreso-voto/ingreso-voto.com
 import { OlvideContrasenaComponent } from './components/olvide-contrasena/olvide-contrasena.component';
 import { ListaCandidatoComponent } from './components/lista-candidato/lista-candidato.component';
 import { ListaEleccionComponent } from './components/lista-eleccion/lista-eleccion.component';
-import { ListaUsuariosComponent } from './components/lista-usuarios/lista-usuarios.component';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // Página principal
@@ -24,7 +24,6 @@ export const routes: Routes = [
   { path: 'menu-principal', component: MenuPrincipalComponent, canActivate: [AuthGuard] },
   { path: 'lista-candidato', component: ListaCandidatoComponent, canActivate: [AuthGuard]},
   { path: 'lista-eleccion', component: ListaEleccionComponent, canActivate: [AuthGuard]},
-  { path: 'lista-usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-candidato', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-candidato/:id', component: GestionCandidatosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-eleccion', component: GestionEleccionComponent, canActivate: [AuthGuard]},

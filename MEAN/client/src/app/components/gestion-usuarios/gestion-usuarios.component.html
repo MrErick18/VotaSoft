@@ -1,42 +1,39 @@
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir Archivo de Usuarios</title>
-</head>
-<body>
-
-<div>
-    <div>
-        <h2>Subir archivo de usuarios</h2>
-        <input type="file" id="fileUpload" accept=".xlsx, .xls">
-        <button onclick="uploadFile()">Subir archivo</button>
-    </div>
-
-    <div>
-        <h2>Lista de usuarios</h2>
-        <input type="text" placeholder="Buscar usuario">
-        <button>Seleccionar</button>
-        <div>
-            <p>John Doe</p>
-            <p>johndoe&#64;example.com</p>
+<section class="content">
+    <div class="lista-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Lista de Usuarios</h2>
         </div>
-        <div>
-            <p>Jane Smith</p>
-            <p>janesmith&#64;example.com</p>
+        <div class="d-flex align-items-center">
+            <input type="text" [(ngModel)]="searchText" class="form-control form-control-sm me-2"
+                placeholder="Buscar...">
+                <input type="file" (change)="onFileChange($event)" accept=".xlsx" class="form-control form-control-sm w-auto me-2">
+            <button class="btn btn-primary btn-sm" (click)="uploadFile()">Subir Archivo</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellidos</th>
+                        <th scope="col">Tipo de Documento</th>
+                        <th scope="col">Número de Documento</th>
+                        <th scope="col">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usuario of usuarios | filter:searchText">
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.apellidos }}</td>
+                        <td>{{ usuario.tipoDoc }}</td>
+                        <td>{{ usuario.numDoc }}</td>
+                        <td>
+                            <!-- Icono para eliminar -->
+                            <i (click)="eliminarUsuario(usuario._id)" aria-label="Eliminar usuario"
+                                class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
-
-<script>
-    function uploadFile() {
-        var fileInput = document.getElementById('fileUpload');
-        var file = fileInput.files[0];
-        if (file) {
-            alert('Archivo "' + file.name + '" subido exitosamente.');
-        } else {
-            alert('Por favor, seleccione un archivo para subir.');
-        }
-    }
-</script>
-
-</body>
+</section>

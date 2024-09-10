@@ -1,3 +1,4 @@
+// server.js (o index.js)
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
@@ -30,8 +31,6 @@ cron.schedule('0 * * * *', async () => {
     console.error('Error al actualizar el estado de las elecciones:', error);
   }
 });
-
-
 
 app.listen(4000, () => {
   console.log('Servidor funcionando en el puerto 4000');

@@ -37,7 +37,7 @@ export class GestionUsuariosComponent implements OnInit {
   obtenerUsuarios(): void {
     this.usuariosService.obtenerUsuarios().subscribe(
       (data) => {
-        this.usuarios = data;
+        this.usuarios = data.map(usuario => ({ ...usuario, selected: false }));
       },
       (error) => {
         console.error('Error al obtener los usuarios:', error);
@@ -61,12 +61,12 @@ export class GestionUsuariosComponent implements OnInit {
       this.toastr.info('Subiendo archivo...', 'En progreso');
       this.usuariosService.subirArchivo(this.selectedFile).subscribe(
         (response: any) => {
-          this.toastr.success(response.message, 'Éxito'); // Usa el mensaje de la respuesta del servidor
+          this.toastr.success(response.message, 'Éxito');
           console.log('Archivo subido correctamente:', response);
-          this.obtenerUsuarios(); // Actualizar la lista de usuarios después de subir el archivo
+          this.obtenerUsuarios();
         },
         (error) => {
-          this.toastr.error(error.error.error, 'Error'); // Usa el mensaje de error de la respuesta del servidor
+          this.toastr.error(error.error.error, 'Error');
           console.error('Error al subir el archivo:', error);
         }
       );
@@ -80,7 +80,7 @@ export class GestionUsuariosComponent implements OnInit {
       this.usuariosService.eliminarUsuario(id).subscribe(
         () => {
           this.toastr.success('Usuario eliminado con éxito', 'Éxito');
-          this.obtenerUsuarios(); // Actualizar la lista de usuarios después de eliminar
+          this.obtenerUsuarios();
         },
         (error) => {
           this.toastr.error('Error al eliminar el usuario', 'Error');
@@ -88,5 +88,30 @@ export class GestionUsuariosComponent implements OnInit {
       );
     }
   }
-}
 
+  toggleSelectAll(event: any): void {
+    const checked = event.target.checked;
+    this.usuarios.forEach(usuario => usuario.selected = checked);
+  }
+
+  anySelected(): boolean {
+    return this.usuarios.some(usuario => usuario.selected);
+  }
+
+  eliminarUsuariosSeleccionados(): void {
+    const usuariosSeleccionados = this.usuarios.filter(usuario => usuario.selected).map(usuario => usuario._id);
+    if (usuariosSeleccionados.length > 0 && confirm('¿Estás seguro de que deseas eliminar los usuarios seleccionados?')) {
+      usuariosSeleccionados.forEach(id => {
+        this.usuariosService.eliminarUsuario(id).subscribe(
+          () => {
+            this.toastr.success('Usuario eliminado con éxito', 'Éxito');
+            this.obtenerUsuarios();
+          },
+          (error) => {
+            this.toastr.error('Error al eliminar el usuario', 'Error');
+          }
+        );
+      });
+    }
+  }
+}

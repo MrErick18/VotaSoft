@@ -3,34 +3,37 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Lista de Usuarios</h2>
         </div>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center mb-2">
             <input type="text" [(ngModel)]="searchText" class="form-control form-control-sm me-2"
                 placeholder="Buscar...">
-                <input type="file" (change)="onFileChange($event)" accept=".xlsx" class="form-control form-control-sm w-auto me-2">
+            <input type="file" (change)="onFileChange($event)" accept=".xlsx"
+                class="form-control form-control-sm w-auto me-2">
             <button class="btn btn-primary btn-sm" (click)="uploadFile()">Subir Archivo</button>
+        </div>
+        <div class="d-flex align-items-center mb-2">
+            <input type="checkbox" (change)="toggleSelectAll($event)" id="selectAll">
+            <label for="selectAll" class="ms-2">Seleccionar Todos</label>
+            <button class="btn btn-danger btn-sm ms-auto" (click)="eliminarUsuariosSeleccionados()"
+                *ngIf="anySelected()">Eliminar Seleccionados</button>
         </div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
+                        <th scope="col"></th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellidos</th>
                         <th scope="col">Tipo de Documento</th>
                         <th scope="col">Número de Documento</th>
-                        <th scope="col">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let usuario of usuarios | filter:searchText">
+                        <td><input type="checkbox" [(ngModel)]="usuario.selected"></td>
                         <td>{{ usuario.nombre }}</td>
                         <td>{{ usuario.apellidos }}</td>
                         <td>{{ usuario.tipoDoc }}</td>
                         <td>{{ usuario.numDoc }}</td>
-                        <td>
-                            <!-- Icono para eliminar -->
-                            <i (click)="eliminarUsuario(usuario._id)" aria-label="Eliminar usuario"
-                                class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
-                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -112,6 +112,13 @@ exports.subirArchivo = async (req, res) => {
             const tipoDoc = row.getCell(3).value;
             const numDoc = row.getCell(4).value;
 
+            // Añade estos console.log para verificar los valores
+            console.log(`Fila ${rowNumber}:`);
+            console.log(`Nombre: ${nombre}`);
+            console.log(`Apellidos: ${apellidos}`);
+            console.log(`TipoDoc: ${tipoDoc}`);
+            console.log(`NumDoc: ${numDoc}`);
+
             if (!nombre || !apellidos || !tipoDoc || !numDoc) {
                 throw new Error('Algunos campos requeridos están vacíos');
             }
@@ -129,4 +136,5 @@ exports.subirArchivo = async (req, res) => {
         res.status(500).json({ error: error.message }); // Cambia a JSON para manejar mejor la respuesta en el frontend
     }
 };
+
 

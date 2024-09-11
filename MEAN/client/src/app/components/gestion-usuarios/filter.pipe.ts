@@ -11,7 +11,8 @@ export class FilterPipe implements PipeTransform {
         }
         return usuarios.filter(usuario =>
             usuario.nombre.toLowerCase().includes(searchText.toLowerCase()) ||
-            usuario.numDoc.includes(searchText)
+            usuario.apellidos.toLowerCase().includes(searchText.toLowerCase()) || // Agrega búsqueda por apellidos
+            usuario.numDoc.includes(searchText) // Agrega búsqueda por número de documento
         );
     }
 }

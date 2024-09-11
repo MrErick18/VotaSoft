@@ -13,30 +13,30 @@
         <div class="d-flex align-items-center mb-2">
             <input type="checkbox" (change)="toggleSelectAll($event)" id="selectAll">
             <label for="selectAll" class="ms-2">Seleccionar Todos</label>
-            <button class="btn btn-danger btn-sm ms-auto" (click)="eliminarUsuariosSeleccionados()"
-                *ngIf="anySelected()">Eliminar Seleccionados</button>
+            <button class="btn btn-danger btn-sm ms-auto" *ngIf="anySelected()"
+                (click)="eliminarUsuariosSeleccionados()">
+                Eliminar Seleccionados
+            </button>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellidos</th>
-                        <th scope="col">Tipo de Documento</th>
-                        <th scope="col">Número de Documento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let usuario of usuarios | filter:searchText">
-                        <td><input type="checkbox" [(ngModel)]="usuario.selected"></td>
-                        <td>{{ usuario.nombre }}</td>
-                        <td>{{ usuario.apellidos }}</td>
-                        <td>{{ usuario.tipoDoc }}</td>
-                        <td>{{ usuario.numDoc }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Tipo de Documento</th>
+                    <th>Numero de Documento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let usuario of usuarios | filter:searchText">
+                    <td><input type="checkbox" [(ngModel)]="usuario.selected"></td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.apellidos }}</td>
+                    <td>{{ usuario.tipoDoc }}</td>
+                    <td>{{ usuario.numDoc }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </section>

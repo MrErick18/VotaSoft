@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FilterPipe } from './filter.pipe'; // Ajusta la ruta según sea necesario
 import { UsuariosService } from '../../services/usuarios.service'; // Asegúrate de que la ruta sea correcta
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -75,21 +75,7 @@ export class GestionUsuariosComponent implements OnInit {
     }
   }
 
-  eliminarUsuario(id: string): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-      this.usuariosService.eliminarUsuario(id).subscribe(
-        () => {
-          this.toastr.success('Usuario eliminado con éxito', 'Éxito');
-          this.obtenerUsuarios();
-        },
-        (error) => {
-          this.toastr.error('Error al eliminar el usuario', 'Error');
-        }
-      );
-    }
-  }
-
-  toggleSelectAll(event: any): void {
+  toggleSelectAll(event: any) {
     const checked = event.target.checked;
     this.usuarios.forEach(usuario => usuario.selected = checked);
   }
@@ -99,19 +85,37 @@ export class GestionUsuariosComponent implements OnInit {
   }
 
   eliminarUsuariosSeleccionados(): void {
-    const usuariosSeleccionados = this.usuarios.filter(usuario => usuario.selected).map(usuario => usuario._id);
-    if (usuariosSeleccionados.length > 0 && confirm('¿Estás seguro de que deseas eliminar los usuarios seleccionados?')) {
-      usuariosSeleccionados.forEach(id => {
-        this.usuariosService.eliminarUsuario(id).subscribe(
-          () => {
-            this.toastr.success('Usuario eliminado con éxito', 'Éxito');
-            this.obtenerUsuarios();
+    const usuariosSeleccionados = this.usuarios.filter(usuario => usuario.selected);
+
+    if (usuariosSeleccionados.length === 0) {
+      this.toastr.warning('No se ha seleccionado ningún usuario.', 'Advertencia');
+      return;
+    }
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esto',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText:'Cancelar '
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const idsSeleccionados = usuariosSeleccionados.map(usuario => usuario._id);
+
+        this.usuariosService.eliminarUsuarios(idsSeleccionados).subscribe(
+          response => {
+            Swal.fire('Eliminado!', 'Los usuarios seleccionados han sido eliminados.', 'success');
+            this.obtenerUsuarios(); // Actualiza la lista de usuarios después de la eliminación
           },
-          (error) => {
-            this.toastr.error('Error al eliminar el usuario', 'Error');
+          error => {
+            Swal.fire('Error!', 'No se pudieron eliminar los usuarios.', 'error');
+            console.error('Error al eliminar los usuarios:', error);
           }
         );
-      });
-    }
+      }
+    });
   }
 }

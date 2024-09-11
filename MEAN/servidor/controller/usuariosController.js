@@ -1,4 +1,3 @@
-// controllers/usuariosController.js
 const ExcelJS = require('exceljs'); // Importar exceljs
 const Usuarios = require('../models/Usuarios');
 const path = require('path');
@@ -28,17 +27,17 @@ exports.obtenerUsuarios = async (req, res) => {
 };
 
 // Actualizar usuario
-exports.actualizarUsusarios = async (req, res) => {
+exports.actualizarUsuarios = async (req, res) => {
     try {
         const { nombre, apellidos, tipoDoc, numDoc } = req.body;
-        let usuarios = await Usuarios.findById(req.params.id);
-        if (!usuarios) { return res.status(400).json({ msg: "Usuario no existe" }); }
-        usuarios.nombre = nombre;
-        usuarios.apellidos = apellidos;
-        usuarios.tipoDoc = tipoDoc;
-        usuarios.numDoc = numDoc;
-        usuarios = await Usuarios.findByIdAndUpdate({ _id: req.params.id }, usuarios, { new: true });
-        res.json(usuarios);
+        let usuario = await Usuarios.findById(req.params.id);
+        if (!usuario) { return res.status(400).json({ msg: "Usuario no existe" }); }
+        usuario.nombre = nombre;
+        usuario.apellidos = apellidos;
+        usuario.tipoDoc = tipoDoc;
+        usuario.numDoc = numDoc;
+        usuario = await Usuarios.findByIdAndUpdate({ _id: req.params.id }, usuario, { new: true });
+        res.json(usuario);
     } catch (error) {
         console.log(error);
         res.status(500).send('Ocurrió un error al actualizar');
@@ -61,17 +60,37 @@ exports.buscarUsuarios = async (req, res) => {
 };
 
 // Eliminar usuario
-exports.eliminarUsuarios = async (req, res) => {
+exports.eliminarUsuario = async (req, res) => {
     try {
-        let usuarios = await Usuarios.findById(req.params.id);
-        if (!usuarios) {
-            res.status(400).json({ msg: "Usuario no existe" });
+        console.log(`Intentando eliminar usuario con ID: ${req.params.id}`);
+        let usuario = await Usuarios.findById(req.params.id);
+        if (!usuario) {
+            console.log(`Usuario con ID: ${req.params.id} no encontrado`);
+            return res.status(400).json({ msg: "Usuario no existe" });
         }
         await Usuarios.findByIdAndDelete(req.params.id);
+        console.log(`Usuario con ID: ${req.params.id} eliminado`);
         res.json({ msg: "Usuario eliminado" });
     } catch (error) {
-        console.log("Error", error);
-        res.status(500).send('Ocurrió un error');
+        console.error("Error al eliminar el usuario:", error);
+        res.status(500).json({ msg: 'Ocurrió un error al eliminar el usuario', error: error.message });
+    }
+};
+
+// Función para eliminar múltiples usuarios
+exports.eliminarUsuarios = async (req, res) => {
+    try {
+        const { ids } = req.body;
+
+        if (!ids || !Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ error: 'No se proporcionaron IDs válidos' });
+        }
+
+        await Usuarios.deleteMany({ _id: { $in: ids } });
+        res.status(200).json({ message: 'Usuarios eliminados correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar los usuarios:', error);
+        res.status(500).json({ error: 'Error al eliminar los usuarios' });
     }
 };
 
@@ -112,13 +131,6 @@ exports.subirArchivo = async (req, res) => {
             const tipoDoc = row.getCell(3).value;
             const numDoc = row.getCell(4).value;
 
-            // Añade estos console.log para verificar los valores
-            console.log(`Fila ${rowNumber}:`);
-            console.log(`Nombre: ${nombre}`);
-            console.log(`Apellidos: ${apellidos}`);
-            console.log(`TipoDoc: ${tipoDoc}`);
-            console.log(`NumDoc: ${numDoc}`);
-
             if (!nombre || !apellidos || !tipoDoc || !numDoc) {
                 throw new Error('Algunos campos requeridos están vacíos');
             }
@@ -130,11 +142,9 @@ exports.subirArchivo = async (req, res) => {
 
         fs.unlinkSync(filePath);
 
-        res.json({ message: 'Archivo subido y usuarios creados' }); // Cambia a JSON para manejar mejor la respuesta en el frontend
+        res.json({ message: 'Archivo subido y usuarios creados' });
     } catch (error) {
         console.error('Error al subir el archivo:', error.message);
-        res.status(500).json({ error: error.message }); // Cambia a JSON para manejar mejor la respuesta en el frontend
+        res.status(500).json({ error: error.message });
     }
 };
-
-

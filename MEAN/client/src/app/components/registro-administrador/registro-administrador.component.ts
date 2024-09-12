@@ -1,3 +1,4 @@
+// registro-administrador.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -38,8 +39,8 @@ export class RegistroAdministradorComponent {
       const numDoc = this.adminForm.get('numDoc')?.value;
       
       this.administradorService.verificarNumeroDocumento(numDoc).subscribe(
-        existe => {
-          if (existe) {
+        response => {
+          if (response.exists) {
             this.toastr.error('El número de documento ya está en uso', 'Error');
           } else {
             this.administradorService.agregarAdministrador(this.adminForm.value).subscribe(

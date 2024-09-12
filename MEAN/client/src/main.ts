@@ -16,7 +16,6 @@ bootstrapApplication(AppComponent, {
   ]
 }).catch(err => console.error(err));
 
-
 // Add logout functionality after the application is initialized
 document.addEventListener('DOMContentLoaded', () => {
   const logoutLink = document.getElementById('logout-link');

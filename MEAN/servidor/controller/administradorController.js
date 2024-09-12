@@ -117,19 +117,24 @@ exports.verificarNumeroDocumento = async (req, res) => {
         const administrador = await Administrador.findOne({ numDoc });
         res.json({ exists: !!administrador }); // Devuelve true si existe, false si no
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send('Ocurrió un error al verificar el número de documento');
     }
 };
 
+// Verificar Correo y Enviar Correo de Recuperación
 exports.verificarCorreo = async (req, res) => {
     try {
         const { correo } = req.params;
         const administrador = await Administrador.findOne({ correo });
 
         if (administrador) {
-            const token = crypto.randomBytes(20).toString('hex');
-            
+            const token = jwt.sign(
+                { administrador_id: administrador._id },
+                "tu_clave_secreta",
+                { expiresIn: '1h' }
+            );
+
             administrador.resetPasswordToken = token;
             administrador.resetPasswordExpires = Date.now() + 3600000; // 1 hora
             await administrador.save();
@@ -158,18 +163,25 @@ exports.verificarCorreo = async (req, res) => {
     }
 };
 
+// Restablecer Contraseña
 exports.restablecerContrasena = async (req, res) => {
     try {
         const { token, nuevaContrasena } = req.body;
-        const administrador = await Administrador.findOne({
-            resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() }
-        });
 
-        if (!administrador) {
+        // Verificar el token JWT
+        let payload;
+        try {
+            payload = jwt.verify(token, "tu_clave_secreta");
+        } catch (err) {
             return res.status(400).json({ message: 'Token inválido o expirado' });
         }
 
+        const administrador = await Administrador.findById(payload.administrador_id);
+        if (!administrador) {
+            return res.status(400).json({ message: 'Administrador no encontrado' });
+        }
+
+        // Actualizar la contraseña
         administrador.contrasena = bcrypt.hashSync(nuevaContrasena, 12);
         administrador.resetPasswordToken = undefined;
         administrador.resetPasswordExpires = undefined;

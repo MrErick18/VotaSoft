@@ -31,14 +31,14 @@ export class AdministradorService {
     return this.http.delete(`${this.url}${id}`);
   }
 
-  verificarNumeroDocumento(numDoc: string): Observable<any> {
-    return this.http.get(`${this.url}verificar/${numDoc}`);
+  verificarNumeroDocumento(numDoc: string): Observable<{ exists: boolean }> {
+    return this.http.get<{ exists: boolean }>(`${this.url}verificar/${numDoc}`);
   }
-
+  
   verificarCorreo(correo: string): Observable<any> {
     return this.http.get<any>(`${this.url}verificarCorreo/${correo}`);
   }
-  
+
   restablecerContrasena(token: string, nuevaContrasena: string): Observable<any> {
     return this.http.post<any>(`${this.url}restablecerContrasena`, { token, nuevaContrasena });
   }

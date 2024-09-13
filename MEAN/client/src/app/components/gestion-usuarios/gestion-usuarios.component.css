@@ -25,3 +25,14 @@
     color: rgb(0, 0, 0);
     font-size: 13.4px;
 }
+
+.inpdddut[type="file"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    background-color: #1baac0;
+    border-radius: 5px;
+    width: 65%;
+    cursor: pointer;
+    margin-top: 18px;
+}

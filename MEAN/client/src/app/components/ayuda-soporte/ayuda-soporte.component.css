@@ -2,12 +2,14 @@
     position: relative;
     width: 850px;
     height: 850px;
-    background: #f00;
+    background: transparent; /* Fondo transparente */
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 5px;
     margin-left: 165px;
+    border: 5px solid rgba(0, 188, 212, 0.8); /* Borde iluminado azul */
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); /* Sombra para resaltar el borde */
 }
 
 .card::before {
@@ -17,7 +19,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(315deg, #03a9f4, #00eeff);
+    background: rgba(0, 188, 212, 0.2); /* Fondo azul claro con transparencia para la animación */
+    z-index: 1;
 }
 
 .card::after {
@@ -27,14 +30,15 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(315deg, #03a9f4, #00eeff);
-    filter: blur(30px);
+    background: rgba(0, 188, 212, 0.2); /* Fondo azul claro con transparencia para la animación */
+    filter: blur(10px); /* Menos desenfoque para un efecto más suave */
+    z-index: 0;
 }
 
 .card b {
     position: absolute;
     inset: 6px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.4); /* Fondo más suave */
     z-index: 2;
 }
 
@@ -103,11 +107,10 @@
     list-style: none;
 }
 
-
 .sci li a {
     position: relative;
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.7); /* Color más claro */
     background: rgba(0, 0, 0, 0.2);
     fill: currentColor;
     width: 30px;

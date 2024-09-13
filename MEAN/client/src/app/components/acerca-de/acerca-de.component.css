@@ -1,4 +1,108 @@
-.container{
-    height: 90%;
-    width: 90%;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    opacity: 0; /* Start hidden for animation */
+    animation: fadeIn 1s forwards; /* Apply fade-in animation */
+}
+
+.info {
+    flex: 1;
+    min-width: 300px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effects */
+}
+
+.info:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 26px;
+    color: #333;
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.text {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.list li {
+    background: #ffffff;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-size: 18px;
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.list li:hover {
+    background-color: #eaf4f4; /* Light blue background on hover */
+}
+
+.security {
+    border-left: 5px solid #FF9800;
+    background: #FEF6E4;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 22px;
+    }
+    
+    .text, .list li {
+        font-size: 16px;
+    }
+    
+    .main-card {
+        flex-direction: column;
+    }
 }

@@ -124,7 +124,7 @@ exports.subirArchivo = async (req, res) => {
         const jsonData = [];
 
         worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-            if (rowNumber === 1) return; // Ignorar la primera fila si contiene encabezados
+            if (rowNumber < 6) return; // Ignorar la primera fila si contiene encabezados
 
             const nombre = row.getCell(1).value;
             const apellidos = row.getCell(2).value;

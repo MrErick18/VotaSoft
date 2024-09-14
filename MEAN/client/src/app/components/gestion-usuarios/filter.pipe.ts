@@ -9,10 +9,12 @@ export class FilterPipe implements PipeTransform {
         if (!usuarios || !searchText) {
             return usuarios;
         }
+        searchText = searchText.toLowerCase();
         return usuarios.filter(usuario =>
-            usuario.nombre.toLowerCase().includes(searchText.toLowerCase()) ||
-            usuario.apellidos.toLowerCase().includes(searchText.toLowerCase()) || // Agrega búsqueda por apellidos
-            usuario.numDoc.includes(searchText) // Agrega búsqueda por número de documento
+            usuario.nombre.toLowerCase().includes(searchText) ||
+            usuario.apellidos.toLowerCase().includes(searchText) ||
+            usuario.tipoDoc.toLowerCase().includes(searchText) ||
+            usuario.numDoc.includes(searchText)
         );
     }
 }

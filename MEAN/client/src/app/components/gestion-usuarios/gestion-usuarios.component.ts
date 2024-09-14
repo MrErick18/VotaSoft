@@ -6,6 +6,7 @@ import { FilterPipe } from './filter.pipe'; // Ajusta la ruta según sea necesar
 import { UsuariosService } from '../../services/usuarios.service'; // Asegúrate de que la ruta sea correcta
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { NgxPaginationModule } from 'ngx-pagination'; // Importa NgxPaginationModule
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -15,7 +16,8 @@ import Swal from 'sweetalert2';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    FilterPipe
+    FilterPipe,
+    NgxPaginationModule // Añade NgxPaginationModule
   ],
   templateUrl: './gestion-usuarios.component.html',
   styleUrls: ['./gestion-usuarios.component.css']
@@ -24,6 +26,7 @@ export class GestionUsuariosComponent implements OnInit {
   usuarios: any[] = [];
   selectedFile: File | null = null;
   searchText: string = '';
+  p: number = 1; // Página actual
 
   constructor(
     private usuariosService: UsuariosService,
@@ -100,7 +103,7 @@ export class GestionUsuariosComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, eliminarlo',
-      cancelButtonText:'Cancelar '
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         const idsSeleccionados = usuariosSeleccionados.map(usuario => usuario._id);

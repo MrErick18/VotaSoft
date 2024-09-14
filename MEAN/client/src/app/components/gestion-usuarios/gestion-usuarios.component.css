@@ -36,3 +36,24 @@
     cursor: pointer;
     margin-top: 18px;
 }
+
+#send1 {
+    background-color: #1baac0;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+}
+
+#send1:hover {
+    background-color: #138991;
+}
+
+#send1:active {
+    background-color: #0f6e77;
+    transform: scale(0.98);
+}

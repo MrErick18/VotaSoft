@@ -8,10 +8,10 @@
                 <input placeholder="Buscar..." id="input" class="input" name="text" type="text">
             </div>
             <div class="container">
-                <form>
+                <form (submit)="uploadFile()">
                     <label for="arquivo"></label>
-                    <input accept=".xlsx" class="inpdddut" name="arquivo" id="arquivo"
-                        type="file">
+                    <input accept=".xlsx" class="inpdddut" name="arquivo" id="arquivo" type="file" (change)="onFileChange($event)">
+                    <button type="submit" id="send1" class="btn btn-primary">Subir</button>
                 </form>
             </div>
         </div>

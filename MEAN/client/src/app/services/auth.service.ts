@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:4000/api/administrador'; // Asegúrate de que esta URL coincide con tu backend
+  private apiUrl = `${environment.apiUrl}/administrador`; // URL base de la API
 
   constructor(private http: HttpClient) { }
 

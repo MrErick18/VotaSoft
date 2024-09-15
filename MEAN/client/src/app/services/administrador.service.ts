@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -7,7 +8,7 @@ import { Administrador } from '../models/administrador';
   providedIn: 'root'
 })
 export class AdministradorService {
-  private url = 'http://localhost:4000/api/administrador/'; // URL base de la API
+  private url = `${environment.apiUrl}/administrador/`; // URL base de la API
 
   constructor(private http: HttpClient) { }
 

@@ -12,10 +12,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/client",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": ["src/polyfills.ts"],
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/assets",
@@ -23,6 +25,11 @@
                 "glob": "render.yaml",
                 "input": "src/assets",
                 "output": "/assets/"
+              },
+              {
+                "glob": "vercel.json",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
@@ -34,7 +41,10 @@
               "moment",
               "moment-timezone",
               "sweetalert2"
-            ]
+            ],
+            "baseHref": "/",
+            "deployUrl": "/",
+            "outputHashing": "all"
           },
           "configurations": {
             "production": {
@@ -73,41 +83,6 @@
             }
           },
           "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "buildTarget": "client:build"
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "client:build:production"
-            },
-            "development": {
-              "buildTarget": "client:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "src/assets",
-                "output": "/assets/"
-              }
-            ],
-            "styles": ["src/styles.css"],
-            "scripts": []
-          }
         }
       }
     }

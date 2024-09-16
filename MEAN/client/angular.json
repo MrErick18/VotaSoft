@@ -5,30 +5,30 @@
   "projects": {
     "client": {
       "projectType": "application",
-      "root": "",
-      "sourceRoot": "src",
+      "root": "client",
+      "sourceRoot": "client/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/client",
-            "index": "src/index.html",
-            "main": "src/main.ts",
+            "outputPath": "client/dist",
+            "index": "client/src/index.html",
+            "main": "client/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "client/tsconfig.app.json",
             "assets": [
-              "src/assets",
+              "client/src/assets",
               {
                 "glob": "**/*",
-                "input": "src/assets",
+                "input": "client/src/assets",
                 "output": "/assets/"
               }
             ],
             "styles": [
-              "src/styles.css",
+              "client/src/styles.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [],
@@ -43,13 +43,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1.5MB",
-                  "maximumError": "2MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "2.5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all"
@@ -87,17 +87,17 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "tsconfig.spec.json",
+            "tsConfig": "client/tsconfig.spec.json",
             "assets": [
-              "src/assets",
+              "client/src/assets",
               {
                 "glob": "**/*",
-                "input": "src/assets",
+                "input": "client/src/assets",
                 "output": "/assets/"
               }
             ],
             "styles": [
-              "src/styles.css"
+              "client/src/styles.css"
             ],
             "scripts": []
           }

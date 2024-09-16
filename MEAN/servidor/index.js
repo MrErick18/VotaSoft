@@ -7,6 +7,7 @@ const { updateEleccionesEstado } = require('./services/eleccionService');
 
 const app = express();
 
+// Conectar a la base de datos
 conectarDB();
 
 // Configuración de CORS
@@ -23,15 +24,16 @@ app.use(cors(corsOptions));
 // Configuración para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
+// Enviar el archivo index.html para cualquier ruta no reconocida
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
-// Resto de tu configuración...
+// Configuración del middleware
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
-// Tus rutas...
+// Rutas
 app.use('/api/administrador', require('./routes/administrador'));
 app.use('/api/candidato', require('./routes/candidato'));
 app.use('/api/eleccion', require('./routes/eleccion'));
@@ -39,7 +41,8 @@ app.use('/api/resultados', require('./routes/resultados'));
 app.use('/api/usuarios', require('./routes/usuario'));
 app.use('/api/voto', require('./routes/voto'));
 
-// Tu configuración de cron...
+// Configuración del cron (si es necesario)
+// cron.schedule('*/5 * * * *', updateEleccionesEstado);
 
 const PORT = process.env.PORT || 4000;
 

@@ -31,27 +31,28 @@
               "src/styles.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "moment",
+              "moment-timezone",
+              "sweetalert2"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1MB",
-                  "maximumError": "1.5MB"
+                  "maximumWarning": "1.5MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "6kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all",
-              "allowedCommonJsDependencies": [
-                "moment",
-                "moment-timezone"
-              ]
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,

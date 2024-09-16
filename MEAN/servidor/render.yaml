@@ -3,7 +3,12 @@ services:
     name: votasoft-backend
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: |
+      cd client
+      npm install
+      npm run build -- --configuration production
+      cd ..
+      npm install
     startCommand: node server.ts
     envVars:
       - key: NODE_ENV
@@ -11,3 +16,5 @@ services:
     routes:
       - src: /api/(.*)
         dest: /api/$1
+      - src: /(.*)
+        dest: /client/dist/$1

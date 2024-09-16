@@ -2,8 +2,6 @@ const path = require('path');
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
-const cron = require('node-cron');
-const { updateEleccionesEstado } = require('./services/eleccionService');
 
 const app = express();
 
@@ -40,9 +38,6 @@ app.use('/api/eleccion', require('./routes/eleccion'));
 app.use('/api/resultados', require('./routes/resultados'));
 app.use('/api/usuarios', require('./routes/usuario'));
 app.use('/api/voto', require('./routes/voto'));
-
-// Configuración del cron (si es necesario)
-// cron.schedule('*/5 * * * *', updateEleccionesEstado);
 
 const PORT = process.env.PORT || 4000;
 

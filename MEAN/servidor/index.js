@@ -1,18 +1,29 @@
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
-const cron = require('node-cron'); // Importar node-cron
-const { updateEleccionesEstado } = require('./services/eleccionService'); // Importar la función del servicio
+const cron = require('node-cron');
+const { updateEleccionesEstado } = require('./services/eleccionService');
 
 const app = express();
 
 conectarDB();
-app.use(cors());
 
-// Configurar express.json para manejar cuerpos de solicitud grandes
+// Configuración de CORS
+const corsOptions = {
+  origin: ['https://votasoft-web.onrender.com', 'https://votasoft.onrender.com', 'http://localhost:4200'], // Asegúrate de reemplazar esto con la URL de tu frontend en producción
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Permite el envío de cookies si es necesario
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+
+// Resto de tu configuración...
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
+// Tus rutas...
 app.use('/api/administrador', require('./routes/administrador'));
 app.use('/api/candidato', require('./routes/candidato'));
 app.use('/api/eleccion', require('./routes/eleccion'));
@@ -20,18 +31,8 @@ app.use('/api/resultados', require('./routes/resultados'));
 app.use('/api/usuarios', require('./routes/usuario'));
 app.use('/api/voto', require('./routes/voto'));
 
-// Configurar el cron job para actualizar el estado de las elecciones
-cron.schedule('0 * * * *', async () => {
-  try {
-    console.log('Ejecutando cron job para actualizar el estado de las elecciones...');
-    await updateEleccionesEstado();
-    console.log('Estado de las elecciones actualizado con éxito.');
-  } catch (error) {
-    console.error('Error al actualizar el estado de las elecciones:', error);
-  }
-});
+// Tu configuración de cron...
 
-// Utiliza el puerto proporcionado por Render o por defecto el 4000 si no está definido
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {

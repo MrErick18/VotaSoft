@@ -21,10 +21,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Configuración para servir archivos estáticos
-app.use(express.static(path.join(__dirname, 'client', 'dist', 'browser')));
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'browser', 'index.csr.html'));
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 // Resto de tu configuración...

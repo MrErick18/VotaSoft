@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    HttpClientModule // Agregar HttpClientModule aquí
+    HttpClientModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -24,7 +24,7 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService // Inyectar ToastrService
+    private toastr: ToastrService
   ) {
     this.loginForm = this.formBuilder.group({
       numDoc: ['', [Validators.required]],
@@ -38,9 +38,11 @@ export class LoginComponent {
       this.authService.login(numDoc, contrasena).subscribe(
         response => {
           if (response.token) {
-            localStorage.setItem('token', response.token);
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.setItem('token', response.token);
+            }
             this.toastr.success('Inicio de sesión exitoso', 'Bienvenido');
-            this.router.navigate(['/menu-principal']); // Cambia a la ruta que desees
+            this.router.navigate(['/menu-principal']);
           } else {
             this.toastr.error('Error de autenticación', 'Inicio de sesión fallido');
           }

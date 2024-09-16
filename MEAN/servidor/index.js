@@ -1,4 +1,3 @@
-// server.js (o index.js)
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
@@ -32,6 +31,9 @@ cron.schedule('0 * * * *', async () => {
   }
 });
 
-app.listen(4000, () => {
-  console.log('Servidor funcionando en el puerto 4000');
+// Utiliza el puerto proporcionado por Render o por defecto el 4000 si no está definido
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor funcionando en el puerto ${PORT}`);
 });

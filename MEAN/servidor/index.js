@@ -26,13 +26,6 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
-// Configuración para servir archivos estáticos
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
-
-// Enviar el archivo index.html para cualquier ruta no reconocida
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-});
 
 // Rutas
 app.use('/api/administrador', require('./routes/administrador'));

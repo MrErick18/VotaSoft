@@ -13,12 +13,12 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "ES2015",
+    "module": "ESNext",
     "lib": [
-      "ES2022",
+      "ES2015",
       "dom"
     ]
   },
@@ -31,6 +31,6 @@
   "include": [
     "src/**/*.ts",
     "src/main.ts",
-    "src/app/app.module.ts"
+    "src/app/**/*.ts"
   ]
 }

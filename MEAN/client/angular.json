@@ -18,7 +18,7 @@
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "client/tsconfig.app.json",
+            "tsConfig": "client/src/tsconfig.app.json",
             "assets": [
               "client/src/assets",
               {
@@ -87,7 +87,7 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "client/tsconfig.spec.json",
+            "tsConfig": "client/src/tsconfig.spec.json",
             "assets": [
               "client/src/assets",
               {

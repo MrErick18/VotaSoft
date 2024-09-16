@@ -1,41 +1,99 @@
-.login-container {
-    width: 350px;
-    margin: 100px auto;
-    padding: 30px;
-    margin-left: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
+.form-container {
+    height: auto; /* Ajustado para que el contenedor se adapte al contenido */
+    width: 200%; /* Cambiado a porcentaje para adaptarse a diferentes tamaños de pantalla */
+    max-width: 50rem; /* Asegura que el contenedor no sea más ancho que este valor */
+    border-radius: 0.75rem;
+    background-color: rgb(0, 0, 0);
+    padding: 2rem;
+    color: rgba(243, 244, 246, 1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 4rem;
+    overflow: hidden; /* Evita la barra de desplazamiento */
 }
 
-.logo img {
+.title {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+}
+
+.form {
+    margin-top: 1.5rem;
+}
+
+.input-group {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.input-group label {
     display: block;
-    margin: 0 auto 20px;
-    width: 80%;
+    color: rgb(255, 255, 255);
+    margin-bottom: 0.25rem; /* Reducido para un mejor espaciado */
 }
 
-h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.btn {
+.input-group input {
     width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(55, 65, 81, 1); /* Color de contorno de campos */
+    outline: 0;
+    background-color: rgb(0, 0, 0); /* Color dentro de los campos */
+    padding: 0.75rem 1rem;
+    color: rgba(243, 244, 246, 1); /* Color de la letra dentro de los campos */
+    margin-bottom: 1.5rem; /* Reducido para evitar exceso de espacio */
 }
 
-.input-group-text {
-    background-color: #138D75;
-    color: white;
+.input-group input:focus {
+    border-color: rgb(62, 4, 236); /* Color del contorno de los campos al seleccionar */
 }
 
-.input-group-text .fas {
-    color: white;
+.error-message {
+    color: red;
+    font-size: 0.75rem;
+    margin-top: 0.25rem; /* Espacio entre el input y el mensaje de error */
 }
 
-.text-center a {
-    color: #138D75;
+.input-group .forgot {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgb(255, 255, 255);
+    margin-top: 0.5rem; /* Margen superior para separar del input */
+    position: relative; /* Necesario para que el siguiente ajuste funcione */
+    padding-top: 1rem; /* Ajusta el espacio para el mensaje de error */
 }
+
+.input-group .forgot a {
+    color: blue(243, 244, 246, 1);
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.input-group .forgot a:hover {
+    text-decoration: underline rgb(28, 104, 219);
+}
+
+.sign {
+    display: block;
+    width: 100%;
+    background-color: rgba(28, 104, 219);
+    padding: 0.75rem;
+    text-align: center;
+    color: rgb(3, 3, 3);
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+}
+
+.signup {
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgb(255, 255, 255);
+    margin-top: 2rem; /* Ajuste de margen para separación adecuada */
+}
+

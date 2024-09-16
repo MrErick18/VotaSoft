@@ -1,0 +1,99 @@
+.container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f9fc;
+    padding: 2rem; /* Espaciado interno del contenedor */
+    border-radius: 0.5rem; /* Bordes redondeados */
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 100%; /* Ancho máximo del contenedor */
+    margin-top: 1%; /* Margen superior */
+    background-color: #ffffff; /* Fondo blanco para el contenedor */
+    height: 91%;
+    margin-left: 17%;
+}
+
+h2.text-center {
+    font-size: 1.75rem; /* Tamaño de fuente más grande */
+    color: #333333; /* Color del texto */
+    margin-bottom: 1.5rem; /* Espacio debajo del título */
+}
+
+p.text-center {
+    font-size: 1rem; /* Tamaño de fuente más pequeño para el texto */
+    color: #666666; /* Color del texto */
+    margin-bottom: 1.5rem; /* Espacio debajo del texto */
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem; /* Espacio horizontal entre columnas */
+}
+
+.col-md-6 {
+    flex: 1 1 calc(50% - 1rem); /* Ajusta el ancho para permitir espacio entre columnas */
+    box-sizing: border-box; /* Incluye padding y border en el ancho */
+}
+
+.form-group {
+    margin-bottom: 0.50rem; /* Espacio entre los grupos de formulario */
+}
+
+label {
+    font-size: 1rem; /* Tamaño de fuente del label */
+    color: #333333; /* Color del texto del label */
+    display: block; /* Asegura que el label ocupe toda la línea */
+    margin-bottom: 0.5rem; /* Espacio debajo del label */
+}
+
+.form-control {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    padding: 0.75rem; /* Espaciado interno del campo */
+    border: 0.0625rem solid #cccccc; /* Color del borde */
+    border-radius: 0.25rem; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño de fuente del campo */
+    box-sizing: border-box; /* Incluye padding en el cálculo del ancho */
+    transition: border-color 0.3s ease; /* Transición suave para el borde */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Color del borde al hacer foco */
+    outline: none; /* Quita el borde de enfoque predeterminado */
+}
+
+.invalid-feedback {
+    color: #dc3545; /* Color del mensaje de error */
+    font-size: 0.875rem; /* Tamaño de fuente del mensaje de error */
+    margin-top: 0.25rem; /* Espacio encima del mensaje de error */
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+}
+
+.btn {
+    padding: 0.75rem 1.5rem; /* Espaciado interno del botón */
+    border: none;
+    border-radius: 0.25rem; /* Bordes redondeados */
+    color: #ffffff; /* Color del texto del botón */
+    font-size: 1rem; /* Tamaño de fuente del botón */
+    cursor: pointer; /* Cursor tipo puntero */
+    transition: background-color 0.3s ease; /* Transición suave para el fondo */
+    margin-left: 1rem; /* Espacio a la izquierda de los botones */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Color de fondo del botón primario */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el ratón */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Color de fondo del botón peligroso */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Color de fondo al pasar el ratón */
+}

@@ -22,7 +22,7 @@
             "assets": [
               "src/assets",
               {
-                "glob": "**/*",
+                "glob": "render.yaml",
                 "input": "src/assets",
                 "output": "/assets/"
               }

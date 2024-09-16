@@ -7,7 +7,7 @@
     padding: 2rem;
     color: rgba(243, 244, 246, 1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-top: 4rem;
+    margin-top: 4rem; /* Margen superior*/
     overflow: hidden; /* Evita la barra de desplazamiento */
 }
 

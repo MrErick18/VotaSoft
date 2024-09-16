@@ -1,12 +1,13 @@
+const path = require('path');
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
-const path = require('path');
 const cron = require('node-cron');
 const { updateEleccionesEstado } = require('./services/eleccionService');
 
 const app = express();
 
+// Conectar a la base de datos
 conectarDB();
 
 // Configuración de CORS
@@ -19,10 +20,20 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Configuración para servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
+// Enviar el archivo index.html para cualquier ruta no reconocida
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+
+// Configuración del middleware
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
-// Rutas de API
+// Rutas
 app.use('/api/administrador', require('./routes/administrador'));
 app.use('/api/candidato', require('./routes/candidato'));
 app.use('/api/eleccion', require('./routes/eleccion'));
@@ -30,15 +41,8 @@ app.use('/api/resultados', require('./routes/resultados'));
 app.use('/api/usuarios', require('./routes/usuario'));
 app.use('/api/voto', require('./routes/voto'));
 
-// Servir los archivos estáticos de la aplicación Angular
-app.use(express.static(path.join(__dirname, 'client/dist/tu-aplicacion-angular')));
-
-// Ruta para manejar todas las solicitudes y redirigirlas al index.html
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist/tu-aplicacion-angular/index.html'));
-});
-
-// Tu configuración de cron...
+// Configuración del cron (si es necesario)
+// cron.schedule('*/5 * * * *', updateEleccionesEstado);
 
 const PORT = process.env.PORT || 4000;
 

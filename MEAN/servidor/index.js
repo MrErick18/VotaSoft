@@ -2,6 +2,9 @@ const path = require('path');
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 
@@ -10,7 +13,7 @@ conectarDB();
 
 // Configuración de CORS
 const corsOptions = {
-  origin: ['https://votasoft-web.onrender.com', 'https://votasoft.onrender.com', 'http://localhost:4200'],
+  origin: ['https://votasoft-web.vercel.app', 'https://votasoft.vercel.app', 'http://localhost:4200'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -19,6 +22,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Configuración del middleware
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
 // Configuración para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
@@ -26,10 +33,6 @@ app.use(express.static(path.join(__dirname, 'client', 'dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
-
-// Configuración del middleware
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Rutas
 app.use('/api/administrador', require('./routes/administrador'));

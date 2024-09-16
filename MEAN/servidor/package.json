@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "cd client && ng build --prod"
+    "build": "cd client && npm install && npm run build --prod"
   },
   "repository": {
     "type": "git",

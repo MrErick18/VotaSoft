@@ -5,30 +5,30 @@
   "projects": {
     "client": {
       "projectType": "application",
-      "root": "client",
-      "sourceRoot": "client/src",
+      "root": "",
+      "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "client/dist",
-            "index": "client/src/index.html",
-            "main": "client/src/main.ts",
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "src/polyfills.ts"
             ],
-            "tsConfig": "client/src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "assets": [
-              "client/src/assets",
+              "src/assets",
               {
                 "glob": "**/*",
-                "input": "client/src/assets",
+                "input": "src/assets",
                 "output": "/assets/"
               }
             ],
             "styles": [
-              "client/src/styles.css",
+              "src/styles.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [],
@@ -87,17 +87,17 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "client/src/tsconfig.spec.json",
+            "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "client/src/assets",
+              "src/assets",
               {
                 "glob": "**/*",
-                "input": "client/src/assets",
+                "input": "src/assets",
                 "output": "/assets/"
               }
             ],
             "styles": [
-              "client/src/styles.css"
+              "src/styles.css"
             ],
             "scripts": []
           }

@@ -1,16 +1,14 @@
-{
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/(.+\\.(?:ico|png|jpg|jpeg|gif|webp|svg|mp4|css|js))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
-}
+services:
+  - type: web
+    name: votasoft-frontend
+    env: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist/tu-aplicacion-angular
+    routes:
+      - src: /assets/(.*)
+        dest: /assets/$1
+      - src: /(.+\.(?:ico|png|jpg|jpeg|gif|webp|svg|mp4|css|js))
+        dest: /$1
+      - src: /(.*)
+        dest: /index.html

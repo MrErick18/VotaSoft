@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: votasoft-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+    routes:
+      - src: /api/(.*)
+        dest: /api/$1

@@ -18,12 +18,13 @@ bootstrapApplication(AppComponent, {
 
 // Add logout functionality after the application is initialized
 document.addEventListener('DOMContentLoaded', () => {
-  const logoutLink = document.getElementById('logout-link');
+  const enlaceCierreSesion = document.getElementById('logout-link');
   
-  if (logoutLink) {
-    logoutLink.addEventListener('click', () => {
+  if (enlaceCierreSesion) {
+    enlaceCierreSesion.addEventListener('click', (evento) => {
+      evento.preventDefault(); // Previene el comportamiento predeterminado del enlace
       localStorage.removeItem('token');
-      window.location.href = '/login'; // Redirect to the login page after logout
+      window.location.href = '/login'; // Redirige a la página de inicio de sesión después de cerrar sesión
     });
   }
 });

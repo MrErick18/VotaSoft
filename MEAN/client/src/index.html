@@ -4,47 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VotaSoft</title>
+  <link rel="icon" href="assets/menu.jpeg" type="image/jpeg">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style></style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-custom">
-    <div class="container-fluid">
+    <div class="container">
       <a class="navbar-brand" href="menu-principal">VotaSoft</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="acerca-de">Acerca De</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="ayuda-soporte">Ayuda y Soporte</a>
-          </li>
-          <li class="nav-item">
-            <a id="logout-link" class="nav-link" href="javascript:void(0)">Cerrar Sesión</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="lista-candidato"><i class="fas fa-user-tie"></i>Candidatos</a></li>
+          <li class="nav-item"><a class="nav-link" href="lista-eleccion"><i class="fas fa-vote-yea"></i>Elecciones</a></li>
+          <li class="nav-item"><a class="nav-link" href="gestion-usuarios"><i class="fas fa-users"></i>Usuarios</a></li>
+          <li class="nav-item"><a class="nav-link" href="gestion-resultados"><i class="fas fa-chart-bar"></i>Resultados</a></li>
+          <li class="nav-item"><a class="nav-link" href="menu-voto"><i class="fas fa-check-square"></i>Votar</a></li>
+          <li class="nav-item"><a class="nav-link" href="ayuda-soporte"><i class="fas fa-question-circle"></i>Ayuda</a></li>
+          <li class="nav-item"><a class="nav-link" href="acerca-de"><i class="fas fa-info-circle"></i>Acerca de</a></li>
+          <li class="nav-item"><a id="logout-link" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <div class="d-flex">
-    <div class="sidebar">
-      <a href="lista-candidato">Gestión de Candidatos</a>
-      <a href="lista-eleccion">Gestión de Elecciones</a>
-      <a href="gestion-usuarios">Gestión de Usuarios</a>
-      <a href="gestion-resultados">Gestión de Resultados</a>
-      <a href="menu-voto">Menu de Ingreso al Voto</a>
-    </div>
-
-    <div class="content">
-      <app-root></app-root>
-    </div>
+  <div class="container mt-4">
+    <app-root></app-root>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="main.ts"></script>
 </body>
 </html>

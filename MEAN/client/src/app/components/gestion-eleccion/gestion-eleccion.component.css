@@ -1,80 +1,154 @@
+/* Estilos generales del contenedor principal */
+.container-tod {
+    max-width: 100%;
+    width: 90%;
+    background-color: #f5f5f5;
+    padding: 2.5rem;
+    margin: 5rem auto;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+/* Estilos de la sección de contenido */
 section.content {
-    flex: 1;
-    padding: 40px;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 500px;
 }
 
-section.content h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
+/* Estilos del título */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }
 
-section.content p {
-    margin-bottom: 20px;
+/* Estilos del párrafo */
+p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
 }
 
+/* Estilos del formulario */
 form {
-    background-color: white;
-    padding: 20px;
+    background-color: #ffffff;
+    padding: 1.5rem;
     border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    max-width: 400px;
+    border-radius: 0.5rem;
+    max-width: 100%;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
 }
 
+/* Estilos de los elementos del formulario */
+form .form-group {
+    margin-bottom: 1rem;
+}
+
+/* Estilos de las etiquetas */
 form label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
     font-weight: bold;
+    color: #333;
 }
 
+/* Estilos de los inputs y selects */
 form input[type="text"],
 form input[type="date"],
-form textarea {
+form select {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 0.25rem;
+    font-size: 1rem;
 }
 
-form textarea {
-    height: 80px;
+/* Estilos de los mensajes de error */
+.text-danger {
+    color: #dc3545;
+    font-size: 0.875rem;
 }
 
-form input[type="submit"] {
-    background-color: #0080ff;
-    color: white;
-    padding: 10px;
+/* Estilos del botón de submit */
+form button.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.75rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     cursor: pointer;
     width: 100%;
+    font-size: 1rem;
 }
 
-form input[type="submit"]:hover {
-    background-color: #005bb5;
+form button.btn-primary:hover {
+    background-color: #0056b3;
 }
 
-footer {
-    background-color: #008080;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Media queries para dispositivos móviles */
+@media (max-width: 600px) {
+    .container-tod {
+        width: 100%;
+        padding: 1.5rem;
+        margin: 2rem auto;
+    }
+
+    section.content {
+        padding: 1rem;
+    }
+
+    form {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 0.875rem;
+    }
+
+    form input[type="text"],
+    form input[type="date"],
+    form select {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    form button.btn-primary {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
 }
 
-footer ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
+/* Media queries para tablets */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .container-tod {
+        width: 95%;
+        padding: 2rem;
+        margin: 3rem auto;
+    }
 
-footer ul li {
-    margin-left: 20px;
-}
+    section.content {
+        padding: 1.5rem;
+    }
 
-footer ul li a {
-    color: white;
-    text-decoration: none;
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    form input[type="text"],
+    form input[type="date"],
+    form select {
+        padding: 0.65rem;
+        font-size: 0.95rem;
+    }
+
+    form button.btn-primary {
+        padding: 0.65rem;
+        font-size: 0.95rem;
+    }
 }

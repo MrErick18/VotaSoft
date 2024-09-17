@@ -1,102 +1,147 @@
+:host {
+    display: block;
+    --bg-color: #f0f2f5;
+    --text-color: #333;
+    --input-bg: #fff;
+    --input-border: #ddd;
+    --input-focus: #1877f2;
+    --button-bg: #007bff;
+    --button-text: #fff;
+    --link-color: #007bff;
+    --error-color: #ff3333;
+}
+
+.dark-theme {
+    --bg-color: #1c1e21;
+    --text-color: #fff;
+    --input-bg: #3a3b3c;
+    --input-border: #4a4b4c;
+    --input-focus: #2d88ff;
+    --button-bg: #2d88ff;
+    --button-text: #fff;
+    --link-color: #4599ff;
+    --error-color: #ff6b6b;
+}
+
 .form-container {
-    height: auto; /* Ajustado para que el contenedor se adapte al contenido */
-    width: 200%; /* Cambiado a porcentaje para adaptarse a diferentes tamaños de pantalla */
-    max-width: 50rem; /* Asegura que el contenedor no sea más ancho que este valor */
-    border-radius: 0.75rem;
-    background-color: rgb(0, 0, 0);
+    max-width: 400px;
+    width: 90%;
+    margin: 5rem auto;
     padding: 2rem;
-    color: rgba(243, 244, 246, 1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-top: 4rem; /* Margen superior*/
-    overflow: hidden; /* Evita la barra de desplazamiento */
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle {
+    text-align: right;
+    margin-bottom: 1rem;
+}
+
+.theme-toggle button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .title {
     text-align: center;
     font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
 }
 
 .form {
-    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .input-group {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .input-group label {
-    display: block;
-    color: rgb(255, 255, 255);
-    margin-bottom: 0.25rem; /* Reducido para un mejor espaciado */
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
 }
 
 .input-group input {
-    width: 100%;
-    border-radius: 0.375rem;
-    border: 1px solid rgba(55, 65, 81, 1); /* Color de contorno de campos */
-    outline: 0;
-    background-color: rgb(0, 0, 0); /* Color dentro de los campos */
-    padding: 0.75rem 1rem;
-    color: rgba(243, 244, 246, 1); /* Color de la letra dentro de los campos */
-    margin-bottom: 0.275rem; /* Reducido para evitar exceso de espacio */
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
 }
 
 .input-group input:focus {
-    border-color: rgb(62, 4, 236); /* Color del contorno de los campos al seleccionar */
+    outline: none;
+    border-color: var(--input-focus);
 }
 
 .error-message {
-    color: red;
-    font-size: 0.75rem;
-    margin-top: 0.25rem; /* Espacio entre el input y el mensaje de error */
-}
-
-.input-group .forgot {
-    display: flex;
-    justify-content: flex-end;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    color: rgb(255, 255, 255);
-    margin-top: 0.5rem; /* Margen superior para separar del input */
-    position: relative; /* Necesario para que el siguiente ajuste funcione */
-    padding-top: 1rem; /* Ajusta el espacio para el mensaje de error */
-}
-
-.input-group .forgot a {
-    color: blue(243, 244, 246, 1);
-    text-decoration: none;
+    color: var(--error-color);
     font-size: 0.875rem;
+    margin-top: 0.25rem;
 }
 
-.input-group .forgot a:hover {
-    text-decoration: underline rgb(28, 104, 219);
+.forgot {
+    text-align: right;
+    margin-top: 0.5rem;
+}
+
+.forgot a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.forgot a:hover {
+    text-decoration: underline;
 }
 
 .sign {
-    display: block;
-    width: 100%;
-    background-color: rgba(28, 104, 219);
+    background-color: var(--button-bg);
+    color: var(--button-text);
     padding: 0.75rem;
-    text-align: center;
-    color: rgb(3, 3, 3);
     border: none;
-    border-radius: 0.375rem;
-    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.sign:hover {
+    background-color: #0056b3;
+}
+
+.sign:disabled {
+    background-color: #9cb3d8;
+    cursor: not-allowed;
 }
 
 .signup {
     text-align: center;
-    font-size: 1rem;
-    line-height: 1rem;
-    color: rgb(255, 255, 255);
-    margin-top: 2rem; /* Ajuste de margen para separación adecuada */
+    margin-top: 1rem;
+    color: var(--text-color);
 }
 
-.forgot {
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+.signup a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding: 1rem;
+    }
 }

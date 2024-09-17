@@ -1,22 +1,18 @@
 <div class="form-container">
-    <p class="title">Iniciar Sesión</p>
+    <h2 class="title">Iniciar Sesión</h2>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
         <div class="input-group">
             <label for="numDoc">Número de Documento</label>
-            <input type="text" id="numDoc" formControlName="numDoc" placeholder="Número de Documento" />
-            <div *ngIf="
-            loginForm.get('numDoc')?.invalid && loginForm.get('numDoc')?.touched
-        " class="error-message">
+            <input type="text" id="numDoc" formControlName="numDoc" placeholder="Ingrese su número de documento">
+            <div *ngIf="loginForm.get('numDoc')?.invalid && loginForm.get('numDoc')?.touched" class="error-message">
                 Número de documento es requerido.
             </div>
         </div>
         <div class="input-group">
             <label for="contrasena">Contraseña</label>
-            <input type="password" id="contrasena" formControlName="contrasena" placeholder="Contraseña" />
-            <div *ngIf="
-            loginForm.get('contrasena')?.invalid &&
-            loginForm.get('contrasena')?.touched
-        " class="error-message">
+            <input type="password" id="contrasena" formControlName="contrasena" placeholder="Ingrese su contraseña">
+            <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched"
+                class="error-message">
                 Contraseña es requerida (mínimo 6 caracteres).
             </div>
         </div>
@@ -26,6 +22,6 @@
         <button type="submit" class="sign" [disabled]="loginForm.invalid">
             Iniciar Sesión
         </button>
-        <p class="signup">¿No tienes cuenta? <a href="registro-administrador">Regístrate aquí</a></p>
     </form>
+    <p class="signup">¿No tienes cuenta? <a href="registro-administrador">Regístrate aquí</a></p>
 </div>

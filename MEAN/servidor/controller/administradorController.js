@@ -146,7 +146,7 @@ exports.verificarCorreo = async (req, res) => {
                 html: `
                     <p><strong>Hola,</strong></p>
                     <p>Recibimos una solicitud para recuperar tu acceso a <strong>VotaSoft</strong>. Para restablecer tu contraseña, haz clic en el enlace a continuación:</p>
-                    <p><a href="http://localhost:4200/olvide-contrasena?token=${token}">Restablecer mi contraseña</a></p>
+                    <p><a href="https://votasoft.vercel.app/olvide-contrasena?token=${token}">Restablecer mi contraseña</a></p>
                     <p>Este enlace expirará en 1 hora.</p>
                     <p>Si no solicitaste esta recuperación de contraseña, ignora este mensaje.</p>
                     <p>Saludos,<br>Equipo VotaSoft</p>

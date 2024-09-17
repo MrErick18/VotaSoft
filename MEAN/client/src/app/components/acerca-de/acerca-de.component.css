@@ -1,108 +1,149 @@
-/* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+  --primary-blue: #1b3a68; /* Azul oscuro intenso */
+  --secondary-blue: #4a90e2; /* Azul intermedio brillante */
+  --light-blue: #d0e7ff; /* Azul claro suave */
+  --white: #ffffff; /* Blanco puro */
+  --text-dark: #1b3a68; /* Texto azul oscuro */
+  --text-light: #ffffff; /* Texto blanco */
+
+  /* Degradado innovador */
+  --gradient-blue-white: linear-gradient(135deg, #1b3a68, #4a90e2, #d0e7ff, #ffffff);
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f4f4f4;
+  font-family: 'Poppins', sans-serif;
+  background: var(--gradient-blue-white); /* Aplicando el degradado como fondo */
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 20px;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+.about-container {
+  max-width: 1200px;
+  width: 100%;
 }
 
-.main-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    opacity: 0; /* Start hidden for animation */
-    animation: fadeIn 1s forwards; /* Apply fade-in animation */
+.main-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+  color: var(--secondary-blue); /* Título en azul brillante */
 }
 
-.info {
-    flex: 1;
-    min-width: 300px;
-    padding: 10px;
-    border-radius: 8px;
-    background: #f9f9f9;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effects */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
 }
 
-.info:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+.info-card {
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 128, 255, 0.1); /* Azul claro en la sombra */
 }
 
-.section {
-    margin-bottom: 20px;
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.title {
-    font-size: 26px;
-    color: #333;
-    border-bottom: 2px solid #007BFF;
-    padding-bottom: 12px;
-    margin-bottom: 15px;
+.card-front {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: var(--primary-blue); /* Fondo azul oscuro */
+  color: var(--text-light); /* Texto claro */
 }
 
-.text {
-    font-size: 18px;
-    color: #555;
-    line-height: 1.6;
+.card-back {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 30px;
+  background: var(--light-blue); /* Fondo azul claro */
+  color: var(--text-dark);
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
-.list {
-    list-style: none;
-    padding: 0;
+.info-card:hover .card-back {
+  max-height: 300px;
+  opacity: 1;
+  padding: 30px;
 }
 
-.list li {
-    background: #ffffff;
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: #333;
-    font-size: 18px;
-    transition: background-color 0.3s ease; /* Transition for hover effect */
+.info-card i {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: var(--secondary-blue); /* Icono en azul brillante */
+  background-color: var(--white);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
 }
 
-.list li:hover {
-    background-color: #eaf4f4; /* Light blue background on hover */
+.info-card h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0;
 }
 
-.security {
-    border-left: 5px solid #FF9800;
-    background: #FEF6E4;
+.card-back ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.card-back li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.card-back li i {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: var(--secondary-blue); /* Color del icono */
+  background-color: transparent;
+  width: auto;
+  height: auto;
 }
 
 @media (max-width: 768px) {
-    .title {
-        font-size: 22px;
-    }
-    
-    .text, .list li {
-        font-size: 16px;
-    }
-    
-    .main-card {
-        flex-direction: column;
-    }
+  .card-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.info-card {
+  animation: float 6s ease-in-out infinite;
+}
+
+p {
+    font-size: 20px;
+}
+
+li {
+    font-size: 20px;
 }

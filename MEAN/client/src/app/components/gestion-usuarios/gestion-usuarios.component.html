@@ -16,14 +16,21 @@
                 <input placeholder="Buscar..." id="input" class="input" name="text" type="text"
                     [(ngModel)]="searchText">
             </div>
+
             <div class="container">
                 <form (submit)="uploadFile()">
-                    <label for="arquivo"></label>
-                    <input accept=".xlsx" class="inpdddut" name="arquivo" id="arquivo" type="file"
-                        (change)="onFileChange($event)">
-                    <button type="submit" id="send1" class="btn btn-primary">Subir</button>
+                    <label for="arquivo" class="file-upload-label">
+                        <img width="65" height="80" src="https://img.icons8.com/ios/100/insert-page.png"
+                            alt="insert-page" />
+                        <span class="span">Agregar archivo</span>
+                    </label>
                 </form>
             </div>
+
+            <input accept=".xlsx" class="inpdddut" name="arquivo" id="arquivo" type="file"
+                (change)="onFileChange($event)" hidden>
+            <button type="submit" id="send1" class="btn btn-primary">Subir</button>
+
         </div>
         <div class="d-flex align-items-center mb-2">
             <input type="checkbox" (change)="toggleSelectAll($event)" id="selectAll">

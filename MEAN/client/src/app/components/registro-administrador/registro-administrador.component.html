@@ -7,12 +7,18 @@
             <div class="campo">
                 <input type="text" id="nombre" formControlName="nombre" required>
                 <label for="nombre">Nombre</label>
+                <div *ngIf="isInvalid('nombre')" class="error-mensaje">
+                    <span *ngIf="hasError('nombre', 'required')">El nombre es requerido.</span>
+                </div>
             </div>
             <div class="campo">
                 <input type="text" id="apellido" formControlName="apellido" required>
                 <label for="apellido">Apellido</label>
+                <div *ngIf="isInvalid('apellido')" class="error-mensaje">
+                    <span *ngIf="hasError('apellido', 'required')">El apellido es requerido.</span>
+                </div>
             </div>
-            <div class="campo campo-completo">
+            <div class="campo">
                 <select id="tipoDoc" formControlName="tipoDoc" required>
                     <option value="" disabled selected></option>
                     <option value="CC">Cédula de Ciudadanía</option>
@@ -21,22 +27,39 @@
                     <option value="PA">Pasaporte</option>
                 </select>
                 <label for="tipoDoc">Tipo de documento</label>
+                <div *ngIf="isInvalid('tipoDoc')" class="error-mensaje">
+                    <span *ngIf="hasError('tipoDoc', 'required')">El tipo de documento es requerido.</span>
+                </div>
             </div>
             <div class="campo">
                 <input type="text" id="numDoc" formControlName="numDoc" required>
                 <label for="numDoc">Número de documento</label>
+                <div *ngIf="isInvalid('numDoc')" class="error-mensaje">
+                    <span *ngIf="hasError('numDoc', 'required')">El número de documento es requerido.</span>
+                </div>
             </div>
             <div class="campo">
                 <input type="password" id="contrasena" formControlName="contrasena" required>
                 <label for="contrasena">Contraseña</label>
+                <div *ngIf="isInvalid('contrasena')" class="error-mensaje">
+                    <span *ngIf="hasError('contrasena', 'required')">La contraseña es requerida.</span>
+                    <span *ngIf="hasError('contrasena', 'minlength')">La contraseña debe tener al menos 6 caracteres.</span>
+                </div>
             </div>
             <div class="campo">
                 <input type="email" id="correo" formControlName="correo" required>
                 <label for="correo">Email</label>
+                <div *ngIf="isInvalid('correo')" class="error-mensaje">
+                    <span *ngIf="hasError('correo', 'required')">El email es requerido.</span>
+                    <span *ngIf="hasError('correo', 'email')">Ingrese un email válido.</span>
+                </div>
             </div>
             <div class="campo">
                 <input type="text" id="cargo" formControlName="cargo" required>
                 <label for="cargo">Cargo</label>
+                <div *ngIf="isInvalid('cargo')" class="error-mensaje">
+                    <span *ngIf="hasError('cargo', 'required')">El cargo es requerido.</span>
+                </div>
             </div>
         </div>
 

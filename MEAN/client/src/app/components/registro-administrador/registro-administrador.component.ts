@@ -1,4 +1,3 @@
-// registro-administrador.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -29,7 +28,7 @@ export class RegistroAdministradorComponent {
       tipoDoc: ['', Validators.required],
       numDoc: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
-      contrasena: ['', Validators.required],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]],
       cargo: ['', Validators.required]
     });
   }
@@ -67,5 +66,16 @@ export class RegistroAdministradorComponent {
 
   goBack() {
     this.router.navigate(['/login']);
+  }
+
+  // Add these new methods
+  isInvalid(controlName: string): boolean {
+    const control = this.adminForm.get(controlName);
+    return control !== null && control.invalid && (control.dirty || control.touched);
+  }
+
+  hasError(controlName: string, errorType: string): boolean {
+    const control = this.adminForm.get(controlName);
+    return control !== null && control.hasError(errorType) && (control.dirty || control.touched);
   }
 }

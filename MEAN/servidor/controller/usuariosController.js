@@ -186,16 +186,45 @@ exports.verificarCodigo = async (req, res) => {
             return res.status(400).json({ msg: 'Código expirado' });
         }
 
-        // Limpiar el código después de usarlo
+        if (usuario.haVotado) {
+            return res.status(400).json({ msg: 'Este usuario ya ha votado' });
+        }
+
+        // Marcar que el usuario ha votado
+        usuario.haVotado = true;
         usuario.codigoVerificacion = null;
         usuario.codigoExpiracion = null;
         await usuario.save();
 
-        res.json({ msg: 'Código verificado correctamente' });
+        res.json({ msg: 'Código verificado correctamente. Usuario marcado como votante.' });
     } catch (error) {
         console.error(error);
         res.status(500).send('Ocurrió un error al verificar el código');
     }
 };
 
+exports.generarCodigoVerificacion = async (req, res) => {
+    try {
+        const { tipoDoc, numDoc } = req.body;
+        const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
+        if (!usuario) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
+
+        if (usuario.haVotado) {
+            return res.status(400).json({ msg: 'Este usuario ya ha votado' });
+        }
+
+        const codigo = Math.random().toString(36).substr(2, 6).toUpperCase();
+        usuario.codigoVerificacion = codigo;
+        usuario.codigoExpiracion = new Date(Date.now() + 10 * 60000); // Expira en 10 minutos
+
+        await usuario.save();
+
+        res.json({ codigo });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Ocurrió un error al generar el código');
+    }
+};
 

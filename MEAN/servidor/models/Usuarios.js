@@ -7,6 +7,8 @@ const usuarioSchema = new mongoose.Schema({
     tipoDoc: { type: String, required: true },
     numDoc: { type: String, required: true },
     codigoVerificacion: { type: String },
-    codigoExpiracion: { type: Date }
+    codigoExpiracion: { type: Date },
+    haVotado: { type: Boolean, default: false }
 });
+
 module.exports = mongoose.model('Usuarios', usuarioSchema);

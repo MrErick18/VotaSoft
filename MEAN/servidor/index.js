@@ -3,6 +3,8 @@ const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const cron = require('node-cron');
+const { updateEleccionesEstado } = require('./services/eleccionService');
 
 dotenv.config();
 
@@ -39,4 +41,14 @@ const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
   console.log(`Servidor funcionando en el puerto ${PORT}`);
+});
+
+cron.schedule('0 * * * *', async () => {
+  try {
+    console.log('Actualizando el estado de las elecciones...');
+    await updateEleccionesEstado();
+    console.log('Actualización de estado de elecciones completada.');
+  } catch (error) {
+    console.error('Error actualizando el estado de las elecciones:', error);
+  }
 });

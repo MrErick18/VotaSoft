@@ -95,19 +95,21 @@ exports.eliminarUsuarios = async (req, res) => {
 };
 
 // Validar usuario
+// controllers/usuariosController.js
 exports.validarUsuario = async (req, res) => {
     try {
-        const { tipoDoc, numDoc } = req.query;
+        const { tipoDoc, numDoc } = req.body; // Cambiado a req.body
         const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
         if (!usuario) {
             return res.status(404).json({ msg: 'Usuario no encontrado' });
         }
         res.json(usuario);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send('Ocurrió un error');
     }
 };
+
 
 // Subir archivo
 exports.subirArchivo = async (req, res) => {
@@ -148,3 +150,52 @@ exports.subirArchivo = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+exports.generarCodigoVerificacion = async (req, res) => {
+    try {
+        const { tipoDoc, numDoc } = req.body;
+        const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
+        if (!usuario) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
+
+        const codigo = Math.random().toString(36).substr(2, 6).toUpperCase();
+        usuario.codigoVerificacion = codigo;
+        usuario.codigoExpiracion = new Date(Date.now() + 10 * 60000); // Expira en 10 minutos
+
+        await usuario.save();
+
+        res.json({ codigo });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Ocurrió un error al generar el código');
+    }
+};
+
+exports.verificarCodigo = async (req, res) => {
+    try {
+        const { tipoDoc, numDoc, codigo } = req.body;
+        const usuario = await Usuarios.findOne({ tipoDoc, numDoc, codigoVerificacion: codigo });
+        
+        if (!usuario) {
+            return res.status(400).json({ msg: 'Código inválido' });
+        }
+
+        if (usuario.codigoExpiracion < new Date()) {
+            return res.status(400).json({ msg: 'Código expirado' });
+        }
+
+        // Limpiar el código después de usarlo
+        usuario.codigoVerificacion = null;
+        usuario.codigoExpiracion = null;
+        await usuario.save();
+
+        res.json({ msg: 'Código verificado correctamente' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Ocurrió un error al verificar el código');
+    }
+};
+
+

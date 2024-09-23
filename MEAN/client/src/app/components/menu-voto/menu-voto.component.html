@@ -1,12 +1,10 @@
 <div class="container-menu-voto">
-    <div class="left">
+    <div class="header">
         <h1>Menu de Votaciones</h1>
-        <p>
-            Por favor complete todos los campos vacíos correctamente para poder ingresar a votar.
-        </p>
+        <p>Por favor complete todos los campos correctamente para poder ingresar a votar.</p>
     </div>
-    <div class="right">
-        <form (ngSubmit)="onSubmit()">
+    <div class="content">
+        <form (ngSubmit)="onSubmit()" *ngIf="!showCodeInput">
             <div class="form-group">
                 <label for="tipoDoc">Tipo de documento</label>
                 <select id="tipoDoc" name="tipoDoc" [(ngModel)]="tipoDoc">
@@ -20,9 +18,30 @@
             </div>
             <div class="form-group">
                 <label for="numDoc">Número de documento</label>
-                <input type="number" id="numDoc" name="numDoc" [(ngModel)]="numDoc" placeholder="Ingrese su número de documento" />
+                <input type="number" id="numDoc" name="numDoc" [(ngModel)]="numDoc"
+                    placeholder="Ingrese su número de documento" />
             </div>
-            <button type="submit">Ingresar</button>
+            <button type="submit">Validar Usuario</button>
         </form>
+
+        <div *ngIf="showCodeInput" class="verification-section">
+            <div *ngIf="!verificationCode">
+                <p>Para obtener su código de verificación, haga clic en el botón de abajo:</p>
+                <button (click)="getVerificationCode()">Obtener código de verificación</button>
+            </div>
+
+            <div *ngIf="verificationCode" class="code-display">
+                <p>Su código de verificación es: <strong>{{ verificationCode }}</strong></p>
+                <button (click)="copyCode()">Copiar código</button>
+            </div>
+
+            <div class="form-group">
+                <label for="userInputCode">Ingrese el código de verificación</label>
+                <input type="text" id="userInputCode" name="userInputCode" [(ngModel)]="userInputCode"
+                    placeholder="Ingrese el código de verificación" />
+            </div>
+            <button (click)="verifyCode()">Verificar e Ingresar</button>
+            <button (click)="goBack()" class="secondary-button">Volver</button>
+        </div>
     </div>
 </div>

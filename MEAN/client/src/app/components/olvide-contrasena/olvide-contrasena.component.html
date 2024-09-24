@@ -4,7 +4,7 @@
     <ng-container *ngIf="!token">
       <h2>¿Olvidó su contraseña?</h2>
       <p *ngIf="!enviadoExito && !errorEnviando">Ingrese su correo para recuperar su contraseña.</p>
-
+	
       <form *ngIf="!enviadoExito && !errorEnviando" (ngSubmit)="enviarCorreo()">
         <div class="form-group">
           <label for="email">Correo electrónico:</label>

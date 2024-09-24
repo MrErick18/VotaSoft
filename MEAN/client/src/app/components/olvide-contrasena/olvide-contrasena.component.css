@@ -11,10 +11,17 @@
   box-sizing: border-box;
 }
 
-.custom-form-container .container {
-  background-color: rgb(230, 230, 230);
+@keyframes shadowPulse {
+  0% { box-shadow: 0 0 20px rgba(102, 102, 102); }
+  50% { box-shadow: 0 0 40px rgb(102, 102, 102); }
+  100% { box-shadow: 0 0 20px rgb(102, 102, 102); }
+}
+
+.container {
+  background: linear-gradient(135deg, #666666, #ffffff);
+  animation: shadowPulse 3s infinite ease-in-out;
   padding: 2rem 3rem;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   text-align: center;
   width: 100%; /* Asegura que el contenedor use el 100% del ancho disponible */
@@ -22,13 +29,13 @@
 
 .custom-form-container h2 {
   margin-bottom: 1.5rem;
-  color: #333333;
+  color: #000000;
   font-size: 1.75rem;
 }
 
 .custom-form-container p {
   margin-bottom: 1.5rem;
-  color: #666666;
+  color: #000000;
 }
 
 .custom-form-container form {

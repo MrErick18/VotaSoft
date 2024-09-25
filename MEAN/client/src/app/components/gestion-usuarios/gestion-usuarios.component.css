@@ -31,12 +31,12 @@ h2 {
     background: #1875FF;
     color: white;
     font-size: 13px;
-    margin-right: 52rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1rem; /* Eliminado margen derecho */
     cursor: pointer;
     transition: all 0.3s;
     height: 2.4rem;
-    width: 5.4rem;
+    padding: 0 1rem; /* Cambiado a padding para ajustar tamaño */
+    text-align: center;
 }
 
 .button:hover {
@@ -76,8 +76,7 @@ h2 {
     padding: 10px 20px;
     cursor: pointer;
     margin-top: 10px;
-    margin-right: 45rem;
-    margin-bottom: 1.7rem;
+    width: auto; /* Ajustar el tamaño */
 }
 
 #send1:hover {
@@ -168,21 +167,28 @@ table tr:hover {
     }
 
     .button {
-        width: 100%;
+        width: 100%; /* Botón ocupa el 100% del ancho */
         margin-top: 10px;
     }
 
-    .InputContainer, .inpdddut {
-        width: 100%;
+    .InputContainer {
+        width: 100%; /* Buscador ocupa el 100% */
+        max-width: none; /* Elimina el límite máximo */
     }
 
     #send1 {
-        width: 100%;
+        width: 100%; /* Botón ocupa el 100% */
+        margin-right: 0; /* Eliminar margen derecho */
     }
 
     table th, table td {
         font-size: 12px;
         padding: 8px;
+    }
+
+    /* Ajustar encabezado h2 en dispositivos móviles */
+    h2 {
+        font-size: 1.5rem; /* Tamaño de fuente más pequeño */
     }
 }
 

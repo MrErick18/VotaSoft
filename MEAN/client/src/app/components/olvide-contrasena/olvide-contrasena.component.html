@@ -8,7 +8,7 @@
       <form *ngIf="!enviadoExito && !errorEnviando" (ngSubmit)="enviarCorreo()">
         <div class="form-group">
           <label for="email">Correo electrónico:</label>
-          <input type="email" id="email" name="email" [(ngModel)]="correo" required class="form-control">
+          <input type="email" id="email" name="email" placeholder="Correo electronico" [(ngModel)]="correo" required class="form-control">
         </div>
         <div class="button-group">
           <button type="button" (click)="volverAlInicio()" class="btn btn-secondary">Volver al inicio</button>

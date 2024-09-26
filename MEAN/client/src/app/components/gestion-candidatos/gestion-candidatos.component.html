@@ -8,6 +8,7 @@
       <p><strong>Nombre Completo:</strong> {{ candidatoForm.get('nombreCompleto')?.value }}</p>
       <p><strong>Perfil:</strong> {{ candidatoForm.get('perfil')?.value }}</p>
       <p><strong>Propuestas:</strong> {{ candidatoForm.get('propuestas')?.value }}</p>
+      <p><strong>Elección:</strong> {{ obtenerNombreEleccion(candidatoForm.get('eleccion')?.value) }}</p>
     </div>
 
     <!-- Sección del formulario -->
@@ -21,6 +22,14 @@
 
         <label for="propuestas">Propuestas:</label>
         <textarea id="propuestas" formControlName="propuestas" placeholder="Ingrese las Propuestas del Candidato"></textarea>
+
+        <label for="eleccion">Elección:</label>
+        <select id="eleccion" formControlName="eleccion">
+          <option value="">Seleccione una elección</option>
+          <option *ngFor="let eleccion of eleccionesPendientes" [value]="eleccion._id">
+            {{ eleccion.nombre }}
+          </option>
+        </select>
 
         <label for="archivo">Subir Foto:</label>
         <input type="file" id="archivo-button" (change)="onFileChange($event)" accept="image/*">

@@ -27,7 +27,11 @@ export class EleccionService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  getEleccion(id: string): Observable<any> { // Cambio aquí
+  getEleccion(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  getEleccionesPendientes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/pendientes`);
   }
 }

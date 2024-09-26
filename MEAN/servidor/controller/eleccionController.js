@@ -78,3 +78,13 @@ exports.eliminarEleccion = async(req, res) =>{
         res.status(500).send('Ocurrió un Error al Eliminar Elección');
     }
 }
+
+exports.obtenerEleccionesPendientes = async (req, res) => {
+    try {
+        const elecciones = await Eleccion.find({ estado: 'Pendiente' });
+        res.json(elecciones);
+    } catch (error) {
+        console.error('Error al obtener elecciones pendientes:', error);
+        res.status(500).json({ message: 'Error interno del servidor al obtener elecciones pendientes' });
+    }
+};

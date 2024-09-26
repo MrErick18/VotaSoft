@@ -4,6 +4,15 @@
         <button class="btn btn-primary" (click)="crearCandidato()">Crear Candidato</button>
     </div>
 
+    <div class="mb-3">
+        <label for="eleccionSelector" class="form-label">Filtrar por Elección:</label>
+        <select id="eleccionSelector" class="form-select" [(ngModel)]="eleccionSeleccionada"
+            (change)="filtrarCandidatos()">
+            <option value="">Todas las elecciones</option>
+            <option *ngFor="let eleccion of elecciones" [value]="eleccion._id">{{ eleccion.nombre }}</option>
+        </select>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover">
             <thead class="thead-dark">
@@ -12,6 +21,7 @@
                     <th scope="col">Nombre Completo</th>
                     <th scope="col">Perfil</th>
                     <th scope="col">Propuestas</th>
+                    <th scope="col">Eleccion</th>
                     <th scope="col">Opciones</th>
                 </tr>
             </thead>
@@ -23,10 +33,11 @@
                     <td>{{ candidato.nombreCompleto }}</td>
                     <td>{{ candidato.perfil }}</td>
                     <td>{{ candidato.propuestas }}</td>
+                    <td>{{ candidato.eleccion?.nombre }}</td>
                     <td>
                         <!-- Iconos para editar y eliminar -->
                         <i (click)="editarCandidato(candidato._id)" aria-label="Editar candidato"
-                        class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>                     
+                            class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>
                         <i (click)="eliminarCandidato(candidato._id)" aria-label="Eliminar candidato"
                             class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
                     </td>

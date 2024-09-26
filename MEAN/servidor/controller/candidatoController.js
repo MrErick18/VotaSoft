@@ -1,39 +1,60 @@
 const Candidato = require("../models/Candidato");
+const Eleccion = require('../models/Eleccion')
 
-exports.crearCandidato = async(req, res) => {
+exports.crearCandidato = async (req, res) => {
     try {
-        let candidato;
-        candidato = new Candidato(req.body);
+        const { eleccion: eleccionId, ...candidatoData } = req.body;
+        
+        // Verificar si la elección existe y está pendiente
+        const eleccion = await Eleccion.findOne({ _id: eleccionId, estado: 'Pendiente' });
+        if (!eleccion) {
+            return res.status(400).json({ msg: "La elección no existe o no está pendiente" });
+        }
+
+        const candidato = new Candidato({
+            ...candidatoData,
+            eleccion: eleccionId
+        });
+        
         await candidato.save();
-        res.send(candidato)
-    } catch(error){
+        res.status(201).json(candidato);
+    } catch (error) {
         console.log(error);
-        res.status(500).send('Ocurrio un Error')
+        res.status(500).send('Ocurrió un Error');
     }
 }
 
 exports.obtenerCandidato = async(req, res) =>{
     try{
-        const candidato = await Candidato.find();
-        res.json(candidato)
+        const candidatos = await Candidato.find().populate('eleccion', 'nombre');
+        res.json(candidatos)
     }catch(error){
         console.log(error);
         res.status(500).send('Ocurrio un error')
-        
     }
 }
 
-exports.actualizarCandidato = async(req, res) => {
+exports.actualizarCandidato = async (req, res) => {
     try {
-        const { nombreCompleto, perfil,propuestas, foto} = req.body;
+        const { eleccion: eleccionId, ...candidatoData } = req.body;
+        
+        // Verificar si la elección existe y está pendiente
+        const eleccion = await Eleccion.findOne({ _id: eleccionId, estado: 'Pendiente' });
+        if (!eleccion) {
+            return res.status(400).json({ msg: "La elección no existe o no está pendiente" });
+        }
+
         let candidato = await Candidato.findById(req.params.id);
-        if (!candidato) {return res.status(400).json({ msg: "Candidato No Existe" });}
-        candidato.nombreCompleto = nombreCompleto;
-        candidato.perfil = perfil;
-        candidato.propuestas = propuestas;
-        candidato.foto = foto;
-        candidato = await Candidato.findByIdAndUpdate({ _id: req.params.id }, candidato, { new: true }
+        if (!candidato) {
+            return res.status(404).json({ msg: "Candidato No Existe" });
+        }
+        
+        candidato = await Candidato.findByIdAndUpdate(
+            req.params.id,
+            { ...candidatoData, eleccion: eleccionId },
+            { new: true }
         );
+        
         res.json(candidato);
     } catch (error) {
         console.log(error);
@@ -65,5 +86,15 @@ exports.eliminarCandidato = async(req, res) => {
     }catch (error) {
         console.log("Error", error);
         res.status(500).send('Ocurrio Un Error ' + error);        
+    }
+}
+
+exports.obtenerCandidatosPorEleccion = async (req, res) => {
+    try {
+        const candidatos = await Candidato.find({ eleccion: req.params.eleccionId }).populate('eleccion', 'nombre');
+        res.json(candidatos);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Ocurrió un error');
     }
 }

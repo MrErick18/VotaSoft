@@ -8,5 +8,6 @@ router.get('/', candidatoController.obtenerCandidato);
 router.put('/:id', candidatoController.actualizarCandidato);
 router.get('/:id', candidatoController.buscarCandidato);
 router.delete('/:id', candidatoController.eliminarCandidato);
+router.get('/eleccion/:eleccionId', candidatoController.obtenerCandidatosPorEleccion);
 
 module.exports = router;

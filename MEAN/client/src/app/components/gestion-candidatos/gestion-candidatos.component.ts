@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CandidatoService } from '../../services/candidato.service';
+import { EleccionService } from '../../services/eleccion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -19,31 +20,62 @@ export class GestionCandidatosComponent implements OnInit {
   candidatoForm: FormGroup;
   candidatoId: string | null = null;
   isEditMode: boolean = false;
-  fotoPreview: string | ArrayBuffer | null = ''; // Para almacenar la vista previa de la imagen
+  fotoPreview: string | ArrayBuffer | null = '';
+  eleccionesPendientes: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private candidatoService: CandidatoService,
+    private eleccionService: EleccionService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // Configuración del formulario con validaciones
     this.candidatoForm = this.fb.group({
       nombreCompleto: ['', Validators.required],
       perfil: ['', Validators.required],
       propuestas: ['', Validators.required],
-      foto: ['', Validators.required] // Campo obligatorio para la foto
+      foto: ['', Validators.required],
+      eleccion: ['', Validators.required] // Nuevo campo para la elección
     });
   }
 
   ngOnInit(): void {
+    this.cargarEleccionesPendientes();
     this.candidatoId = this.route.snapshot.paramMap.get('id');
     if (this.candidatoId) {
       this.isEditMode = true;
-      this.candidatoService.getCandidato(this.candidatoId).subscribe((data) => {
-        this.candidatoForm.patchValue(data);
-        this.fotoPreview = data.foto; // Si ya existe una foto, la muestra
-      });
+      this.cargarDatosCandidato();
+    }
+  }
+
+  cargarEleccionesPendientes(): void {
+    this.eleccionService.getEleccionesPendientes().subscribe(
+      (elecciones) => {
+        this.eleccionesPendientes = elecciones;
+      },
+      (error) => {
+        console.error('Error al cargar elecciones pendientes:', error);
+        // Aquí puedes agregar lógica adicional para manejar el error, como mostrar un mensaje al usuario
+      }
+    );
+  }
+
+  obtenerNombreEleccion(eleccionId: string): string {
+    const eleccion = this.eleccionesPendientes.find(e => e._id === eleccionId);
+    return eleccion ? eleccion.nombre : 'No seleccionada';
+  }
+
+  cargarDatosCandidato(): void {
+    if (this.candidatoId) {
+      this.candidatoService.getCandidato(this.candidatoId).subscribe(
+        (data) => {
+          this.candidatoForm.patchValue(data);
+          this.fotoPreview = data.foto;
+        },
+        (error) => {
+          console.error('Error al cargar datos del candidato:', error);
+        }
+      );
     }
   }
 
@@ -53,7 +85,6 @@ export class GestionCandidatosComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
 
-      // Verifica si el archivo es una imagen válida
       const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!validImageTypes.includes(file.type)) {
         alert('Solo se permiten archivos de imagen (JPG, JPEG, PNG)');
@@ -63,9 +94,9 @@ export class GestionCandidatosComponent implements OnInit {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.fotoPreview = reader.result; // Almacena la vista previa de la foto
+        this.fotoPreview = reader.result;
         this.candidatoForm.patchValue({
-          foto: reader.result // Actualiza el campo 'foto' en el formulario
+          foto: reader.result
         });
       };
 
@@ -79,20 +110,32 @@ export class GestionCandidatosComponent implements OnInit {
       return;
     }
 
+    const candidatoData = this.candidatoForm.value;
+
     if (this.isEditMode && this.candidatoId) {
-      // Actualiza un candidato existente
-      this.candidatoService.actualizarCandidato(this.candidatoId, this.candidatoForm.value)
-        .subscribe(() => {
-          alert('Candidato actualizado con éxito');
-          this.router.navigate(['lista-candidato']); // Redirige a la lista de candidatos
-        });
+      this.candidatoService.actualizarCandidato(this.candidatoId, candidatoData)
+        .subscribe(
+          () => {
+            alert('Candidato actualizado con éxito');
+            this.router.navigate(['lista-candidato']);
+          },
+          (error) => {
+            console.error('Error al actualizar candidato:', error);
+            alert('Error al actualizar candidato. Por favor, intenta de nuevo.');
+          }
+        );
     } else {
-      // Crea un nuevo candidato
-      this.candidatoService.crearCandidato(this.candidatoForm.value)
-        .subscribe(() => {
-          alert('Candidato creado con éxito');
-          this.router.navigate(['lista-candidato']); // Redirige a la lista de candidatos
-        });
+      this.candidatoService.crearCandidato(candidatoData)
+        .subscribe(
+          () => {
+            alert('Candidato creado con éxito');
+            this.router.navigate(['lista-candidato']);
+          },
+          (error) => {
+            console.error('Error al crear candidato:', error);
+            alert('Error al crear candidato. Por favor, intenta de nuevo.');
+          }
+        );
     }
   }
 }

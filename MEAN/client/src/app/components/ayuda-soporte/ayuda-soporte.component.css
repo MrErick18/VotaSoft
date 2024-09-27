@@ -1,126 +1,45 @@
-.card {
+.one-div {
     position: relative;
-    width: 850px;
-    height: 850px;
-    background: transparent; /* Fondo transparente */
+    height: 800px;
+    width: 800px;
+    background-color: 000000;
+    transform-style: preserve-3d;
+    animation: rot 2s infinite ease;
+    border-radius: 20px;
+    box-shadow: 0 0 50px 0px, inset 0 0 90px 0px;
+    color: black;
+    transition: 1.5s;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 5px;
-    margin-left: 165px;
-    border: 5px solid rgba(0, 188, 212, 0.8); /* Borde iluminado azul */
-    box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); /* Sombra para resaltar el borde */
+    margin-left: 17rem;
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 188, 212, 0.2); /* Fondo azul claro con transparencia para la animación */
-    z-index: 1;
+.one-div .text {
+    opacity: 0;
+    transition: all 0.5s;
 }
 
-.card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 188, 212, 0.2); /* Fondo azul claro con transparencia para la animación */
-    filter: blur(10px); /* Menos desenfoque para un efecto más suave */
-    z-index: 0;
+.one-div:hover.one-div .text {
+    scale: 1.2;
+    opacity: 0.7;
 }
 
-.card b {
-    position: absolute;
-    inset: 6px;
-    background: rgba(0, 0, 0, 0.4); /* Fondo más suave */
-    z-index: 2;
+.one-div:hover {
+    box-shadow: 0 0 20px 30px #555, inset 5px 5px 5px 0px #555;
 }
 
-.card img {
-    position: absolute;
-    z-index: 3;
-    scale: 0.8;
-    opacity: 0.25;
-    transition: 0.5s;
+@keyframes rot {
+    0% {
+        transform: rotateX(-15deg) translateY(0px);
+    }
+
+    50% {
+        transform: rotateX(-15deg) translateY(-10px);
+    }
+
+    100% {
+        transform: rotateX(-15deg) translateY(0px);
+    }
 }
 
-.card:hover img {
-    scale: 0.5;
-    opacity: 0.9;
-    transform: translateY(-70px);
-}
-
-.card .content {
-    position: absolute;
-    z-index: 3;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform: scale(0);
-    transition: 0.5s;
-    margin-top: 5px;
-    margin-right: 220px;
-    margin-bottom: 250px;
-}
-
-.card:hover .content {
-    transform: scale(1);
-    bottom: 25px;
-}
-
-.content .title {
-    position: relative;
-    color: #fff;
-    font-weight: 500;
-    line-height: 1em;
-    font-size: 1em;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 30px;
-}
-
-.content .title span {
-    font-weight: 300;
-    font-size: 0.70em;
-    font-size: 30px;
-}
-
-.content .sci {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-top: 5px;
-    margin-left: 20px;
-}
-
-.sci li {
-    list-style: none;
-}
-
-.sci li a {
-    position: relative;
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.7); /* Color más claro */
-    background: rgba(0, 0, 0, 0.2);
-    fill: currentColor;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    transition: 0.5s;
-    width: 350px;
-    height: 200px;
-    margin-right: 50px;
-}

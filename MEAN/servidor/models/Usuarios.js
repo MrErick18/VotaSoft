@@ -1,14 +1,16 @@
-// models/Usuarios.js
 const mongoose = require('mongoose');
 
-const usuarioSchema = new mongoose.Schema({
+const UsuarioSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
     apellidos: { type: String, required: true },
     tipoDoc: { type: String, required: true },
-    numDoc: { type: String, required: true },
-    codigoVerificacion: { type: String },
-    codigoExpiracion: { type: Date },
-    haVotado: { type: Boolean, default: false }
+    numDoc: { type: String, required: true, unique: true },
+    votaciones: [{
+        eleccion: { type: mongoose.Schema.Types.ObjectId, ref: 'Eleccion' },
+        codigoVerificacion: String,
+        codigoExpiracion: Date,
+        haVotado: { type: Boolean, default: false }
+    }]
 });
 
-module.exports = mongoose.model('Usuarios', usuarioSchema);
+module.exports = mongoose.model('Usuario', UsuarioSchema);

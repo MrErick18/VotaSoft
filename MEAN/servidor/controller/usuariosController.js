@@ -1,4 +1,4 @@
-const ExcelJS = require('exceljs'); // Importar exceljs
+const ExcelJS = require('exceljs');
 const Usuarios = require('../models/Usuarios');
 const path = require('path');
 const fs = require('fs');
@@ -95,10 +95,9 @@ exports.eliminarUsuarios = async (req, res) => {
 };
 
 // Validar usuario
-// controllers/usuariosController.js
 exports.validarUsuario = async (req, res) => {
     try {
-        const { tipoDoc, numDoc } = req.body; // Cambiado a req.body
+        const { tipoDoc, numDoc } = req.body;
         const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
         if (!usuario) {
             return res.status(404).json({ msg: 'Usuario no encontrado' });
@@ -109,7 +108,6 @@ exports.validarUsuario = async (req, res) => {
         res.status(500).send('Ocurrió un error');
     }
 };
-
 
 // Subir archivo
 exports.subirArchivo = async (req, res) => {
@@ -151,80 +149,106 @@ exports.subirArchivo = async (req, res) => {
     }
 };
 
-
+// Generar código de verificación
 exports.generarCodigoVerificacion = async (req, res) => {
     try {
-        const { tipoDoc, numDoc } = req.body;
+        const { tipoDoc, numDoc, eleccionId } = req.body;
+        console.log('Generando código para:', { tipoDoc, numDoc, eleccionId });
+
         const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
-        if (!usuario) {
-            return res.status(404).json({ msg: 'Usuario no encontrado' });
-        }
-
-        const codigo = Math.random().toString(36).substr(2, 6).toUpperCase();
-        usuario.codigoVerificacion = codigo;
-        usuario.codigoExpiracion = new Date(Date.now() + 10 * 60000); // Expira en 10 minutos
-
-        await usuario.save();
-
-        res.json({ codigo });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Ocurrió un error al generar el código');
-    }
-};
-
-exports.verificarCodigo = async (req, res) => {
-    try {
-        const { tipoDoc, numDoc, codigo } = req.body;
-        const usuario = await Usuarios.findOne({ tipoDoc, numDoc, codigoVerificacion: codigo });
         
         if (!usuario) {
-            return res.status(400).json({ msg: 'Código inválido' });
-        }
-
-        if (usuario.codigoExpiracion < new Date()) {
-            return res.status(400).json({ msg: 'Código expirado' });
-        }
-
-        if (usuario.haVotado) {
-            return res.status(400).json({ msg: 'Este usuario ya ha votado' });
-        }
-
-        // Marcar que el usuario ha votado
-        usuario.haVotado = true;
-        usuario.codigoVerificacion = null;
-        usuario.codigoExpiracion = null;
-        await usuario.save();
-
-        res.json({ msg: 'Código verificado correctamente. Usuario marcado como votante.' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Ocurrió un error al verificar el código');
-    }
-};
-
-exports.generarCodigoVerificacion = async (req, res) => {
-    try {
-        const { tipoDoc, numDoc } = req.body;
-        const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
-        if (!usuario) {
+            console.log('Usuario no encontrado');
             return res.status(404).json({ msg: 'Usuario no encontrado' });
         }
 
-        if (usuario.haVotado) {
-            return res.status(400).json({ msg: 'Este usuario ya ha votado' });
+        console.log('Usuario encontrado:', JSON.stringify(usuario, null, 2));
+
+        let votacion = usuario.votaciones.find(v => v.eleccion.toString() === eleccionId);
+        console.log('Votación existente:', votacion);
+
+        if (votacion && votacion.haVotado) {
+            console.log('Usuario ya ha votado en esta elección');
+            return res.status(400).json({ msg: 'Este usuario ya ha votado en esta elección' });
         }
 
         const codigo = Math.random().toString(36).substr(2, 6).toUpperCase();
-        usuario.codigoVerificacion = codigo;
-        usuario.codigoExpiracion = new Date(Date.now() + 10 * 60000); // Expira en 10 minutos
+        console.log('Nuevo código generado:', codigo);
+        
+        if (!votacion) {
+            votacion = {
+                eleccion: eleccionId,
+                codigoVerificacion: codigo,
+                codigoExpiracion: new Date(Date.now() + 10 * 60000),
+                haVotado: false
+            };
+            usuario.votaciones.push(votacion);
+        } else {
+            votacion.codigoVerificacion = codigo;
+            votacion.codigoExpiracion = new Date(Date.now() + 10 * 60000);
+        }
 
+        console.log('Usuario antes de guardar:', JSON.stringify(usuario, null, 2));
         await usuario.save();
+        console.log('Usuario después de guardar:', JSON.stringify(usuario, null, 2));
 
         res.json({ codigo });
     } catch (error) {
-        console.error(error);
+        console.error('Error al generar código:', error);
         res.status(500).send('Ocurrió un error al generar el código');
     }
 };
 
+// Verificar código
+exports.verificarCodigo = async (req, res) => {
+    try {
+        const { tipoDoc, numDoc, codigo, eleccionId } = req.body;
+        console.log('Verificando código:', { tipoDoc, numDoc, codigo, eleccionId });
+
+        const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
+        
+        if (!usuario) {
+            console.log('Usuario no encontrado');
+            return res.status(404).json({ msg: "Usuario no encontrado" });
+        }
+
+        console.log('Usuario encontrado:', JSON.stringify(usuario, null, 2));
+
+        const votacion = usuario.votaciones.find(v => v.eleccion.toString() === eleccionId);
+        console.log('Votación encontrada:', votacion);
+
+        if (!votacion || !votacion.codigoVerificacion) {
+            console.log('No se ha generado código para esta elección');
+            return res.status(400).json({ msg: "No se ha generado código para esta elección. Por favor, solicite un nuevo código." });
+        }
+
+        if (votacion.haVotado) {
+            console.log('Usuario ya ha votado en esta elección');
+            return res.status(400).json({ msg: "Ya has votado en esta elección" });
+        }
+
+        if (votacion.codigoVerificacion !== codigo) {
+            console.log('Código incorrecto. Esperado:', votacion.codigoVerificacion, 'Recibido:', codigo);
+            return res.status(400).json({ msg: "Código incorrecto" });
+        }
+
+        if (new Date() > votacion.codigoExpiracion) {
+            console.log('Código expirado');
+            return res.status(400).json({ msg: "Código expirado. Por favor, solicite un nuevo código." });
+        }
+
+        votacion.haVotado = true;
+        votacion.codigoVerificacion = null;
+        votacion.codigoExpiracion = null;
+
+        console.log('Usuario antes de guardar:', JSON.stringify(usuario, null, 2));
+        await usuario.save();
+        console.log('Usuario después de guardar:', JSON.stringify(usuario, null, 2));
+
+        console.log('Código verificado correctamente');
+        res.json({ msg: "Código verificado correctamente" });
+    } catch (error) {
+        console.error('Error en verificarCodigo:', error);
+        res.status(500).json({ msg: 'Error al verificar código', error: error.message });
+    }
+};

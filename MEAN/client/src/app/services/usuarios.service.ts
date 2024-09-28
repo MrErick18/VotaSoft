@@ -33,11 +33,11 @@ export class UsuariosService {
     return this.http.post<any>(`${this.apiUrl}/validar`, { tipoDoc, numDoc });
   }
 
-  generarCodigoVerificacion(tipoDoc: string, numDoc: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/generar-codigo`, { tipoDoc, numDoc });
+  generarCodigoVerificacion(tipoDoc: string, numDoc: string, eleccionId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/generar-codigo`, { tipoDoc, numDoc, eleccionId });
   }
 
-  verificarCodigo(tipoDoc: string, numDoc: string, codigo: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/verificar-codigo`, { tipoDoc, numDoc, codigo });
+  verificarCodigo(tipoDoc: string, numDoc: string, codigo: string, eleccionId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verificar-codigo`, { tipoDoc, numDoc, codigo, eleccionId });
   }
 }

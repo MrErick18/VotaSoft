@@ -1,10 +1,20 @@
 <div class="container-menu-voto">
     <div class="header">
         <h1>Menú de Votaciones</h1>
-        <p>Por favor complete todos los campos correctamente para poder ingresar a votar.</p>
+        <p>Por favor seleccione una elección y complete todos los campos correctamente para poder ingresar a votar.</p>
     </div>
     <div class="content">
-        <form (ngSubmit)="onSubmit()" *ngIf="!showCodeInput">
+        <div *ngIf="!eleccionSeleccionada">
+            <h2>Elecciones Pendientes</h2>
+            <select [(ngModel)]="eleccionId" (change)="onEleccionChange()">
+                <option value="" disabled selected>Seleccione una Elección</option>
+                <option *ngFor="let eleccion of eleccionesPendientes" [value]="eleccion._id">
+                    {{ eleccion.nombre }}
+                </option>
+            </select>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" *ngIf="eleccionSeleccionada && !showCodeInput">
             <div class="form-group">
                 <label for="tipoDoc">Tipo de documento</label>
                 <select id="tipoDoc" name="tipoDoc" [(ngModel)]="tipoDoc">

@@ -1,102 +1,66 @@
 .container-ingreso-voto {
-    text-align: center;
-    max-width: 1300px;
-    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 180px;
-    margin-left: 185px;
+    font-family: Arial, sans-serif;
 }
 
 h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
 }
 
 .candidatos {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
-    margin-bottom: 30px;
 }
 
 .candidato {
-    background-color: #f8f8f8;
-    padding: 10px;
+    width: 30%;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    width: 28%;
-    text-align: center;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
-}
-
-.candidato:first-child {
-    margin-left: 0;
-    margin-right: 40px;
-}
-
-.candidato:nth-child(2) {
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
-.candidato:last-child {
-    margin-left: 40px;
-    margin-right: 0;
+    overflow: hidden;
 }
 
 .candidato-header {
-    background-color: #ddd;
+    background-color: #f0f0f0;
     padding: 10px;
-    font-size: 1.2rem;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .candidato img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
 }
 
 .candidato-info {
-    background-color: #e8e8e8;
     padding: 10px;
-    border-radius: 8px;
-    text-align: left;
 }
 
 .candidato-info p {
     margin: 5px 0;
-    font-size: 1rem;
 }
 
-.votar-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.votar-btn:hover {
-    background-color: #0056b3;
+input[type="radio"] {
+    margin-right: 5px;
 }
 
 button {
-    width: 100%;
+    display: block;
+    width: 200px;
+    margin: 20px auto;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #0056b3;
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }

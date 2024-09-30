@@ -62,14 +62,11 @@ exports.buscarUsuarios = async (req, res) => {
 // Eliminar usuario
 exports.eliminarUsuario = async (req, res) => {
     try {
-        console.log(`Intentando eliminar usuario con ID: ${req.params.id}`);
         let usuario = await Usuarios.findById(req.params.id);
         if (!usuario) {
-            console.log(`Usuario con ID: ${req.params.id} no encontrado`);
             return res.status(400).json({ msg: "Usuario no existe" });
         }
         await Usuarios.findByIdAndDelete(req.params.id);
-        console.log(`Usuario con ID: ${req.params.id} eliminado`);
         res.json({ msg: "Usuario eliminado" });
     } catch (error) {
         console.error("Error al eliminar el usuario:", error);
@@ -153,28 +150,22 @@ exports.subirArchivo = async (req, res) => {
 exports.generarCodigoVerificacion = async (req, res) => {
     try {
         const { tipoDoc, numDoc, eleccionId } = req.body;
-        console.log('Generando código para:', { tipoDoc, numDoc, eleccionId });
 
         const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
         
         if (!usuario) {
-            console.log('Usuario no encontrado');
             return res.status(404).json({ msg: 'Usuario no encontrado' });
         }
 
-        console.log('Usuario encontrado:', JSON.stringify(usuario, null, 2));
 
         let votacion = usuario.votaciones.find(v => v.eleccion.toString() === eleccionId);
-        console.log('Votación existente:', votacion);
 
         if (votacion && votacion.haVotado) {
-            console.log('Usuario ya ha votado en esta elección');
             return res.status(400).json({ msg: 'Este usuario ya ha votado en esta elección' });
         }
 
         const codigo = Math.random().toString(36).substr(2, 6).toUpperCase();
-        console.log('Nuevo código generado:', codigo);
-        
+
         if (!votacion) {
             votacion = {
                 eleccion: eleccionId,
@@ -188,9 +179,7 @@ exports.generarCodigoVerificacion = async (req, res) => {
             votacion.codigoExpiracion = new Date(Date.now() + 10 * 60000);
         }
 
-        console.log('Usuario antes de guardar:', JSON.stringify(usuario, null, 2));
         await usuario.save();
-        console.log('Usuario después de guardar:', JSON.stringify(usuario, null, 2));
 
         res.json({ codigo });
     } catch (error) {
@@ -203,37 +192,28 @@ exports.generarCodigoVerificacion = async (req, res) => {
 exports.verificarCodigo = async (req, res) => {
     try {
         const { tipoDoc, numDoc, codigo, eleccionId } = req.body;
-        console.log('Verificando código:', { tipoDoc, numDoc, codigo, eleccionId });
 
         const usuario = await Usuarios.findOne({ tipoDoc, numDoc });
         
         if (!usuario) {
-            console.log('Usuario no encontrado');
             return res.status(404).json({ msg: "Usuario no encontrado" });
         }
 
-        console.log('Usuario encontrado:', JSON.stringify(usuario, null, 2));
-
         const votacion = usuario.votaciones.find(v => v.eleccion.toString() === eleccionId);
-        console.log('Votación encontrada:', votacion);
 
         if (!votacion || !votacion.codigoVerificacion) {
-            console.log('No se ha generado código para esta elección');
             return res.status(400).json({ msg: "No se ha generado código para esta elección. Por favor, solicite un nuevo código." });
         }
 
         if (votacion.haVotado) {
-            console.log('Usuario ya ha votado en esta elección');
             return res.status(400).json({ msg: "Ya has votado en esta elección" });
         }
 
         if (votacion.codigoVerificacion !== codigo) {
-            console.log('Código incorrecto. Esperado:', votacion.codigoVerificacion, 'Recibido:', codigo);
             return res.status(400).json({ msg: "Código incorrecto" });
         }
 
         if (new Date() > votacion.codigoExpiracion) {
-            console.log('Código expirado');
             return res.status(400).json({ msg: "Código expirado. Por favor, solicite un nuevo código." });
         }
 
@@ -241,11 +221,8 @@ exports.verificarCodigo = async (req, res) => {
         votacion.codigoVerificacion = null;
         votacion.codigoExpiracion = null;
 
-        console.log('Usuario antes de guardar:', JSON.stringify(usuario, null, 2));
         await usuario.save();
-        console.log('Usuario después de guardar:', JSON.stringify(usuario, null, 2));
 
-        console.log('Código verificado correctamente');
         res.json({ msg: "Código verificado correctamente" });
     } catch (error) {
         console.error('Error en verificarCodigo:', error);

@@ -2,9 +2,8 @@
     max-width: 800px;
     margin: 50px auto;
     padding: 30px;
-    border: 2px solid #556070; /* Borde azul para darle énfasis */
     border-radius: 12px; /* Bordes redondeados suaves */
-    background-color: #f9f9f9; /* Color de fondo claro para buen contraste */
+    background-color: rgb(230, 230, 230); /* Color de fondo claro para buen contraste */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
 }
 
@@ -41,10 +40,10 @@
 .contact-methods a {
     text-decoration: none;
     font-size: 1.2rem;
-    color: #4285f4;
+    color: #000000;
     transition: color 0.3s ease;
 }
 
 .contact-methods a:hover {
-    color: #2b6cb0; /* Cambiar a un azul más oscuro al pasar el puntero */
+    color: #007bff; /* Cambiar a un azul más oscuro al pasar el puntero */
 }

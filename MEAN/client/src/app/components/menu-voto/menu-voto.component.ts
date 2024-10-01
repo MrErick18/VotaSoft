@@ -22,6 +22,7 @@ export class MenuVotoComponent implements OnInit{
   verificationCode: string = '';
   userInputCode: string = '';
   showCodeInput: boolean = false;
+  usuarioId: string = '';
 
   constructor(
     private usuariosService: UsuariosService,
@@ -65,6 +66,7 @@ export class MenuVotoComponent implements OnInit{
     this.usuariosService.validarUsuario(this.tipoDoc, this.numDoc).subscribe(
       (response) => {
         if (response && response._id) {
+          this.usuarioId = response._id; // Guardamos el ID del usuario
           this.showCodeInput = true;
           this.toastr.success('Usuario validado. Por favor, obtenga su código de verificación.');
         } else {
@@ -101,18 +103,11 @@ export class MenuVotoComponent implements OnInit{
       return;
     }
   
-    console.log('Enviando datos:', { 
-      tipoDoc: this.tipoDoc, 
-      numDoc: this.numDoc, 
-      codigo: this.userInputCode, 
-      eleccionId: this.eleccionId 
-    });
-  
     this.usuariosService.verificarCodigo(this.tipoDoc, this.numDoc, this.userInputCode, this.eleccionId).subscribe(
       (response) => {
-        console.log('Respuesta exitosa:', response);
         this.toastr.success('Código verificado correctamente.');
-        this.router.navigate(['ingreso-voto', this.eleccionId]);
+        // Pasamos el ID del usuario y el ID de la elección como parámetros de ruta
+        this.router.navigate(['ingreso-voto', this.eleccionId, this.usuarioId]);
       },
       (error) => {
         console.error('Error detallado:', error);

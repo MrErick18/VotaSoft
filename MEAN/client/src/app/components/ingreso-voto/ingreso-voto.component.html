@@ -1,37 +1,18 @@
-
-    <div class="container-ingreso-voto">
-        <h1>Menú de Candidatos</h1>
-        <div class="candidatos">
-            <div class="candidato">
-                <div class="candidato-header">Candidato N°1</div>
-                <img src="assets/candidato.jpg" alt="Candidato 1">
-                <div class="candidato-info">
-                    <p><strong>Nombre:</strong></p>
-                    <p><strong>Jornada:</strong></p>
-                    <p><strong>Titulada:</strong></p>
-                    <p><strong>Propuesta:</strong></p>
-                </div>
+<div class="container-ingreso-voto">
+    <h1>Papeleta de Votación</h1>
+    <div class="candidatos">
+        <div *ngFor="let candidato of candidatos; let i = index" class="candidato">
+            <div class="candidato-header">Candidato N°{{i + 1}}</div>
+            <img [src]="candidato.foto" [alt]="candidato.nombreCompleto">
+            <div class="candidato-info">
+                <p><strong>Nombre:</strong> {{candidato.nombreCompleto}}</p>
+                <p><strong>Perfil:</strong> {{candidato.perfil}}</p>
+                <p><strong>Propuesta:</strong> {{candidato.propuestas}}</p>
             </div>
-            <div class="candidato">
-                <div class="candidato-header">Candidato N°2</div>
-                <img src="assets/candidato.jpg" alt="Candidato 2">
-                <div class="candidato-info">
-                    <p><strong>Nombre:</strong></p>
-                    <p><strong>Jornada:</strong></p>
-                    <p><strong>Titulada:</strong></p>
-                    <p><strong>Propuesta:</strong></p>
-                </div>
-            </div>
-            <div class="candidato">
-                <div class="candidato-header">Candidato N°3</div>
-                <img src="assets/candidato.jpg" alt="Candidato 3">
-                <div class="candidato-info">
-                    <p><strong>Nombre:</strong></p>
-                    <p><strong>Jornada:</strong></p>
-                    <p><strong>Titulada:</strong></p>
-                    <p><strong>Propuesta:</strong></p>
-                </div>
-            </div>
+            <input type="radio" [id]="'candidato' + i" name="candidatoSeleccionado" [value]="candidato._id"
+                [(ngModel)]="candidatoSeleccionadoId">
+            <label [for]="'candidato' + i">Seleccionar</label>
         </div>
-        <button type="submit">Votar</button>
     </div>
+    <button (click)="confirmarVoto()" [disabled]="!candidatoSeleccionadoId">Votar</button>
+</div>

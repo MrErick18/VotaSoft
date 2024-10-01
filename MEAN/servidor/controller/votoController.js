@@ -1,69 +1,71 @@
 const Voto = require("../models/Voto");
+const Eleccion = require("../models/Eleccion");
+const Candidato = require("../models/Candidato");
+const moment = require('moment-timezone');
 
-exports.crearVoto = async(req, res) => {
+exports.crearVoto = async (req, res) => {
     try {
-        let voto;
-        voto = new Voto(req.body);
-        await voto.save();
-        res.send(voto)
-    } catch(error){
-        console.log(error);
-        res.status(500).send('Ocurrio un Error')
+        const { Usuarios_id, Candidato_id, Eleccion_id } = req.body;
+
+        // Verificar si la elección existe y está activa
+        const eleccion = await Eleccion.findById(Eleccion_id);
+
+        if (!eleccion) {
+            return res.status(400).json({ msg: "La elección no existe" });
+        }
+
+        if (eleccion.estado !== 'Pendiente') {
+            return res.status(400).json({ msg: "La elección no está activa" });
+        }
+
+        // Verificar si el candidato pertenece a esta elección
+        const candidato = await Candidato.findOne({ _id: Candidato_id, eleccion: Eleccion_id });
+        if (!candidato) {
+            return res.status(400).json({ msg: "El candidato no pertenece a esta elección" });
+        }
+
+        // Verificar si el usuario ya ha votado en esta elección
+        const votoExistente = await Voto.findOne({ Usuarios_id, Eleccion_id });
+        if (votoExistente) {
+            return res.status(400).json({ msg: "El usuario ya ha votado en esta elección" });
+        }
+
+        // Crear el voto
+        const fechaEmisionColombia = moment().tz('America/Bogota').toDate();
+        const nuevoVoto = new Voto({
+            Usuarios_id,
+            Candidato_id,
+            Eleccion_id,
+            fechaEmision: fechaEmisionColombia
+        });
+
+        await nuevoVoto.save();
+        res.status(201).json({ msg: "Voto registrado con éxito", voto: nuevoVoto });
+    } catch (error) {
+        console.error('Error detallado:', error);
+        res.status(500).json({ msg: 'Ocurrió un error al registrar el voto', error: error.message });
     }
 }
 
-exports.obtenerVoto = async(req, res) =>{
-    try{
-        const voto = await Voto.find();
-        res.json(voto)
-    }catch(error){
-        console.log(error);
-        res.status(500).send('Ocurrio un error')
-        
-    }
-}
-
-exports.actualizarVoto = async(req, res) => {
+exports.obtenerVotos = async (req, res) => {
     try {
-        const { Usuario_id, Candidato_id, Eleccion_id, fechaEmision } = req.body;
-        let voto = await Voto.findById(req.params.id);
-        if (!voto) {return res.status(400).json({ msg: "Voto No Existe" });}
-        voto.Usuario_id = Usuario_id;
-        voto.Candidato_id = Candidato_id;
-        voto.Eleccion_id = Eleccion_id;
-        voto.fechaEmision = fechaEmision;
-        voto = await Voto.findByIdAndUpdate({ _id: req.params.id }, voto, { new: true }
-        );
-        res.json(voto);
+        const votos = await Voto.find().populate('Eleccion_id', 'nombre').populate('Candidato_id', 'nombreCompleto');
+        res.json(votos);
     } catch (error) {
         console.log(error);
-        res.status(500).send("Ocurrió un Error al Actualizar");
+        res.status(500).json({ msg: 'Ocurrió un error al obtener los votos' });
     }
 }
 
-exports.buscarVoto = async(req, res) => {
-    try{
-        let voto = await Voto.findById(req.params.id);
-        if(!voto){
-            res.status(400).json({msg: 'Este Voto no Existe'});
-        }
-        res.json(voto);
-    }catch(error){ 
-        console.log(error);        
-        res.status(500).send('Ocurrio Un Error Al Eliminar Voto')
-    }
-}
-
-exports.eliminarVoto = async(req, res) => {
-    try{
-        let voto = await Voto.findById(req.params.id);
-        if(!voto){
-            res.status(400).json({msg: 'Este Voto no Existe'});
-        }
-        await Voto.findByIdAndDelete(req.params.id)
-        res.json(voto);
-    }catch(error){ 
-        console.log(error);        
-        res.status(500).send('Ocurrio Un Error ' + error)
+exports.obtenerVotosPorEleccion = async (req, res) => {
+    try {
+        const { eleccionId } = req.params;
+        const votos = await Voto.find({ Eleccion_id: eleccionId })
+            .populate('Candidato_id', 'nombreCompleto')
+            .populate('Usuarios_id', 'nombre');
+        res.json(votos);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: 'Ocurrió un error al obtener los votos de la elección' });
     }
 }

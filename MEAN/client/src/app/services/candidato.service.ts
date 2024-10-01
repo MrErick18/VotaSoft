@@ -30,4 +30,8 @@ export class CandidatoService {
   getCandidato(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
+
+  getCandidatosPorEleccion(eleccionId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/eleccion/${eleccionId}`);
+  }
 }

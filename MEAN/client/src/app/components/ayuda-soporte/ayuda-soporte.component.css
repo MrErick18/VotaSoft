@@ -7,9 +7,9 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
 }
 
-.container h1 {
+h1 {
     font-size: 2rem;
-    color: #333; /* Texto oscuro para formalidad */
+    color: #000000; /* Texto oscuro para formalidad */
     text-align: center; /* Centrar el título */
     margin-bottom: 20px;
 }
@@ -17,7 +17,7 @@
 .container p {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: #555; /* Texto ligeramente gris para evitar alto contraste */
+    color: #000000; /* Texto ligeramente gris para evitar alto contraste */
 }
 
 .contact-info h2 {

@@ -3,7 +3,7 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f4f4f4; /* Fondo gris claro */
+    background-color: rgb(230, 230, 230);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -12,7 +12,7 @@
 h2 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: #333;
+    color: #000000;
 }
 
 /* Contenedor del botón y texto */
@@ -199,6 +199,7 @@ table tr:hover {
 
 p {
     font-size: 1.1rem;
+    color: #000000;
 }
 
 .container {

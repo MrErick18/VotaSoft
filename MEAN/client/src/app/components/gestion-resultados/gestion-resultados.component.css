@@ -1,164 +1,111 @@
-body {
+/* gestion-resultados.component.css */
+.results-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
 }
 
-.container {
-    width: 1200px;
-    max-width: 1000px;
-    background-color: white;
-    padding: 80px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    margin-left: 135px;
-}
-
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+.title {
     color: #333;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-p {
-    font-size: 1.2em;
-    color: #666;
+.form-group {
     margin-bottom: 20px;
 }
 
-/* From Uiverse.io by cssbuttons-io */
-button {
-    position: relative;
-    border: none;
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
-    outline-offset: 4px;
-    transition: filter 250ms;
-    user-select: none;
-    touch-action: manipulation;
-}
-
-.shadow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    background: hsl(0deg 0% 0% / 0.25);
-    will-change: transform;
-    transform: translateY(2px);
-    transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
-}
-
-.edge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    background: linear-gradient(to left,
-            hsl(182, 100%, 16%) 0%,
-            hsl(191, 100%, 32%) 8%,
-            hsl(197, 100%, 32%) 92%,
-            hsl(195, 100%, 16%) 100%);
-}
-
-.front {
+.form-group label {
     display: block;
-    position: relative;
-    padding: 12px 27px;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    color: white;
-    background: hsl(209, 100%, 47%);
-    will-change: transform;
-    transform: translateY(-4px);
-    transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
-}
-
-button:hover {
-    filter: brightness(110%);
-}
-
-button:hover .front {
-    transform: translateY(-6px);
-    transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
-}
-
-button:active .front {
-    transform: translateY(-2px);
-    transition: transform 34ms;
-}
-
-button:hover .shadow {
-    transform: translateY(4px);
-    transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
-}
-
-button:active .shadow {
-    transform: translateY(1px);
-    transition: transform 34ms;
-}
-
-button:focus:not(:focus-visible) {
-    outline: none;
-}
-
-.chart {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 200px;
-    background-color: #f0f0f0;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-}
-
-.bar {
-    width: 20%;
-    background-color: #999;
-    color: white;
-    text-align: center;
+    margin-bottom: 5px;
     font-weight: bold;
-    padding: 5px 0;
 }
 
-.stats-container {
-    display: flex;
-    justify-content: space-around;
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-.stat-box {
+.results-content {
     background-color: #f9f9f9;
+    border-radius: 8px;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 30%;
-    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.stat-box h3 {
-    font-size: 1.2em;
+.winner-section,
+.tie-section {
+    margin-bottom: 20px;
+}
+
+.winner-section h3,
+.tie-section h3 {
+    color: #333;
     margin-bottom: 10px;
 }
 
-.stat-box p {
-    font-size: 2em;
-    margin: 0;
+.winner-card,
+.tie-card {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.stat-box span {
-    display: block;
-    margin-top: 10px;
-    font-size: 1em;
+.winner-name,
+.tie-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.winner-votes,
+.tie-votes {
     color: #666;
+}
+
+.tie-cards {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tie-card {
+    flex: 1;
+    min-width: 200px;
+}
+
+.charts-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-wrapper {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.download-btn:hover {
+    background-color: #45a049;
 }

@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
 const resultadosController = require('../controller/resultadosController');
 
-router.post('/', resultadosController.crearResultados);
-router.get('/', resultadosController.obtenerResultados);
-router.put('/:id', resultadosController.actualizarResultados);
-router.get('/:id', resultadosController.buscarResultados);
-router.delete('/:id', resultadosController.eliminarResultado);
+router.get('/eleccion/:eleccionId', resultadosController.obtenerResultadosPorEleccion);
+router.post('/pdf/:eleccionId', resultadosController.generarPDF);
 
 module.exports = router;

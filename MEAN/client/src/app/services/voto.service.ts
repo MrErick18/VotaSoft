@@ -14,4 +14,8 @@ export class VotoService {
   emitirVoto(voto: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, voto);
   }
+
+  getVotosPorEleccion(eleccionId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/eleccion/${eleccionId}`);
+  }
 }

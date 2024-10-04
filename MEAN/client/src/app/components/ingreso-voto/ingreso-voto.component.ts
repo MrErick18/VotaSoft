@@ -90,7 +90,7 @@ export class IngresoVotoComponent implements OnInit {
           'Tu voto ha sido registrado con éxito.',
           'success'
         );
-        this.router.navigate(['/confirmacion-voto']);
+        this.router.navigate(['/menu-voto']);
       },
       (error) => {
         console.error('Error al emitir el voto', error);

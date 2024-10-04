@@ -14,7 +14,7 @@ exports.crearVoto = async (req, res) => {
             return res.status(400).json({ msg: "La elección no existe" });
         }
 
-        if (eleccion.estado !== 'Pendiente') {
+        if (eleccion.estado !== 'En Curso') {
             return res.status(400).json({ msg: "La elección no está activa" });
         }
 

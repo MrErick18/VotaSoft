@@ -79,9 +79,9 @@ exports.eliminarEleccion = async(req, res) =>{
     }
 }
 
-exports.obtenerEleccionesPendientes = async (req, res) => {
+exports.obtenerEleccionesEnCurso = async (req, res) => {
     try {
-        const elecciones = await Eleccion.find({ estado: 'Pendiente' });
+        const elecciones = await Eleccion.find({ estado: 'En Curso' });
         res.json(elecciones);
     } catch (error) {
         console.error('Error al obtener elecciones pendientes:', error);

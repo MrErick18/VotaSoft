@@ -8,7 +8,7 @@
             <h2>Elecciones Pendientes</h2>
             <select [(ngModel)]="eleccionId" (change)="onEleccionChange()">
                 <option value="" disabled selected>Seleccione una Elección</option>
-                <option *ngFor="let eleccion of eleccionesPendientes" [value]="eleccion._id">
+                <option *ngFor="let eleccion of eleccionesEnCurso" [value]="eleccion._id">
                     {{ eleccion.nombre }}
                 </option>
             </select>

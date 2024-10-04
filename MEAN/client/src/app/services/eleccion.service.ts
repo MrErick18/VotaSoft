@@ -34,4 +34,8 @@ export class EleccionService {
   getEleccionesPendientes(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/pendientes`);
   }
+
+  getEleccionesEnCurso(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/encurso`);
+  }
 }

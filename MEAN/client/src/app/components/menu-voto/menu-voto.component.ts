@@ -14,7 +14,7 @@ import { EleccionService } from '../../services/eleccion.service';
   styleUrls: ['./menu-voto.component.css']
 })
 export class MenuVotoComponent implements OnInit{
-  eleccionesPendientes: any[] = [];
+  eleccionesEnCurso: any[] = [];
   eleccionId: string = '';
   eleccionSeleccionada: boolean = false;
   tipoDoc: string = '';
@@ -32,17 +32,17 @@ export class MenuVotoComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-    this.cargarEleccionesPendientes();
+    this.cargarEleccionesEnCurso();
   }
 
-  cargarEleccionesPendientes() {
+  cargarEleccionesEnCurso() {
     this.eleccionService.getEleccionesPendientes().subscribe(
-      (elecciones) => {
-        this.eleccionesPendientes = elecciones;
+      (elecciones: any[]) => {
+        this.eleccionesEnCurso = elecciones;
       },
       (error) => {
-        console.error('Error al cargar elecciones pendientes:', error);
-        this.toastr.error('No se pudieron cargar las elecciones pendientes.');
+        console.error('Error al cargar elecciones en curso:', error);
+        this.toastr.error('No se pudieron cargar las elecciones en curso.');
       }
     );
   }

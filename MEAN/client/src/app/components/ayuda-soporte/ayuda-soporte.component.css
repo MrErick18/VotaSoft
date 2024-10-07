@@ -2,28 +2,28 @@
     max-width: 800px;
     margin: 50px auto;
     padding: 30px;
-    border-radius: 12px; /* Bordes redondeados suaves */
-    background-color: rgb(230, 230, 230); /* Color de fondo claro para buen contraste */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
+    border-radius: 12px;
+    background-color: var(--ayuda);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     font-size: 2rem;
-    color: #000000; /* Texto oscuro para formalidad */
-    text-align: center; /* Centrar el título */
+    color: var(--text-color);
+    text-align: center;
     margin-bottom: 20px;
 }
 
 .container p {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: #000000; /* Texto ligeramente gris para evitar alto contraste */
+    color: var(--text-color);
 }
 
 .contact-info h2 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: #333;
+    color: var(--text-color);
 }
 
 .contact-methods li {
@@ -35,15 +35,16 @@ h1 {
 
 .contact-methods li svg {
     margin-right: 10px;
+    fill: var(--text-color); /* Asegúrate de que los iconos SVG también cambien de color */
 }
 
 .contact-methods a {
     text-decoration: none;
     font-size: 1.2rem;
-    color: #000000;
+    color: var(--link-color);
     transition: color 0.3s ease;
 }
 
 .contact-methods a:hover {
-    color: #007bff; /* Cambiar a un azul más oscuro al pasar el puntero */
+    color: var(--input-focus); /* Usar el color de enfoque para el hover */
 }

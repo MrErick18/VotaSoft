@@ -30,7 +30,7 @@ export const routes: Routes = [
   { path: 'gestion-eleccion/:id', component: GestionEleccionComponent, canActivate: [AuthGuard]},
   { path: 'gestion-usuarios', component: GestionUsuariosComponent, canActivate: [AuthGuard]},
   { path: 'gestion-resultados', component: GestionResultadosComponent, canActivate:[AuthGuard]},
-  { path: 'menu-voto', component: MenuVotoComponent, canActivate: [AuthGuard]},
+  { path: 'menu-voto', component: MenuVotoComponent},
   { path: 'ingreso-voto/:eleccionId/:usuarioId', component: IngresoVotoComponent, canActivate: [AuthGuard] },
   { path: 'acerca-de', component: AcercaDeComponent },
   { path: 'ayuda-soporte', component: AyudaSoporteComponent},

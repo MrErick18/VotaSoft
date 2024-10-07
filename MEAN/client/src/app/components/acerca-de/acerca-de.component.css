@@ -1,28 +1,6 @@
 /* styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-:root {
-    --primary-color: #1b3a68;
-    --secondary-color: #4a90e2;
-    --background-color: #ffffff;
-    --text-color: #333333;
-    --card-background: #ffffff;
-    --card-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    --icon-color: #000000;
-    --title-color: #000000;
-}
-
-.dark-theme {
-    --primary-color: #4a90e2;
-    --secondary-color: #1b3a68;
-    --background-color: #1a1a1a;
-    --text-color: #ffffff;
-    --card-background: #2a2a2a;
-    --card-shadow: 0 6px 15px rgba(255, 255, 255, 0.1);
-    --icon-color: #ffffff;
-    --title-color: #ffffff;
-}
-
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--background-color);
@@ -79,8 +57,8 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    border-radius: 10px;
-    background-color: var(--card-background);
+    border-radius: 10px color;
+    background-color: var(--card-bg);
     box-shadow: var(--card-shadow);
 }
 
@@ -89,7 +67,7 @@ body {
 }
 
 .card-back {
-    background-color: var(--secondary-color);
+    background-color: var(--card-bg);
     color: var(--background-color);
     transform: rotateY(180deg);
 }

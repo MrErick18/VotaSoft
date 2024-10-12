@@ -9,3 +9,8 @@
 [dev]
   command = "ng serve"
   targetPort = 4200
+
+  [[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

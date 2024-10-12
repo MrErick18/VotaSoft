@@ -1,4 +1,16 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[
+build
+]
+  command = "ng build --configuration production"
+  publish = "dist/client/browser"
+
+[[
+plugins
+]]
+  package = "@netlify/angular-runtime"
+
+[
+dev
+]
+  command = "ng serve"
+  targetPort = 4200

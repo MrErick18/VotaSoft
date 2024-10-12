@@ -3477,3 +3477,6 @@ MEAN/servidor/node_modules/which-typed-array/README.md
 MEAN/servidor/node_modules/which-typed-array/tsconfig.json
 MEAN/servidor/node_modules/which-typed-array/.github/FUNDING.yml
 MEAN/servidor/node_modules/which-typed-array/test/index.js
+
+# Local Netlify folder
+.netlify

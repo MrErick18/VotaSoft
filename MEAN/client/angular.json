@@ -24,7 +24,7 @@
                 "input": "src",
                 "output": "/"
               },
-              "scr/assets"
+              "src/assets"
             ],
             "styles": [
               "src/styles.css",

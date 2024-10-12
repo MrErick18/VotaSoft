@@ -23,7 +23,8 @@
                 "glob": "200.html",
                 "input": "src",
                 "output": "/"
-              }
+              },
+              "scr/assets"
             ],
             "styles": [
               "src/styles.css",

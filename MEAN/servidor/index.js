@@ -15,7 +15,7 @@ conectarDB();
 
 // Configuración de CORS
 const corsOptions = {
-  origin: ['https://votasoft-web.vercel.app', 'https://votasoft.vercel.app', 'http://localhost:4200'],
+  origin: ['https://votasoft.netlify.app', 'http://localhost:4200'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

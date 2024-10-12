@@ -1,16 +1,18 @@
 [
 build
 ]
-  command = "ng build --configuration production"
-  publish = "dist/client/browser"
+     base = "."
+     command = "npm run build"
+     publish = "dist/client/browser"
 
-[[
+   [[
 plugins
 ]]
-  package = "@netlify/angular-runtime"
+     package = "@netlify/angular-runtime"
 
-[
+   [
 dev
 ]
-  command = "ng serve"
-  targetPort = 4200
+     command = "ng serve"
+     targetPort = 4200
+   

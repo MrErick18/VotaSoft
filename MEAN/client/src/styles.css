@@ -14,7 +14,7 @@
   --transition: all 0.3s ease;
 }
 
-body.dark-theme {
+html[data-theme='dark-theme'] {
   --primary-color: #4da3ff;
   --primary-dark: #1e88e5;
   --bg-color: #121212;

@@ -4,140 +4,123 @@ const jwt = require('jsonwebtoken');
 const { transporter } = require("../config/mailer");
 const Administrador = require("../models/Administrador");
 
-// Crear Administrador
+const BCRYPT_ROUNDS = 12;
+
+// Función para generar una clave JWT aleatoria
+function generateJWTSecret() {
+    return crypto.randomBytes(64).toString('hex');
+}
+
+// Generamos la clave JWT al iniciar la aplicación
+const JWT_SECRET = generateJWTSecret();
+console.log('Nueva clave JWT generada');
+
 exports.crearAdministrador = async (req, res) => {
     try {
         const { numDoc, contrasena } = req.body;
-        const existeAdministrador = await Administrador.findOne({ numDoc });
+        const existeAdministrador = await Administrador.findOne({ numDoc }).lean();
         if (existeAdministrador) {
             return res.status(400).json({ msg: "El número de documento ya está en uso" });
         }
 
-        req.body.contrasena = bcrypt.hashSync(contrasena, 12);
-        const administrador = new Administrador(req.body);
+        const hashedPassword = await bcrypt.hash(contrasena, BCRYPT_ROUNDS);
+        const administrador = new Administrador({ ...req.body, contrasena: hashedPassword });
         await administrador.save();
         res.status(201).json(administrador);
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Ocurrió un Error');
+        console.error('Error en crearAdministrador:', error);
+        res.status(500).json({ error: 'Ocurrió un Error' });
     }
 };
 
-// Obtener todos los Administradores
 exports.obtenerAdministrador = async (req, res) => {
     try {
-        const administradores = await Administrador.find();
+        const administradores = await Administrador.find().lean();
         res.json(administradores);
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Ocurrió un error');
+        console.error('Error en obtenerAdministrador:', error);
+        res.status(500).json({ error: 'Ocurrió un error' });
     }
 };
 
-// Actualizar Administrador
 exports.actualizarAdministrador = async (req, res) => {
     try {
-        const { nombre, apellido, tipoDoc, numDoc, correo, contrasena, cargo } = req.body;
-        let administrador = await Administrador.findById(req.params.id);
-        if (!administrador) return res.status(400).json({ msg: "Administrador No Existe" });
+        const { id } = req.params;
+        const { contrasena, ...updateData } = req.body;
 
-        administrador.nombre = nombre;
-        administrador.apellido = apellido;
-        administrador.tipoDoc = tipoDoc;
-        administrador.numDoc = numDoc;
-        administrador.correo = correo;
         if (contrasena) {
-            administrador.contrasena = bcrypt.hashSync(contrasena, 12);
+            updateData.contrasena = await bcrypt.hash(contrasena, BCRYPT_ROUNDS);
         }
-        administrador.cargo = cargo;
-        administrador = await Administrador.findByIdAndUpdate(req.params.id, administrador, { new: true });
+
+        const administrador = await Administrador.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+        if (!administrador) return res.status(404).json({ msg: "Administrador No Existe" });
+
         res.json(administrador);
     } catch (error) {
-        console.log(error);
-        res.status(500).send("Ocurrió un Error al Actualizar");
+        console.error('Error en actualizarAdministrador:', error);
+        res.status(500).json({ error: "Ocurrió un Error al Actualizar" });
     }
 };
 
-// Buscar Administrador por ID
 exports.buscarAdministrador = async (req, res) => {
     try {
-        const administrador = await Administrador.findById(req.params.id);
+        const administrador = await Administrador.findById(req.params.id).lean();
         if (!administrador) return res.status(404).json({ msg: 'Administrador no encontrado' });
         res.json(administrador);
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Ocurrió un Error');
+        console.error('Error en buscarAdministrador:', error);
+        res.status(500).json({ error: 'Ocurrió un Error' });
     }
 };
 
-// Eliminar Administrador
 exports.eliminarAdministrador = async (req, res) => {
     try {
-        const administrador = await Administrador.findById(req.params.id);
-        if (!administrador) return res.status(404).json({ msg: "Administrador no encontrado" });
-        await Administrador.findByIdAndDelete(req.params.id);
+        const resultado = await Administrador.findByIdAndDelete(req.params.id);
+        if (!resultado) return res.status(404).json({ msg: "Administrador no encontrado" });
         res.json({ msg: "Administrador eliminado" });
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Ocurrió un Error');
+        console.error('Error en eliminarAdministrador:', error);
+        res.status(500).json({ error: 'Ocurrió un Error' });
     }
 };
 
-// Login Administrador
 exports.loginAdministrador = async (req, res) => {
     try {
         const { numDoc, contrasena } = req.body;
-        const administrador = await Administrador.findOne({ numDoc });
-        if (!administrador) return res.status(400).json({ msg: "Error en usuario/contraseña" });
+        const administrador = await Administrador.findOne({ numDoc }).select('+contrasena').lean();
+        if (!administrador || !(await bcrypt.compare(contrasena, administrador.contrasena))) {
+            return res.status(400).json({ msg: "Error en usuario/contraseña" });
+        }
 
-        const esValido = bcrypt.compareSync(contrasena, administrador.contrasena);
-        if (!esValido) return res.status(400).json({ msg: "Error en usuario/contraseña" });
-
-        const token = createToken(administrador);
+        const token = jwt.sign({ administrador_id: administrador._id, numDoc }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ msg: "Login Correcto", token });
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Ocurrió un Error');
+        console.error('Error en loginAdministrador:', error);
+        res.status(500).json({ error: 'Ocurrió un Error' });
     }
 };
 
-// Crear Token JWT
-function createToken(administrador) {
-    const payload = {
-        administrador_id: administrador._id,
-        numDoc: administrador.numDoc
-    };
-    return jwt.sign(payload, "tu_clave_secreta", { expiresIn: '1h' });
-}
-
-// Verificar Número de Documento
 exports.verificarNumeroDocumento = async (req, res) => {
     try {
-        const numDoc = req.params.numDoc;
-        const administrador = await Administrador.findOne({ numDoc });
-        res.json({ exists: !!administrador }); // Devuelve true si existe, false si no
+        const exists = await Administrador.exists({ numDoc: req.params.numDoc });
+        res.json({ exists: !!exists });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Ocurrió un error al verificar el número de documento');
+        console.error('Error en verificarNumeroDocumento:', error);
+        res.status(500).json({ error: 'Ocurrió un error al verificar el número de documento' });
     }
 };
 
-// Verificar Correo y Enviar Correo de Recuperación
 exports.verificarCorreo = async (req, res) => {
     try {
         const { correo } = req.params;
-        const administrador = await Administrador.findOne({ correo });
+        const administrador = await Administrador.findOne({ correo }).lean();
 
         if (administrador) {
-            const token = jwt.sign(
-                { administrador_id: administrador._id },
-                "tu_clave_secreta",
-                { expiresIn: '1h' }
-            );
-
-            administrador.resetPasswordToken = token;
-            administrador.resetPasswordExpires = Date.now() + 3600000; // 1 hora
-            await administrador.save();
+            const token = jwt.sign({ administrador_id: administrador._id }, JWT_SECRET, { expiresIn: '1h' });
+            await Administrador.findByIdAndUpdate(administrador._id, {
+                resetPasswordToken: token,
+                resetPasswordExpires: Date.now() + 3600000
+            });
 
             await transporter.sendMail({
                 from: '"VotaSoft Soporte" <votasoftsoporte@gmail.com>',
@@ -146,11 +129,11 @@ exports.verificarCorreo = async (req, res) => {
                 html: `
                     <p><strong>Hola,</strong></p>
                     <p>Recibimos una solicitud para recuperar tu acceso a <strong>VotaSoft</strong>. Para restablecer tu contraseña, haz clic en el enlace a continuación:</p>
-                    <p><a href="https://votasoft.vercel.app/olvide-contrasena?token=${token}">Restablecer mi contraseña</a></p>
+                    <p><a href="https://votasoft.netlify.app/olvide-contrasena?token=${token}">Restablecer mi contraseña</a></p>
                     <p>Este enlace expirará en 1 hora.</p>
                     <p>Si no solicitaste esta recuperación de contraseña, ignora este mensaje.</p>
                     <p>Saludos,<br>Equipo VotaSoft</p>
-                `,
+                `
             });
 
             res.status(200).json({ exists: true, message: 'Correo enviado' });
@@ -163,26 +146,17 @@ exports.verificarCorreo = async (req, res) => {
     }
 };
 
-// Restablecer Contraseña
 exports.restablecerContrasena = async (req, res) => {
     try {
         const { token, nuevaContrasena } = req.body;
-
-        // Verificar el token JWT
-        let payload;
-        try {
-            payload = jwt.verify(token, "tu_clave_secreta");
-        } catch (err) {
-            return res.status(400).json({ message: 'Token inválido o expirado' });
-        }
+        const payload = jwt.verify(token, JWT_SECRET);
 
         const administrador = await Administrador.findById(payload.administrador_id);
         if (!administrador) {
             return res.status(400).json({ message: 'Administrador no encontrado' });
         }
 
-        // Actualizar la contraseña
-        administrador.contrasena = bcrypt.hashSync(nuevaContrasena, 12);
+        administrador.contrasena = await bcrypt.hash(nuevaContrasena, BCRYPT_ROUNDS);
         administrador.resetPasswordToken = undefined;
         administrador.resetPasswordExpires = undefined;
         await administrador.save();
@@ -190,6 +164,9 @@ exports.restablecerContrasena = async (req, res) => {
         res.status(200).json({ message: 'Contraseña actualizada correctamente' });
     } catch (error) {
         console.error('Error al restablecer la contraseña:', error);
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(400).json({ message: 'Token inválido o expirado' });
+        }
         res.status(500).json({ error: 'Error al restablecer la contraseña' });
     }
 };

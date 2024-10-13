@@ -1,31 +1,44 @@
-const Eleccion = require('../models/Eleccion'); // Ajusta la ruta si es necesario
+const Eleccion = require('../models/Eleccion');
+const moment = require('moment-timezone');
 
-// Función para actualizar el estado de las elecciones
 async function updateEleccionesEstado() {
-    const hoy = new Date();
-    hoy.setUTCHours(0, 0, 0, 0); // Ajusta la fecha para que sea UTC sin la parte de hora
-
-    const inicioHoy = new Date(hoy);
-    const finHoy = new Date(hoy);
-    finHoy.setUTCHours(23, 59, 59, 999); // Ajusta el fin del día a las 23:59:59.999 UTC
+    const zonaBogota = 'America/Bogota';
+    const ahora = moment().tz(zonaBogota);
+    
+    const inicioHoy = ahora.clone().startOf('day');
+    const finHoy = ahora.clone().endOf('day');
 
     // Actualiza el estado a 'Finalizada' para elecciones pasadas
     await Eleccion.updateMany(
-        { fecha: { $lt: inicioHoy }, estado: { $ne: 'Finalizada' } },
+        { 
+            fecha: { $lt: inicioHoy.toDate() }, 
+            estado: { $ne: 'Finalizada' } 
+        },
         { $set: { estado: 'Finalizada' } }
     );
 
     // Actualiza el estado a 'En Curso' para elecciones que ocurren hoy
     await Eleccion.updateMany(
-        { fecha: { $gte: inicioHoy, $lte: finHoy }, estado: { $ne: 'En Curso' } },
+        { 
+            fecha: { 
+                $gte: inicioHoy.toDate(), 
+                $lte: finHoy.toDate() 
+            }, 
+            estado: { $ne: 'En Curso' } 
+        },
         { $set: { estado: 'En Curso' } }
     );
 
     // Actualiza el estado a 'Pendiente' para elecciones futuras
     await Eleccion.updateMany(
-        { fecha: { $gt: finHoy }, estado: { $ne: 'Pendiente' } },
+        { 
+            fecha: { $gt: finHoy.toDate() }, 
+            estado: { $ne: 'Pendiente' } 
+        },
         { $set: { estado: 'Pendiente' } }
     );
+
+    console.log(`Estados de elecciones actualizados para ${ahora.format('YYYY-MM-DD HH:mm:ss')} hora de Bogotá`);
 }
 
 module.exports = { updateEleccionesEstado };

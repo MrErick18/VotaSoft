@@ -7,6 +7,7 @@ router.get('/encurso', eleccionController.obtenerEleccionesEnCurso);
 
 router.post('/', eleccionController.crearEleccion);
 router.get('/', eleccionController.obtenerEleccion);
+router.get('/pendientes', eleccionController.obtenerEleccionesPendientes)
 router.put('/:id', eleccionController.actualizarEleccion);
 router.get('/:id', eleccionController.buscarEleccion);
 router.delete('/:id', eleccionController.eliminarEleccion);

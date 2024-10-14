@@ -5,10 +5,10 @@
       <h2>¿Olvidó su contraseña?</h2>
       <p *ngIf="!enviadoExito && !errorEnviando">Ingrese su correo para recuperar su contraseña.</p>
 	
-      <form *ngIf="!enviadoExito && !errorEnviando" (ngSubmit)="enviarCorreo()">
+      <form *ngIf="!enviadoExito && !errorEnviando" [formGroup]="correoForm" (ngSubmit)="enviarCorreo()">
         <div class="form-group">
           <label for="email">Correo electrónico:</label>
-          <input type="email" id="email" name="email" placeholder="Correo electronico" [(ngModel)]="correo" required class="form-control">
+          <input type="email" id="email" formControlName="correo" placeholder="Correo electrónico" required class="form-control">
         </div>
         <div class="button-group">
           <button type="button" (click)="volverAlInicio()" class="btn btn-secondary">Volver al inicio</button>
@@ -32,10 +32,10 @@
       <h2>Restablecer Contraseña</h2>
       <p *ngIf="!errorEnviando">Ingrese su nueva contraseña.</p>
 
-      <form (ngSubmit)="restablecerContrasena()">
+      <form [formGroup]="contrasenaForm" (ngSubmit)="restablecerContrasena()">
         <div class="form-group">
           <label for="newPassword">Nueva Contraseña:</label>
-          <input type="password" id="newPassword" name="newPassword" [(ngModel)]="nuevaContrasena" required class="form-control">
+          <input type="password" id="newPassword" formControlName="nuevaContrasena" required class="form-control">
         </div>
         <div class="button-group">
           <button type="submit" class="btn btn-primary">Restablecer Contraseña</button>

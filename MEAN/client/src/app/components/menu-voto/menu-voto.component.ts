@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 import { UsuariosService } from '../../services/usuarios.service';
 import { EleccionService } from '../../services/eleccion.service';
 
@@ -13,16 +14,17 @@ import { EleccionService } from '../../services/eleccion.service';
   templateUrl: './menu-voto.component.html',
   styleUrls: ['./menu-voto.component.css']
 })
-export class MenuVotoComponent implements OnInit{
+export class MenuVotoComponent implements OnInit {
   eleccionesEnCurso: any[] = [];
-  eleccionId: string = '';
-  eleccionSeleccionada: boolean = false;
-  tipoDoc: string = '';
-  numDoc: string = '';
-  verificationCode: string = '';
-  userInputCode: string = '';
-  showCodeInput: boolean = false;
-  usuarioId: string = '';
+  eleccionId = '';
+  eleccionSeleccionada = false;
+  tipoDoc = '';
+  numDoc = '';
+  verificationCode = '';
+  userInputCode = '';
+  showCodeInput = false;
+  usuarioId = '';
+  isDarkTheme = false;
 
   constructor(
     private usuariosService: UsuariosService,
@@ -33,24 +35,38 @@ export class MenuVotoComponent implements OnInit{
 
   ngOnInit() {
     this.cargarEleccionesEnCurso();
+    this.loadTheme();
+  }
+
+  loadTheme() {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark-theme') {
+      this.isDarkTheme = true;
+      document.documentElement.setAttribute('data-theme', 'dark-theme');
+    }
+  }
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    const theme = this.isDarkTheme ? 'dark-theme' : 'light-theme';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }
 
   cargarEleccionesEnCurso() {
-    this.eleccionService.getEleccionesPendientes().subscribe(
-      (elecciones: any[]) => {
+    this.eleccionService.getEleccionesPendientes().subscribe({
+      next: (elecciones: any[]) => {
         this.eleccionesEnCurso = elecciones;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error al cargar elecciones en curso:', error);
         this.toastr.error('No se pudieron cargar las elecciones en curso.');
       }
-    );
+    });
   }
 
   onEleccionChange() {
-    if (this.eleccionId) {
-      this.eleccionSeleccionada = true;
-    }
+    this.eleccionSeleccionada = !!this.eleccionId;
   }
 
   onSubmit() {
@@ -63,38 +79,47 @@ export class MenuVotoComponent implements OnInit{
       return;
     }
 
-    this.usuariosService.validarUsuario(this.tipoDoc, this.numDoc).subscribe(
-      (response) => {
+    this.usuariosService.validarUsuario(this.tipoDoc, this.numDoc).subscribe({
+      next: (response) => {
         if (response && response._id) {
-          this.usuarioId = response._id; // Guardamos el ID del usuario
+          this.usuarioId = response._id;
           this.showCodeInput = true;
           this.toastr.success('Usuario validado. Por favor, obtenga su código de verificación.');
         } else {
           this.toastr.warning('Usuario no encontrado.');
         }
       },
-      (error) => {
+      error: (error) => {
         console.error(error);
         this.toastr.error('Ocurrió un error al validar el usuario.');
       }
-    );
+    });
   }
 
   getVerificationCode() {
-    this.usuariosService.generarCodigoVerificacion(this.tipoDoc, this.numDoc, this.eleccionId).subscribe(
-      (response) => {
+    this.usuariosService.generarCodigoVerificacion(this.tipoDoc, this.numDoc, this.eleccionId).subscribe({
+      next: (response) => {
         this.verificationCode = response.codigo;
-        this.toastr.success('Código de verificación generado. Por favor, cópielo e ingréselo en el campo correspondiente.');
+        Swal.fire({
+          title: 'Código de Verificación',
+          text: `Su código es: ${this.verificationCode}`,
+          icon: 'success',
+          confirmButtonText: 'Copiar y Cerrar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.copyCode();
+          }
+        });
       },
-      (error) => {
+      error: (error) => {
         console.error(error);
         if (error.status === 400 && error.error.msg === "Ya has votado en esta elección") {
-          this.toastr.warning('Ya has participado en esta elección. Por favor, selecciona otra elección si deseas votar.');
+          Swal.fire('Advertencia', 'Ya has participado en esta elección. Por favor, selecciona otra elección si deseas votar.', 'warning');
         } else {
           this.toastr.error('Ocurrió un error al generar el código de verificación.');
         }
       }
-    );
+    });
   }
 
   verifyCode() {
@@ -103,21 +128,17 @@ export class MenuVotoComponent implements OnInit{
       return;
     }
   
-    this.usuariosService.verificarCodigo(this.tipoDoc, this.numDoc, this.userInputCode, this.eleccionId).subscribe(
-      (response) => {
-        this.toastr.success('Código verificado correctamente.');
-        // Pasamos el ID del usuario y el ID de la elección como parámetros de ruta
-        this.router.navigate(['ingreso-voto', this.eleccionId, this.usuarioId]);
+    this.usuariosService.verificarCodigo(this.tipoDoc, this.numDoc, this.userInputCode, this.eleccionId).subscribe({
+      next: () => {
+        Swal.fire('Éxito', 'Código verificado correctamente.', 'success').then(() => {
+          this.router.navigate(['ingreso-voto', this.eleccionId, this.usuarioId]);
+        });
       },
-      (error) => {
+      error: (error) => {
         console.error('Error detallado:', error);
-        if (error.error && error.error.msg) {
-          this.toastr.error(error.error.msg);
-        } else {
-          this.toastr.error('Ocurrió un error al verificar el código.');
-        }
+        Swal.fire('Error', error.error?.msg || 'Ocurrió un error al verificar el código.', 'error');
       }
-    );
+    });
   }
 
   copyCode() {

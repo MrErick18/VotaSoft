@@ -1,5 +1,5 @@
 .custom-form-container {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Cambiar fuente */
+  font-family: var(--font-family, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
   margin-top: 8rem;
   margin: 0 auto; 
   width: 90%; 
@@ -9,27 +9,28 @@
   align-items: flex-start;
   min-height: calc(100vh - 60px);
   box-sizing: border-box;
+  transition: var(--transition);
 }
 
 .container {
-  background: linear-gradient(135deg, #e6e6e6, #ffffff); /* Color más suave */
-  animation: shadowPulse 3s infinite ease-in-out;
-  padding: 2.5rem 3rem; /* Espaciado más generoso */
+  background: var(--card-bg);
+  padding: 2.5rem 3rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
+  transition: var(--transition);
 }
 
 .custom-form-container h2 {
   margin-bottom: 1.5rem;
-  color: #333; /* Color más suave */
-  font-size: 2rem; /* Aumentar tamaño de fuente */
+  color: var(--titulo);
+  font-size: 2rem;
 }
 
 .custom-form-container p {
   margin-bottom: 1.5rem;
-  color: #555; /* Color más claro */
+  color: var(--text-color);
 }
 
 .custom-form-container form {
@@ -40,19 +41,20 @@
 .custom-form-container label {
   margin-bottom: 0.75rem;
   text-align: left;
-  color: #444;
-  font-size: 1.125rem; /* Aumentar tamaño de fuente */
+  color: var(--text-color);
+  font-size: 1.125rem;
 }
 
 .custom-form-container input[type="email"],
 .custom-form-container input[type="password"] {
   padding: 1rem;
   margin-bottom: 1.5rem;
-  border: 1px solid #cccccc;
-  border-radius: 0.5rem; /* Bordes más redondeados */
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
   font-size: 1.125rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s, box-shadow 0.3s; /* Suavizar transiciones */
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: var(--transition);
 }
 
 .custom-form-container .button-group {
@@ -64,39 +66,44 @@
 .custom-form-container button {
   padding: 1rem 1.5rem;
   border: none;
-  border-radius: 0.5rem; /* Bordes más redondeados */
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 1.125rem;
-  color: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 97, 203, 0.4); /* Sombra más suave */
-  transition: opacity 0.3s, box-shadow 0.3s; /* Suavizar efectos */
-}
-
-.custom-form-container button[type="submit"],
-.custom-form-container button[type="button"] {
-  background-color: #0056b3; /* Color más oscuro para mayor contraste */
+  color: var(--button-text);
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: var(--transition);
 }
 
 .custom-form-container button:hover {
-  opacity: 0.95;
-  box-shadow: 0 6px 15px rgba(0, 86, 179, 0.5); /* Sombra más fuerte */
+  opacity: 0.9;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-#email {
-  background-color: #f1f1f1; /* Fondo más suave */
-  color: #333;
-  border: 1px solid #999999; /* Cambiar el borde */
+#email:hover,
+#email:focus,
+input[type="password"]:hover,
+input[type="password"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
-#email:hover {
-  border-color: #007bff; /* Cambiar el color del borde al pasar el mouse */
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Efecto de luz */
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-#email:focus {
-  outline: none; 
-  border-color: #0056b3; /* Color al hacer clic */
-  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5); 
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
 
 @media (max-width: 768px) {
@@ -105,7 +112,7 @@
   }
 
   .custom-form-container h2 {
-    font-size: 1.75rem; /* Ajustar el tamaño en pantallas más pequeñas */
+    font-size: 1.75rem;
   }
 
   .custom-form-container input[type="email"],

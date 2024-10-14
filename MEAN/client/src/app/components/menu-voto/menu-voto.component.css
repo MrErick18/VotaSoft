@@ -8,16 +8,16 @@
     width: 100%;
     max-width: 600px;
     margin: 20px auto;
-    background-color: #fff;
+    background-color: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .header {
-    background-color: #2c3e50;
-    color: #fff;
+    background-color: var(--menuvoto);
+    color: var(--button-text);
     padding: 40px 30px;
     text-align: center;
     position: relative;
@@ -25,17 +25,27 @@
 
 .content {
     padding: 40px 30px;
+    background-color: var(--card-bg);
 }
 
 h1 {
     font-size: 2.2rem;
     margin-bottom: 15px;
+    color: var(--titulo);
 }
 
-p {
+#p1{
     font-size: 1.1rem;
     margin-bottom: 20px;
     line-height: 1.6;
+    color: var(--colormenu);
+}
+
+#p2{
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: var(--text-color);
 }
 
 .form-group {
@@ -46,41 +56,43 @@ label {
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #34495e;
+    color: var(--text-color);
 }
 
 select,
 input {
     width: 100%;
     padding: 14px;
-    border: 2px solid #ddd;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 select:focus,
 input:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
 button {
     width: 100%;
     padding: 14px;
-    background-color: #3498db;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--button-text);
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 button:hover {
-    background-color: #2980b9;
+    background-color: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
 }
@@ -90,30 +102,30 @@ button:hover {
 }
 
 .code-display {
-    background-color: #f7f9fa;
+    background-color: var(--ayuda);
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
-    border: 2px solid #e0e5e9;
+    border: 2px solid var(--borde);
 }
 
 .code-display p {
-    color: #34495e;
+    color: var(--text-color);
     font-size: 1.1rem;
 }
 
 .code-display strong {
     font-size: 1.3rem;
-    color: #2c3e50;
+    color: var(--text-color);
 }
 
 .secondary-button {
-    background-color: #95a5a6;
+    background-color: var(--border-color);
     margin-top: 15px;
 }
 
 .secondary-button:hover {
-    background-color: #7f8c8d;
+    background-color: var(--primary-dark);
 }
 
 .theme-toggle {
@@ -126,51 +138,12 @@ button:hover {
     cursor: pointer;
     padding: 5px;
     border-radius: 50%;
-    transition: background-color 0.3s ease;
+    transition: var(--transition);
+    color: var(--button-text);
 }
 
 .theme-toggle:hover {
     background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Estilos para el tema oscuro */
-.dark-theme {
-    background-color: #1a1a1a;
-    color: #f0f0f0;
-}
-
-.dark-theme .header {
-    background-color: #2c3e50;
-}
-
-.dark-theme .content {
-    background-color: #2c3e50;
-}
-
-.dark-theme label {
-    color: #ecf0f1;
-}
-
-.dark-theme select,
-.dark-theme input {
-    background-color: #34495e;
-    color: #ecf0f1;
-    border-color: #4a6278;
-}
-
-.dark-theme select:focus,
-.dark-theme input:focus {
-    border-color: #3498db;
-}
-
-.dark-theme .code-display {
-    background-color: #34495e;
-    border-color: #4a6278;
-}
-
-.dark-theme .code-display p,
-.dark-theme .code-display strong {
-    color: #ecf0f1;
 }
 
 @media (max-width: 480px) {

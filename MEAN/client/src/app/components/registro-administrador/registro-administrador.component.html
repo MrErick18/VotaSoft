@@ -20,11 +20,25 @@
             </div>
             <div class="campo">
                 <select id="tipoDoc" formControlName="tipoDoc" required>
-                    <option value="" disabled selected></option>
+                    <option value="" disabled selected>Seleccione su Tipo de Documento...</option>
                     <option value="CC">Cédula de Ciudadanía</option>
-                    <option value="CE">Cédula Extranjera</option>
-                    <option value="PPT">Permiso por Protección Temporal</option>
+                    <option value="CE">Cédula de Extranjería</option>
+                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="RC">Registro Civil</option>
                     <option value="PA">Pasaporte</option>
+                    <option value="PPT">Permiso por Protección Temporal</option>
+                    <option value="DNI">Documento Nacional de Identidad</option>
+                    <option value="NIT">Número de Identificación Tributaria</option>
+                    <option value="LM">Libreta Militar</option>
+                    <option value="PEP">Permiso Especial de Permanencia</option>
+                    <option value="VC">Visa Colombiana</option>
+                    <option value="DE">Documento de Extranjería</option>
+                    <option value="CR">Contraseña Registraduría</option>
+                    <option value="CI">Cédula de Identidad</option>
+                    <option value="TP">Tarjeta Profesional</option>
+                    <option value="CD">Carné Diplomático</option>
+                    <option value="SC">Salvoconducto</option>
+                    <option value="OT">Otro</option>
                 </select>
                 <label for="tipoDoc">Tipo de documento</label>
                 <div *ngIf="isInvalid('tipoDoc')" class="error-mensaje">
@@ -55,10 +69,32 @@
                 </div>
             </div>
             <div class="campo">
-                <input type="text" id="cargo" formControlName="cargo" required>
-                <label for="cargo">Cargo</label>
+                <select id="cargo" formControlName="cargo" required>
+                    <option value="" disabled selected>Seleccione su rol...</option>
+                    <option value="sin_cargo">Sin cargo asignado</option>
+                    <option value="organizador">Organizador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="auditor">Auditor</option>
+                    <option value="participante">Participante</option>
+                    <option value="observador">Observador</option>
+                    <option value="coordinador">Coordinador</option>
+                    <option value="coordinador_colegio">Coordinador de Colegio</option>
+                    <option value="director">Director</option>
+                    <option value="director_colegio">Director de Colegio</option>
+                    <option value="rector">Rector</option>
+                    <option value="docente">Docente</option>
+                    <option value="estudiante">Estudiante</option>
+                    <option value="padre_familia">Padre de Familia</option>
+                    <option value="analista">Analista</option>
+                    <option value="tecnico">Técnico</option>
+                    <option value="administrador_sistema">Administrador de Sistema</option>
+                    <option value="representante_comunidad">Representante de la Comunidad</option>
+                    <option value="voluntario">Voluntario</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <label for="cargo">Rol</label>
                 <div *ngIf="isInvalid('cargo')" class="error-mensaje">
-                    <span *ngIf="hasError('cargo', 'required')">El cargo es requerido.</span>
+                    <span *ngIf="hasError('cargo', 'required')">El rol es requerido.</span>
                 </div>
             </div>
         </div>

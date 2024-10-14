@@ -1,7 +1,7 @@
 <div class="container-menu-voto">
     <div class="header">
         <h1>Menú de Votaciones</h1>
-        <p>Por favor seleccione una elección y complete todos los campos correctamente para poder ingresar a votar.</p>
+        <p id="p1">Por favor seleccione una elección y complete todos los campos correctamente para poder ingresar a votar.</p>
     </div>
     <div class="content">
         <div *ngIf="!eleccionSeleccionada">
@@ -18,12 +18,25 @@
             <div class="form-group">
                 <label for="tipoDoc">Tipo de documento</label>
                 <select id="tipoDoc" name="tipoDoc" [(ngModel)]="tipoDoc">
-                    <option value="" disabled selected>Seleccione un Tipo de Documento</option>
-                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="" disabled selected>Seleccione su Tipo de Documento...</option>
                     <option value="CC">Cédula de Ciudadanía</option>
-                    <option value="CE">Cedula de Extranjería</option>
-                    <option value="PPT">Permiso por Protección Temporal</option>
+                    <option value="CE">Cédula de Extranjería</option>
+                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="RC">Registro Civil</option>
                     <option value="PA">Pasaporte</option>
+                    <option value="PPT">Permiso por Protección Temporal</option>
+                    <option value="DNI">Documento Nacional de Identidad</option>
+                    <option value="NIT">Número de Identificación Tributaria</option>
+                    <option value="LM">Libreta Militar</option>
+                    <option value="PEP">Permiso Especial de Permanencia</option>
+                    <option value="VC">Visa Colombiana</option>
+                    <option value="DE">Documento de Extranjería</option>
+                    <option value="CR">Contraseña Registraduría</option>
+                    <option value="CI">Cédula de Identidad</option>
+                    <option value="TP">Tarjeta Profesional</option>
+                    <option value="CD">Carné Diplomático</option>
+                    <option value="SC">Salvoconducto</option>
+                    <option value="OT">Otro</option>
                 </select>
             </div>
             <div class="form-group">
@@ -36,12 +49,12 @@
 
         <div *ngIf="showCodeInput" class="verification-section">
             <div *ngIf="!verificationCode">
-                <p>Para obtener su código de verificación, haga clic en el botón de abajo:</p>
+                <p id="p2">Para obtener su código de verificación, haga clic en el botón de abajo:</p>
                 <button (click)="getVerificationCode()">Obtener código de verificación</button>
             </div>
 
             <div *ngIf="verificationCode" class="code-display">
-                <p>Su código de verificación es: <strong>{{ verificationCode }}</strong></p>
+                <p id="p2">Su código de verificación es: <strong>{{ verificationCode }}</strong></p>
                 <button (click)="copyCode()">Copiar código</button>
             </div>
 

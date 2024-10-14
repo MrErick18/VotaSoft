@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { AdministradorService } from '../../services/administrador.service';
-import { FormsModule } from '@angular/forms';  // Import FormsModule
+import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-olvide-contrasena',
@@ -14,18 +17,16 @@ import { FormsModule } from '@angular/forms';  // Import FormsModule
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,
-    ToastrModule
+    FormsModule
   ]
 })
-export class OlvideContrasenaComponent implements OnInit {
+export class OlvideContrasenaComponent implements OnInit, OnDestroy {
   correoForm: FormGroup;
   contrasenaForm: FormGroup;
-  correo: string = '';
-  nuevaContrasena: string = '';
   token: string | null = null;
   enviadoExito: boolean = false;
   errorEnviando: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -47,44 +48,96 @@ export class OlvideContrasenaComponent implements OnInit {
     this.token = this.route.snapshot.queryParamMap.get('token');
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   enviarCorreo(): void {
-    if (!this.correo) {
-      this.toastr.warning('Por favor, ingrese su correo electrónico');
+    if (this.correoForm.invalid) {
+      this.toastr.warning('Por favor, ingrese un correo electrónico válido');
       return;
     }
 
-    this.administradorService.verificarCorreo(this.correo).subscribe(
-      response => {
-        this.toastr.success('Correo de recuperación enviado');
-        this.enviadoExito = true;
-      },
-      error => {
-        this.toastr.error('Error al enviar el correo de recuperación');
-        this.errorEnviando = true;
-        console.error('Error al enviar el correo:', error);
-      }
-    );
+    Swal.fire({
+      title: 'Enviando correo',
+      text: 'Por favor espere...',
+      icon: 'info',
+      allowOutsideClick: false,
+      showConfirmButton: false
+    });
+
+    const correo = this.correoForm.get('correo')?.value;
+    this.administradorService.verificarCorreo(correo)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          Swal.close();
+          Swal.fire({
+            title: '¡Éxito!',
+            text: 'Correo de recuperación enviado',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          this.enviadoExito = true;
+        },
+        error: (error) => {
+          Swal.close();
+          Swal.fire({
+            title: 'Error',
+            text: 'Error al enviar el correo de recuperación',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          this.errorEnviando = true;
+          console.error('Error al enviar el correo:', error);
+        }
+      });
   }
 
   restablecerContrasena(): void {
-    if (!this.nuevaContrasena || this.nuevaContrasena.length < 6) {
-      this.toastr.warning('Por favor, ingrese una nueva contraseña válida');
+    if (this.contrasenaForm.invalid) {
+      this.toastr.warning('Por favor, ingrese una nueva contraseña válida (mínimo 6 caracteres)');
       return;
     }
 
-    this.administradorService.restablecerContrasena(this.token!, this.nuevaContrasena).subscribe(
-      response => {
-        this.toastr.success('Contraseña restablecida correctamente');
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000); // Redirige después de 3 segundos
-      },
-      error => {
-        this.toastr.error('Error al restablecer la contraseña');
-        this.errorEnviando = true;
-        console.error('Error al restablecer la contraseña:', error);
-      }
-    );
+    Swal.fire({
+      title: 'Restableciendo contraseña',
+      text: 'Por favor espere...',
+      icon: 'info',
+      allowOutsideClick: false,
+      showConfirmButton: false
+    });
+
+    const nuevaContrasena = this.contrasenaForm.get('nuevaContrasena')?.value;
+    this.administradorService.restablecerContrasena(this.token!, nuevaContrasena)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          Swal.close();
+          Swal.fire({
+            title: '¡Éxito!',
+            text: 'Contraseña restablecida correctamente',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/login']);
+            }
+          });
+        },
+        error: (error) => {
+          Swal.close();
+          Swal.fire({
+            title: 'Error',
+            text: 'Error al restablecer la contraseña',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          this.errorEnviando = true;
+          console.error('Error al restablecer la contraseña:', error);
+        }
+      });
   }
 
   volverAlInicio(): void {

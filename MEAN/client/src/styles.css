@@ -15,7 +15,7 @@
   --colormenu: #ffffff;
   --table-header-bg: #343a40;
   --table-header-text: #ffffff;
-  --table-row-even: #f4f4f4;
+  --table-row-even: #f8f9fa;
   --table-row-hover: #e2e2e2;
   --button-bg: #1875ff;
   --button-hover: #0056b3;
@@ -25,9 +25,7 @@
   --input-text: #333333;
   --checkbox-bg: #ffffff;
   --transition: all 0.3s ease;
-
-  /* Nuevas variables */
-  --input-background-color: #f0f0f0;
+  --input-background-color: #ffffff;
   --input-border-color: #cccccc;
   --button-danger-color: #f44336;
   --button-danger-text-color: #ffffff;
@@ -35,6 +33,7 @@
   --table-row-text-color: #333333;
   --pagination-active-background-color: #4caf50;
   --pagination-active-text-color: #ffffff;
+  --botonverde: #28a745;
 }
 
 html[data-theme='dark-theme'] {
@@ -54,8 +53,8 @@ html[data-theme='dark-theme'] {
   --menuvoto: #4da3ff;
   --table-header-bg: #2c2c2c;
   --table-header-text: #e0e0e0;
-  --table-row-even: #262626;
-  --table-row-hover: #333333;
+  --table-row-even: #333333;
+  --table-row-hover: #444444;
   --button-bg: #4da3ff;
   --button-hover: #1e88e5;
   --danger-button: #ff4d4d;
@@ -63,16 +62,15 @@ html[data-theme='dark-theme'] {
   --input-bg: #333333;
   --input-text: #e0e0e0;
   --checkbox-bg: #333333;
-
-  /* Nuevas variables */
   --input-background-color: #333333;
   --input-border-color: #444444;
   --button-danger-color: #f44336;
   --button-danger-text-color: #ffffff;
-  --table-row-background-color: #1e1e1e;
+  --table-row-background-color: #262626;
   --table-row-text-color: #e0e0e0;
   --pagination-active-background-color: #4caf50;
   --pagination-active-text-color: #ffffff;
+  --botonverde: #2ecc71;
 }
 
 body {

@@ -11,7 +11,6 @@ const CandidatoSchema = mongoose.Schema({
     },
     propuestas: {
         type: String,
-        required: true
     },
     foto: {
         type: String,

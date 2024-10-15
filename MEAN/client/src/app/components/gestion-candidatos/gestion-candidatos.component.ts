@@ -5,6 +5,8 @@ import { EleccionService } from '../../services/eleccion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-gestion-candidatos',
@@ -28,14 +30,15 @@ export class GestionCandidatosComponent implements OnInit {
     private candidatoService: CandidatoService,
     private eleccionService: EleccionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.candidatoForm = this.fb.group({
-      nombreCompleto: ['', Validators.required],
-      perfil: ['', Validators.required],
-      propuestas: ['', Validators.required],
+      nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
+      perfil: ['', [Validators.required, Validators.minLength(10)]],
+      propuestas: [''], // Optional field
       foto: ['', Validators.required],
-      eleccion: ['', Validators.required] // Nuevo campo para la elección
+      eleccion: ['', Validators.required]
     });
   }
 
@@ -55,7 +58,7 @@ export class GestionCandidatosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al cargar elecciones pendientes:', error);
-        // Aquí puedes agregar lógica adicional para manejar el error, como mostrar un mensaje al usuario
+        this.toastr.error('No se pudieron cargar las elecciones pendientes', 'Error');
       }
     );
   }
@@ -74,6 +77,7 @@ export class GestionCandidatosComponent implements OnInit {
         },
         (error) => {
           console.error('Error al cargar datos del candidato:', error);
+          this.toastr.error('No se pudieron cargar los datos del candidato', 'Error');
         }
       );
     }
@@ -87,7 +91,7 @@ export class GestionCandidatosComponent implements OnInit {
 
       const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!validImageTypes.includes(file.type)) {
-        alert('Solo se permiten archivos de imagen (JPG, JPEG, PNG)');
+        this.toastr.error('Solo se permiten archivos de imagen (JPG, JPEG, PNG)', 'Error');
         return;
       }
 
@@ -106,36 +110,59 @@ export class GestionCandidatosComponent implements OnInit {
 
   onSubmit(): void {
     if (this.candidatoForm.invalid) {
-      alert('Por favor, completa todos los campos requeridos.');
+      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
       return;
     }
 
     const candidatoData = this.candidatoForm.value;
 
-    if (this.isEditMode && this.candidatoId) {
-      this.candidatoService.actualizarCandidato(this.candidatoId, candidatoData)
-        .subscribe(
-          () => {
-            alert('Candidato actualizado con éxito');
-            this.router.navigate(['lista-candidato']);
-          },
-          (error) => {
-            console.error('Error al actualizar candidato:', error);
-            alert('Error al actualizar candidato. Por favor, intenta de nuevo.');
-          }
-        );
-    } else {
-      this.candidatoService.crearCandidato(candidatoData)
-        .subscribe(
-          () => {
-            alert('Candidato creado con éxito');
-            this.router.navigate(['lista-candidato']);
-          },
-          (error) => {
-            console.error('Error al crear candidato:', error);
-            alert('Error al crear candidato. Por favor, intenta de nuevo.');
-          }
-        );
-    }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: this.isEditMode ? 'Se actualizarán los datos del candidato.' : 'Se registrará un nuevo candidato.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: this.isEditMode ? 'Sí, actualizar' : 'Sí, registrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.isEditMode && this.candidatoId) {
+          this.actualizarCandidato(this.candidatoId, candidatoData);
+        } else {
+          this.crearCandidato(candidatoData);
+        }
+      }
+    });
+  }
+
+  private actualizarCandidato(id: string, data: any): void {
+    this.candidatoService.actualizarCandidato(id, data).subscribe(
+      () => {
+        Swal.fire('¡Éxito!', 'Candidato actualizado correctamente', 'success');
+        this.router.navigate(['lista-candidato']);
+      },
+      (error) => {
+        console.error('Error al actualizar candidato:', error);
+        Swal.fire('Error', 'No se pudo actualizar el candidato', 'error');
+      }
+    );
+  }
+
+  private crearCandidato(data: any): void {
+    this.candidatoService.crearCandidato(data).subscribe(
+      () => {
+        Swal.fire('¡Éxito!', 'Candidato registrado correctamente', 'success');
+        this.router.navigate(['lista-candidato']);
+      },
+      (error) => {
+        console.error('Error al crear candidato:', error);
+        Swal.fire('Error', 'No se pudo registrar el candidato', 'error');
+      }
+    );
+  }
+
+  volverALista(): void {
+    this.router.navigate(['lista-candidato']);
   }
 }

@@ -13,6 +13,8 @@ interface Eleccion {
   _id: string;
   nombre: string;
   estado: string;
+  fechaInicio: string;
+  fechaFin: string;
 }
 
 interface Voto {
@@ -39,15 +41,13 @@ export class GestionResultadosComponent implements OnInit {
 
   elecciones: Eleccion[] = [];
   selectedEleccionId: string = '';
-  eleccionFinalizada: boolean = false;
+  eleccionActual: Eleccion | null = null;
   
   resultados: Resultado[] = [];
   ganador: Resultado | null = null;
   empate: boolean = false;
   empatados: Resultado[] = [];
 
-  fechaEleccion: string = new Date().toISOString().split('T')[0]; // Fecha actual
-  lugarEleccion: string = 'Gran Line';
   organizador: string = 'Nefertari Vivi';
 
   private barChartInstance: Chart | null = null;
@@ -66,23 +66,31 @@ export class GestionResultadosComponent implements OnInit {
   cargarElecciones() {
     this.eleccionService.getElecciones().subscribe(
       (elecciones: Eleccion[]) => {
-        this.elecciones = elecciones.filter(e => e.estado === 'En curso' || e.estado === 'Finalizada');
+        console.log('Todas las elecciones recibidas:', elecciones);
+        
+        this.elecciones = elecciones.filter(e => 
+          e.estado.toLowerCase().includes('en curso') || 
+          e.estado.toLowerCase().includes('finalizada')
+        );
+        
+        console.log('Elecciones filtradas:', this.elecciones);
       },
-      (error) => console.error('Error al cargar elecciones:', error)
+      (error) => {
+        console.error('Error al cargar elecciones:', error);
+      }
     );
   }
 
   cargarResultados() {
     if (!this.selectedEleccionId) return;
 
+    this.eleccionActual = this.elecciones.find(e => e._id === this.selectedEleccionId) || null;
+
     this.votoService.getVotosPorEleccion(this.selectedEleccionId).subscribe(
       (votos: Voto[]) => {
         this.resultados = this.procesarVotos(votos);
         this.actualizarGraficos(this.resultados);
         this.determinarGanador(this.resultados);
-
-        const eleccionSeleccionada = this.elecciones.find(e => e._id === this.selectedEleccionId);
-        this.eleccionFinalizada = eleccionSeleccionada?.estado === 'Finalizada';
       },
       (error) => console.error('Error al cargar votos:', error)
     );
@@ -120,6 +128,11 @@ export class GestionResultadosComponent implements OnInit {
     }
   }
 
+  calcularPorcentaje(votos: number): number {
+    const totalVotos = this.resultados.reduce((sum, r) => sum + r.votos, 0);
+    return totalVotos > 0 ? votos / totalVotos : 0;
+  }
+
   actualizarGraficos(resultados: Resultado[]) {
     const labels = resultados.map(r => r.nombre);
     const data = resultados.map(r => r.votos);
@@ -132,73 +145,126 @@ export class GestionResultadosComponent implements OnInit {
     if (this.barChartInstance) {
       this.barChartInstance.destroy();
     }
-
-    const config = {
-      type: 'bar' as const,
+  
+    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
+    const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+  
+    const config: ChartConfiguration = {
+      type: 'bar',
       data: {
         labels: labels,
         datasets: [{
           label: 'Votos',
           data: data,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)'
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(54, 162, 235, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(75, 192, 192, 0.8)',
+            'rgba(153, 102, 255, 0.8)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
         }]
       },
       options: {
         responsive: true,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: { color: textColor },
+            grid: { color: borderColor }
+          },
+          x: {
+            ticks: { color: textColor },
+            grid: { color: borderColor }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: { color: textColor }
           }
         }
       }
     };
-
-    this.barChartInstance = new Chart(this.barChart.nativeElement, config as any);
+  
+    this.barChartInstance = new Chart(this.barChart.nativeElement, config);
   }
-
+  
   actualizarGraficoCircular(labels: string[], data: number[]) {
     if (this.pieChartInstance) {
       this.pieChartInstance.destroy();
     }
-
-    const config = {
-      type: 'pie' as const,
+  
+    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
+  
+    const config: ChartConfiguration = {
+      type: 'pie',
       data: {
         labels: labels,
         datasets: [{
           data: data,
           backgroundColor: [
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 206, 86, 0.6)',
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(153, 102, 255, 0.6)'
-          ]
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(54, 162, 235, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(75, 192, 192, 0.8)',
+            'rgba(153, 102, 255, 0.8)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
         }]
       },
       options: {
-        responsive: true
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: textColor }
+          }
+        }
       }
     };
+  
+    this.pieChartInstance = new Chart(this.pieChart.nativeElement, config);
+  }
 
-    this.pieChartInstance = new Chart(this.pieChart.nativeElement, config as any);
+  // Método para actualizar los gráficos cuando cambia el tema
+  actualizarGraficosPorTema() {
+    if (this.resultados.length > 0) {
+      const labels = this.resultados.map(r => r.nombre);
+      const data = this.resultados.map(r => r.votos);
+      this.actualizarGraficoBarras(labels, data);
+      this.actualizarGraficoCircular(labels, data);
+    }
   }
 
   descargarPDF() {
-    if (this.eleccionFinalizada) {
+    if (this.eleccionActual && this.eleccionActual.estado === 'Finalizada') {
       const barChartImage = this.barChartInstance?.toBase64Image();
       const pieChartImage = this.pieChartInstance?.toBase64Image();
 
       const datosCompletos = {
-        eleccionNombre: this.elecciones.find(e => e._id === this.selectedEleccionId)?.nombre,
+        eleccionNombre: this.eleccionActual.nombre,
         resultados: this.resultados,
         ganador: this.ganador,
         empate: this.empate,
         empatados: this.empatados,
         barChartImage,
         pieChartImage,
-        fechaEleccion: this.fechaEleccion,
-        lugarEleccion: this.lugarEleccion,
+        fechaEleccion: this.eleccionActual.fechaFin,
+        lugarEleccion: 'Gran Line', // Asumiendo que este dato es constante
         organizador: this.organizador
       };
 
@@ -207,7 +273,7 @@ export class GestionResultadosComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'resultados_eleccion.pdf';
+          a.download = `resultados_${this.eleccionActual?.nombre.replace(/\s+/g, '_')}.pdf`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);

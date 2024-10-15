@@ -1,109 +1,197 @@
 .lista-container {
-    max-width: 100%;
-    width: 90%;
-    background-color: rgb(230, 230, 230);
-    padding: 2.5rem;
-    margin: 5rem auto; /* Centrado horizontal y espacio en la parte superior */
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
-    border-radius: 0.5rem; /* Bordes redondeados */
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: var(--text-color);
 }
 
-.d-flex {
+/* Estilos para el encabezado */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 30px;
 }
 
-h2 {
-    font-size: 2rem; /* Tamaño del título */
-    color: #333;
+.header h2 {
+    color: var(--titulo);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
 }
 
-button.btn {
-    font-size: 1.2rem;
-    padding: 0.8rem 2rem;
-    border-radius: 0.5rem;
-    background-color: #007bff;
-    color: white;
+/* Estilos para los filtros */
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+}
+
+.filter-group label {
+    margin-right: 10px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+select,
+input[type="text"] {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-background-color);
+    color: var(--input-text);
+    font-size: 1rem;
+}
+
+/* Estilos para la tabla */
+.table-container {
+    overflow-x: auto;
+    border-radius: 10px;
+    background-color: var(--table-row-background-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--table-row-background-color);
+}
+
+table th, table td {
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--table-row-background-color);
+    color: var(--table-row-text-color);
+}
+
+table th {
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+table tr:nth-child(even) {
+    background-color: var(--table-row-even);
+}
+
+table tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+/* Estilos para los botones */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
     border: none;
+}
+
+.btn-primary {
+    background-color: var(--botonverde);
+    color: var(--button-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover);
+}
+
+/* Estilos para las imágenes en miniatura */
+.img-thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Estilos para los checkboxes */
+.checkbox-wrapper {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    user-select: none;
 }
 
-button.btn:hover {
-    background-color: #0056b3;
-}
-
-.table-responsive {
-    width: 100%;
-    margin-top: 2rem;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.05); /* Efecto hover en filas */
-}
-
-.thead-dark th {
-    background-color: #343a40;
-    color: white;
-    text-align: left;
-    padding: 1rem;
-    font-size: 1.2rem;
-}
-
-td, th {
-    padding: 1rem;
-    font-size: 1.1rem;
-    border-bottom: 0.1rem solid #ddd;
-    text-align: left;
-}
-
-img.img-thumbnail {
-    width: auto;
-    height: 6rem;
-    border-radius: 0.5rem;
-}
-
-.edit-icon, .delete-icon {
-    font-size: 1.5rem;
+.checkbox-wrapper input {
+    opacity: 0;
     cursor: pointer;
-    margin-right: 1rem;
+    height: 0;
+    width: 0;
 }
 
-.edit-icon:hover {
-    color: #ffcc00;
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: var(--checkbox-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
 }
 
-.delete-icon:hover {
-    color: #ff4d4d;
+.checkbox-wrapper:hover input ~ .checkmark {
+    background-color: var(--table-row-hover);
 }
 
-/* Responsivo */
+.checkbox-wrapper input:checked ~ .checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-wrapper input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-wrapper .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Estilos responsivos */
 @media (max-width: 768px) {
-    .d-flex {
+    .lista-container {
+        padding: 20px;
+    }
+
+    .header,
+    .filters {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
     }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    h2 {
-        margin-bottom: 1rem;
-        text-align: center;
-    }
-
-    button.btn {
+    .btn,
+    select,
+    input[type="text"] {
         width: 100%;
-        text-align: center;
-        padding: 1rem;
-        font-size: 1.4rem;
+        margin-bottom: 10px;
     }
 }

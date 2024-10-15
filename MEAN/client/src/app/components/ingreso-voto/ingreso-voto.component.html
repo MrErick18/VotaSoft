@@ -1,18 +1,34 @@
-<div class="container-ingreso-voto">
-    <h1>Papeleta de Votación</h1>
-    <div class="candidatos">
-        <div *ngFor="let candidato of candidatos; let i = index" class="candidato">
-            <div class="candidato-header">Candidato N°{{i + 1}}</div>
-            <img [src]="candidato.foto" [alt]="candidato.nombreCompleto">
-            <div class="candidato-info">
-                <p><strong>Nombre:</strong> {{candidato.nombreCompleto}}</p>
-                <p><strong>Perfil:</strong> {{candidato.perfil}}</p>
-                <p><strong>Propuesta:</strong> {{candidato.propuestas}}</p>
+<div class="voting-ballot">
+    <h1 class="ballot-title">Papeleta de Votación</h1>
+
+    <div *ngIf="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Cargando candidatos...</p>
+    </div>
+
+    <div *ngIf="!loading" class="candidates-grid">
+        <div *ngFor="let candidato of candidatos; let i = index" class="candidate-card"
+            [class.selected]="candidatoSeleccionadoId === candidato._id">
+            <div class="candidate-number">{{i + 1}}</div>
+            <div class="candidate-image">
+                <img [src]="candidato.foto" [alt]="candidato.nombreCompleto">
             </div>
-            <input type="radio" [id]="'candidato' + i" name="candidatoSeleccionado" [value]="candidato._id"
-                [(ngModel)]="candidatoSeleccionadoId">
-            <label [for]="'candidato' + i">Seleccionar</label>
+            <div class="candidate-info">
+                <h2 class="candidate-name">{{candidato.nombreCompleto}}</h2>
+                <p class="candidate-profile"><strong>Perfil:</strong> {{candidato.perfil}}</p>
+                <p class="candidate-proposal"><strong>Propuesta:</strong> {{candidato.propuestas}}</p>
+            </div>
+            <div class="vote-button-container">
+                <button class="vote-button" (click)="onCandidatoSelect(candidato._id)"
+                    [class.selected]="candidatoSeleccionadoId === candidato._id">
+                    <span class="vote-icon" [class.selected]="candidatoSeleccionadoId === candidato._id">✓</span>
+                    {{ candidatoSeleccionadoId === candidato._id ? 'Seleccionado' : 'Seleccionar' }}
+                </button>
+            </div>
         </div>
     </div>
-    <button (click)="confirmarVoto()" [disabled]="!candidatoSeleccionadoId">Votar</button>
+
+    <button class="submit-vote-button" (click)="confirmarVoto()" [disabled]="!candidatoSeleccionadoId">
+        Emitir Mi Voto
+    </button>
 </div>

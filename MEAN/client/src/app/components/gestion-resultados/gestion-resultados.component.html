@@ -1,4 +1,3 @@
-<!-- gestion-resultados.component.html -->
 <div class="results-container">
     <h2 class="title">Gestión de Resultados</h2>
 
@@ -12,35 +11,67 @@
         </select>
     </div>
 
-    <div *ngIf="selectedEleccionId" class="results-content">
-        <div class="winner-section" *ngIf="ganador">
-            <h3>Ganador:</h3>
-            <div class="winner-card">
-                <span class="winner-name">{{ ganador.nombre }}</span>
-                <span class="winner-votes">{{ ganador.votos }} votos</span>
-            </div>
+    <div *ngIf="eleccionActual" class="results-content">
+        <div class="election-info">
+            <h3>{{ eleccionActual.nombre }}</h3>
+            <p><strong>Estado:</strong> {{ eleccionActual.estado }}</p>
+            <p><strong>Fecha de inicio:</strong> {{ eleccionActual.fechaInicio | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Fecha de fin:</strong> {{ eleccionActual.fechaFin | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Organizador:</strong> {{ organizador }}</p>
         </div>
 
-        <div class="tie-section" *ngIf="empate">
-            <h3>Empate:</h3>
-            <div class="tie-cards">
-                <div class="tie-card" *ngFor="let candidato of empatados">
-                    <span class="tie-name">{{ candidato.nombre }}</span>
-                    <span class="tie-votes">{{ candidato.votos }} votos</span>
+        <div class="results-summary">
+            <div class="winner-section" *ngIf="ganador && eleccionActual.estado === 'Finalizada'">
+                <h3>Ganador:</h3>
+                <div class="winner-card">
+                    <span class="winner-name">{{ ganador.nombre }}</span>
+                    <span class="winner-votes">{{ ganador.votos }} votos</span>
+                </div>
+            </div>
+
+            <div class="tie-section" *ngIf="empate && eleccionActual.estado === 'Finalizada'">
+                <h3>Empate:</h3>
+                <div class="tie-cards">
+                    <div class="tie-card" *ngFor="let candidato of empatados">
+                        <span class="tie-name">{{ candidato.nombre }}</span>
+                        <span class="tie-votes">{{ candidato.votos }} votos</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="charts-container">
             <div class="chart-wrapper">
+                <h4>Gráfico de Barras</h4>
                 <canvas #barChart></canvas>
             </div>
             <div class="chart-wrapper">
+                <h4>Gráfico Circular</h4>
                 <canvas #pieChart></canvas>
             </div>
         </div>
 
-        <button *ngIf="eleccionFinalizada" (click)="descargarPDF()" class="download-btn">
+        <div class="results-table">
+            <h3>Resultados Detallados</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Candidato</th>
+                        <th>Votos</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let resultado of resultados">
+                        <td>{{ resultado.nombre }}</td>
+                        <td>{{ resultado.votos }}</td>
+                        <td>{{ calcularPorcentaje(resultado.votos) | percent }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button *ngIf="eleccionActual.estado === 'Finalizada'" (click)="descargarPDF()" class="download-btn">
             Descargar PDF
         </button>
     </div>

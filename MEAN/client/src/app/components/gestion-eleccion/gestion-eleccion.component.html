@@ -1,22 +1,29 @@
-<div class="container-tod">
-    <h1>Registro de Elecciones</h1>
-    <p>Completa la información requerida para hacer el respectivo registro de la elección.</p>
-    <section class="content">
-        <form [formGroup]="eleccionForm" (ngSubmit)="onSubmit()">
+<div class="eleccion-container">
+    <div class="eleccion-card">
+        <div class="eleccion-header">
+            <h1 class="eleccion-title">{{ isEditMode ? 'Editar Elección' : 'Registro de Elecciones' }}</h1>
+            <p class="eleccion-description">{{ isEditMode ? 'Modifique la información de la elección.' : 'Complete la
+                información requerida para registrar una nueva elección.' }}</p>
+        </div>
+        <form [formGroup]="eleccionForm" (ngSubmit)="onSubmit()" class="eleccion-form">
             <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input id="nombre" class="form-control" formControlName="nombre" type="text"
-                    placeholder="Ingrese el nombre de la elección" required>
+                <label for="nombre">
+                    <i class="fas fa-file-signature"></i> Nombre de la Elección
+                </label>
+                <input id="nombre" formControlName="nombre" type="text" placeholder="Ej: Elecciones Presidenciales 2024"
+                    required>
                 <div *ngIf="eleccionForm.get('nombre')?.invalid && eleccionForm.get('nombre')?.touched"
-                    class="text-danger">
+                    class="error-message">
                     <small *ngIf="eleccionForm.get('nombre')?.hasError('required')">El nombre es requerido.</small>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="tipo">Tipo de Elección:</label>
-                <select id="tipo" class="form-control" formControlName="tipo" required>
-                    <option value="" selected>Seleccione el tipo de elección</option>
+                <label for="tipo">
+                    <i class="fas fa-vote-yea"></i> Tipo de Elección
+                </label>
+                <select id="tipo" formControlName="tipo" required>
+                    <option value="" selected disabled>Seleccione el tipo de elección</option>
                     <option value="Presidencial">Presidencial</option>
                     <option value="Congresional">Congresional</option>
                     <option value="Municipal">Municipal</option>
@@ -28,37 +35,49 @@
                     <option value="Comité de empresa">Comité de Empresa</option>
                     <option value="Vocero">Vocero</option>
                 </select>
-                <div *ngIf="eleccionForm.get('tipo')?.invalid && eleccionForm.get('tipo')?.touched" class="text-danger">
+                <div *ngIf="eleccionForm.get('tipo')?.invalid && eleccionForm.get('tipo')?.touched"
+                    class="error-message">
                     <small *ngIf="eleccionForm.get('tipo')?.hasError('required')">El tipo de elección es
                         requerido.</small>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="fecha">Fecha:</label>
-                <input id="fecha" class="form-control" formControlName="fecha" type="date" [attr.min]="minDate"
-                    [disabled]="isEditMode" required>
+                <label for="fecha">
+                    <i class="fas fa-calendar-alt"></i> Fecha de la Elección
+                </label>
+                <input id="fecha" formControlName="fecha" type="date" [attr.min]="minDate" [disabled]="isEditMode"
+                    required>
                 <div *ngIf="eleccionForm.get('fecha')?.invalid && eleccionForm.get('fecha')?.touched"
-                    class="text-danger">
+                    class="error-message">
                     <small *ngIf="eleccionForm.get('fecha')?.hasError('required')">La fecha es requerida.</small>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="estado">Estado:</label>
-                <select id="estado" class="form-control" formControlName="estado" required>
-                    <option value="" selected>Seleccione el estado de la elección</option>
+                <label for="estado">
+                    <i class="fas fa-flag"></i> Estado de la Elección
+                </label>
+                <select id="estado" formControlName="estado" required>
+                    <option value="" selected disabled>Seleccione el estado de la elección</option>
                     <option value="Pendiente">Pendiente</option>
                     <option value="En Curso">En Curso</option>
                     <option value="Finalizada">Finalizada</option>
                 </select>
                 <div *ngIf="eleccionForm.get('estado')?.invalid && eleccionForm.get('estado')?.touched"
-                    class="text-danger">
+                    class="error-message">
                     <small *ngIf="eleccionForm.get('estado')?.hasError('required')">El estado es requerido.</small>
                 </div>
             </div>
 
-            <button class="btn btn-primary" type="submit" [disabled]="eleccionForm.invalid">Ingresar Elección</button>
+            <div class="button-group">
+                <button type="submit" [disabled]="eleccionForm.invalid" class="submit-btn">
+                    <i class="fas fa-save"></i> {{ isEditMode ? 'Actualizar' : 'Registrar' }} Elección
+                </button>
+                <button type="button" class="volver-btn" (click)="volverALista()">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+            </div>
         </form>
-    </section>
+    </div>
 </div>

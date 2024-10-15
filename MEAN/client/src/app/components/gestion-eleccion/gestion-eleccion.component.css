@@ -1,156 +1,134 @@
-/* Estilos generales del contenedor principal */
-.container-tod {
-    max-width: 100%;
-    width: 90%;
-    background-color: rgb(230, 230, 230);
-    padding: 2.5rem;
-    margin: 5rem auto;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* Estilos de la sección de contenido */
-section.content {
-    padding: 2rem;
-    margin: 0 auto;
-    max-width: 500px;
+.eleccion-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-/* Estilos del título */
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #000000;
+.eleccion-card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos del párrafo */
-p {
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-    color: #000000;
+.eleccion-header {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  padding: 1.5rem;
+  text-align: center;
 }
 
-/* Estilos del formulario */
-form {
-    background-color: #ffffff;
-    padding: 1.5rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 0.5rem;
-    max-width: 100%;
-    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
+.eleccion-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Estilos de los elementos del formulario */
-form .form-group {
-    margin-bottom: 1rem;
+.eleccion-description {
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
-/* Estilos de las etiquetas */
-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #333;
+.eleccion-form {
+  padding: 1.5rem;
 }
 
-/* Estilos de los inputs y selects */
-form input[type="text"],
-form input[type="date"],
-form select {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    font-size: 1rem;
+.form-group {
+  margin-bottom: 1.25rem;
 }
 
-/* Estilos de los mensajes de error */
-.text-danger {
-    color: #dc3545;
-    font-size: 0.875rem;
+label {
+  display: block;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
-/* Estilos del botón de submit */
-form button.btn-primary {
-    background-color: #27ae60;
-    color: #fff;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1rem;
+label i {
+  margin-right: 0.5rem;
+  color: var(--primary-color);
 }
 
-form button.btn-primary:hover {
-    background-color: #27ae60;
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--input-border-color);
+  border-radius: 5px;
+  background-color: var(--input-background-color);
+  color: var(--input-text);
+  font-size: 1rem;
 }
 
-/* Media queries para dispositivos móviles */
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.error-message {
+  color: var(--button-danger-color);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.submit-btn, .volver-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.submit-btn {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.volver-btn {
+  background-color: var(--danger-button);
+  color: var(--button-danger-text-color);
+}
+
+.volver-btn:hover {
+  background-color: var(--danger-button-hover);
+}
+
 @media (max-width: 600px) {
-    .container-tod {
-        width: 100%;
-        padding: 1.5rem;
-        margin: 2rem auto;
-    }
+  .button-group {
+    flex-direction: column;
+  }
 
-    section.content {
-        padding: 1rem;
-    }
-
-    form {
-        padding: 1rem;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    p {
-        font-size: 0.875rem;
-    }
-
-    form input[type="text"],
-    form input[type="date"],
-    form select {
-        padding: 0.5rem;
-        font-size: 0.875rem;
-    }
-
-    form button.btn-primary {
-        padding: 0.5rem;
-        font-size: 0.875rem;
-    }
-}
-
-/* Media queries para tablets */
-@media (min-width: 601px) and (max-width: 1024px) {
-    .container-tod {
-        width: 95%;
-        padding: 2rem;
-        margin: 3rem auto;
-    }
-
-    section.content {
-        padding: 1.5rem;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-    }
-
-    form input[type="text"],
-    form input[type="date"],
-    form select {
-        padding: 0.65rem;
-        font-size: 0.95rem;
-    }
-
-    form button.btn-primary {
-        padding: 0.65rem;
-        font-size: 0.95rem;
-    }
+  .submit-btn, .volver-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 }

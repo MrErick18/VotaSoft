@@ -1,43 +1,84 @@
 <div class="container">
-  <h1>Gestión de Candidatos</h1>
-  <div class="content d-flex">
-    <!-- Sección de vista previa -->
-    <div class="photo-section me-5">
-      <h3>Vista Previa</h3>
-      <img [src]="fotoPreview" alt="Foto del Candidato" class="candidate-photo mb-3" *ngIf="fotoPreview">
-      <p><strong>Nombre Completo:</strong> {{ candidatoForm.get('nombreCompleto')?.value }}</p>
-      <p><strong>Perfil:</strong> {{ candidatoForm.get('perfil')?.value }}</p>
-      <p><strong>Propuestas:</strong> {{ candidatoForm.get('propuestas')?.value }}</p>
-      <p><strong>Elección:</strong> {{ obtenerNombreEleccion(candidatoForm.get('eleccion')?.value) }}</p>
+  <h1 class="main-title">Gestión de Candidatos</h1>
+  <div class="content">
+    <!-- Preview Section -->
+    <div class="preview-section">
+      <h2 class="section-title">Vista Previa</h2>
+      <div class="preview-card">
+        <div class="photo-container">
+          <img [src]="fotoPreview" alt="Foto del Candidato" class="candidate-photo" *ngIf="fotoPreview">
+          <div class="photo-placeholder" *ngIf="!fotoPreview">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+        <div class="preview-info">
+          <p><strong>Nombre:</strong> {{ candidatoForm.get('nombreCompleto')?.value || 'No especificado' }}</p>
+          <p><strong>Perfil:</strong> {{ candidatoForm.get('perfil')?.value || 'No especificado' }}</p>
+          <p><strong>Propuestas:</strong> {{ candidatoForm.get('propuestas')?.value || 'No especificado' }}</p>
+          <p><strong>Elección:</strong> {{ obtenerNombreEleccion(candidatoForm.get('eleccion')?.value) }}</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Sección del formulario -->
+    <!-- Form Section -->
     <div class="form-section">
+      <h2 class="section-title">{{ isEditMode ? 'Editar' : 'Registrar' }} Candidato</h2>
       <form [formGroup]="candidatoForm" (ngSubmit)="onSubmit()">
-        <label for="nombre">Nombre Completo:</label>
-        <input type="text" id="nombre" formControlName="nombreCompleto" placeholder="Ingrese el Nombre Completo del Candidato">
+        <div class="form-group">
+          <label for="nombre">Nombre Completo:</label>
+          <input type="text" id="nombre" formControlName="nombreCompleto" placeholder="Ingrese el Nombre Completo del Candidato">
+          <div *ngIf="candidatoForm.get('nombreCompleto')?.invalid && (candidatoForm.get('nombreCompleto')?.dirty || candidatoForm.get('nombreCompleto')?.touched)" class="error-message">
+            <span *ngIf="candidatoForm.get('nombreCompleto')?.errors?.['required']">El nombre es requerido.</span>
+            <span *ngIf="candidatoForm.get('nombreCompleto')?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres.</span>
+          </div>
+        </div>
 
-        <label for="perfil">Perfil:</label>
-        <textarea id="perfil" formControlName="perfil" placeholder="Ingrese el Perfil del Candidato"></textarea>
+        <div class="form-group">
+          <label for="perfil">Perfil:</label>
+          <textarea id="perfil" formControlName="perfil" placeholder="Ingrese el Perfil del Candidato"></textarea>
+          <div *ngIf="candidatoForm.get('perfil')?.invalid && (candidatoForm.get('perfil')?.dirty || candidatoForm.get('perfil')?.touched)" class="error-message">
+            <span *ngIf="candidatoForm.get('perfil')?.errors?.['required']">El perfil es requerido.</span>
+            <span *ngIf="candidatoForm.get('perfil')?.errors?.['minlength']">El perfil debe tener al menos 10 caracteres.</span>
+          </div>
+        </div>
 
-        <label for="propuestas">Propuestas:</label>
-        <textarea id="propuestas" formControlName="propuestas" placeholder="Ingrese las Propuestas del Candidato"></textarea>
+        <div class="form-group">
+          <label for="propuestas">Propuestas:</label>
+          <textarea id="propuestas" formControlName="propuestas" placeholder="Ingrese las Propuestas del Candidato (opcional)"></textarea>
+        </div>
 
-        <label for="eleccion">Elección:</label>
-        <select id="eleccion" formControlName="eleccion">
-          <option value="">Seleccione una elección</option>
-          <option *ngFor="let eleccion of eleccionesPendientes" [value]="eleccion._id">
-            {{ eleccion.nombre }}
-          </option>
-        </select>
+        <div class="form-group">
+          <label for="eleccion">Elección:</label>
+          <select id="eleccion" formControlName="eleccion">
+            <option value="">Seleccione una elección</option>
+            <option *ngFor="let eleccion of eleccionesPendientes" [value]="eleccion._id">
+              {{ eleccion.nombre }}
+            </option>
+          </select>
+          <div *ngIf="candidatoForm.get('eleccion')?.invalid && (candidatoForm.get('eleccion')?.dirty || candidatoForm.get('eleccion')?.touched)" class="error-message">
+            <span *ngIf="candidatoForm.get('eleccion')?.errors?.['required']">La elección es requerida.</span>
+          </div>
+        </div>
 
-        <label for="archivo">Subir Foto:</label>
-        <input type="file" id="archivo-button" (change)="onFileChange($event)" accept="image/*">
+        <div class="form-group">
+          <label for="archivo" class="file-upload-label">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span class="file-upload-text">{{ fotoPreview ? 'Cambiar Foto' : 'Subir Foto' }}</span>
+            <input type="file" id="archivo" (change)="onFileChange($event)" accept="image/*">
+          </label>
+          <div *ngIf="candidatoForm.get('foto')?.invalid && (candidatoForm.get('foto')?.dirty || candidatoForm.get('foto')?.touched)" class="error-message">
+            <span *ngIf="candidatoForm.get('foto')?.errors?.['required']">La foto es requerida.</span>
+          </div>
+        </div>
         
-        <!-- Botón para registrar o editar el candidato -->
-        <button type="submit" class="submit-button mt-3">
-          {{ isEditMode ? 'Editar Candidato' : 'Registrar Candidato' }}
-        </button>
+        <div class="button-group">
+          <button type="submit" class="submit-button" [disabled]="candidatoForm.invalid">
+            <i class="fas fa-save"></i> {{ isEditMode ? 'Editar Candidato' : 'Registrar Candidato' }}
+          </button>
+          <button type="button" class="back-button" (click)="volverALista()">
+            <i class="fas fa-arrow-left"></i> Volver
+          </button>
+        </div>
       </form>
     </div>
   </div>

@@ -1,35 +1,81 @@
 <div class="lista-container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="header-container">
         <h2>Lista de Elecciones</h2>
         <button class="btn btn-primary" (click)="crearEleccion()">Crear Elección</button>
     </div>
 
+    <div class="filter-search-container">
+        <div class="filter-group">
+            <div class="filter-container">
+                <label for="tipoFiltro">Tipo:</label>
+                <select id="tipoFiltro" [(ngModel)]="filtroTipo" (change)="aplicarFiltros()">
+                    <option value="">Todos</option>
+                    <option *ngFor="let tipo of tiposUnicos" [value]="tipo">{{ tipo }}</option>
+                </select>
+            </div>
+            <div class="filter-container">
+                <label for="estadoFiltro">Estado:</label>
+                <select id="estadoFiltro" [(ngModel)]="filtroEstado" (change)="aplicarFiltros()">
+                    <option value="">Todos</option>
+                    <option *ngFor="let estado of estadosUnicos" [value]="estado">{{ estado }}</option>
+                </select>
+            </div>
+            <div class="filter-container">
+                <label for="fechaFiltro">Fecha:</label>
+                <input type="date" id="fechaFiltro" [(ngModel)]="filtroFecha" (change)="aplicarFiltros()">
+            </div>
+        </div>
+        <div class="search-container">
+            <label for="busqueda">Búsqueda:</label>
+            <input type="text" id="busqueda" [(ngModel)]="terminoBusqueda" (input)="aplicarFiltros()" placeholder="Buscar por nombre o estado...">
+        </div>
+    </div>
+
+    <div class="actions-container">
+        <button class="btn btn-primary" 
+                *ngIf="hasOneElectionSelected()" 
+                (click)="editarEleccion(getSelectedElectionId())">
+            Editar
+        </button>
+        <button class="btn btn-danger" 
+                *ngIf="eleccionesSeleccionadas.size > 0" 
+                (click)="eliminarElecciones()">
+            Eliminar Seleccionados
+        </button>
+    </div>
+
     <div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="thead-dark">
+        <table class="table">
+            <thead>
                 <tr>
+                    <th scope="col">
+                        <input type="checkbox" [checked]="todosSeleccionados" (change)="seleccionarTodos()">
+                    </th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Estado</th>
-                    <th scope="col">Opciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let eleccion of elecciones">
+                <tr *ngFor="let eleccion of eleccionesFiltradas | paginate: { itemsPerPage: itemsPorPagina, currentPage: paginaActual }">
+                    <td>
+                        <input type="checkbox" [checked]="eleccionesSeleccionadas.has(eleccion._id)" (change)="toggleSeleccion(eleccion._id)">
+                    </td>
                     <td>{{ eleccion.nombre }}</td>
                     <td>{{ eleccion.tipo }}</td>
-                    <td>{{ eleccion.fecha | date }}</td>
+                    <td>{{ eleccion.fecha | date:'dd/MM/yyyy' }}</td>
                     <td>{{ eleccion.estado }}</td>
-                    <td>
-                        <!-- Iconos para editar y eliminar -->
-                        <i (click)="editarEleccion(eleccion._id)" aria-label="Editar elección"
-                            class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>
-                        <i (click)="eliminarEleccion(eleccion._id)" aria-label="Eliminar elección"
-                            class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
-                    </td>
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="pagination-container">
+        <pagination-controls 
+            (pageChange)="paginaActual = $event"
+            previousLabel="Anterior"
+            nextLabel="Siguiente">
+        </pagination-controls>
     </div>
 </div>

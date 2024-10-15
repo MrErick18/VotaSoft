@@ -1,46 +1,65 @@
 <div class="lista-container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="header">
         <h2>Lista de Candidatos</h2>
         <button class="btn btn-primary" (click)="crearCandidato()">Crear Candidato</button>
     </div>
 
-    <div class="mb-3">
-        <label for="eleccionSelector" class="form-label">Filtrar por Elección:</label>
-        <select id="eleccionSelector" class="form-select" [(ngModel)]="eleccionSeleccionada"
-            (change)="filtrarCandidatos()">
-            <option value="">Todas las elecciones</option>
-            <option *ngFor="let eleccion of elecciones" [value]="eleccion._id">{{ eleccion.nombre }}</option>
-        </select>
+    <div class="filters">
+        <div class="filter-group">
+            <label for="eleccionFilter">Filtrar por Elección:</label>
+            <select id="eleccionFilter" [(ngModel)]="eleccionSeleccionada" (change)="filtrarCandidatos()">
+                <option value="">Todas las elecciones</option>
+                <option *ngFor="let eleccion of elecciones" [value]="eleccion._id">{{ eleccion.nombre }}</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="searchFilter">Buscar:</label>
+            <input type="text" id="searchFilter" [(ngModel)]="searchTerm" (input)="filtrarCandidatos()"
+                placeholder="Buscar candidatos...">
+        </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="thead-dark">
+    <div class="action-buttons" *ngIf="candidatosSeleccionados.length > 0">
+        <button *ngIf="candidatosSeleccionados.length === 1" class="btn btn-primary"
+            (click)="editarSeleccionado()">
+            Editar Seleccionado
+        </button>
+        <button class="btn btn-danger" (click)="eliminarSeleccionados()">
+            Eliminar Seleccionados
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th scope="col">Foto</th>
-                    <th scope="col">Nombre Completo</th>
-                    <th scope="col">Perfil</th>
-                    <th scope="col">Propuestas</th>
-                    <th scope="col">Eleccion</th>
-                    <th scope="col">Opciones</th>
+                    <th>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" [checked]="todosSeleccionados" (change)="seleccionarTodos($event)">
+                            <span class="checkmark"></span>
+                        </label>
+                    </th>
+                    <th>Foto</th>
+                    <th>Nombre Completo</th>
+                    <th>Perfil</th>
+                    <th>Propuestas</th>
+                    <th>Elección</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let candidato of candidatos">
+                <tr *ngFor="let candidato of candidatos" [class.selected]="estaSeleccionado(candidato)">
                     <td>
-                        <img [src]="candidato.foto" alt="Foto del Candidato" class="img-thumbnail" width="100">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" [checked]="estaSeleccionado(candidato)"
+                                (change)="toggleSeleccion(candidato)">
+                            <span class="checkmark"></span>
+                        </label>
                     </td>
+                    <td><img [src]="candidato.foto" alt="Foto de {{ candidato.nombreCompleto }}" class="img-thumbnail"></td>
                     <td>{{ candidato.nombreCompleto }}</td>
                     <td>{{ candidato.perfil }}</td>
                     <td>{{ candidato.propuestas }}</td>
                     <td>{{ candidato.eleccion?.nombre }}</td>
-                    <td>
-                        <!-- Iconos para editar y eliminar -->
-                        <i (click)="editarCandidato(candidato._id)" aria-label="Editar candidato"
-                            class="edit-icon text-warning fa-solid fa-pen-to-square me-2" style="cursor: pointer;"></i>
-                        <i (click)="eliminarCandidato(candidato._id)" aria-label="Eliminar candidato"
-                            class="delete-icon text-danger fa-solid fa-trash" style="cursor: pointer;"></i>
-                    </td>
                 </tr>
             </tbody>
         </table>

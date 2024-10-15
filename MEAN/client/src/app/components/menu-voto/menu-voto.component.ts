@@ -54,7 +54,7 @@ export class MenuVotoComponent implements OnInit {
   }
 
   cargarEleccionesEnCurso() {
-    this.eleccionService.getEleccionesPendientes().subscribe({
+    this.eleccionService.getEleccionesEnCurso().subscribe({
       next: (elecciones: any[]) => {
         this.eleccionesEnCurso = elecciones;
       },

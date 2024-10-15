@@ -57,7 +57,6 @@ export class GestionEleccionComponent implements OnInit {
       );
     }
 
-    // Establecer la fecha mínima permitida
     this.minDate = new Date().toISOString().split('T')[0];
     this.eleccionForm.get('fecha')?.valueChanges.subscribe(() => {
       this.updateEstado();
@@ -71,7 +70,7 @@ export class GestionEleccionComponent implements OnInit {
   updateEstado(): void {
     const fecha = new Date(this.eleccionForm.get('fecha')?.value);
     const hoy = new Date();
-    hoy.setUTCHours(0, 0, 0, 0); // Ajusta la fecha de hoy para que sea UTC sin la parte de hora
+    hoy.setUTCHours(0, 0, 0, 0);
 
     const estadoControl = this.eleccionForm.get('estado');
 
@@ -93,13 +92,13 @@ export class GestionEleccionComponent implements OnInit {
     if (estado === 'En Curso' || estado === 'Finalizada') {
       for (const key in controls) {
         if (controls.hasOwnProperty(key)) {
-          controls[key].disable(); // Deshabilitar todos los campos
+          controls[key].disable();
         }
       }
     } else {
       for (const key in controls) {
         if (controls.hasOwnProperty(key)) {
-          controls[key].enable(); // Habilitar todos los campos
+          controls[key].enable();
         }
       }
     }
@@ -111,13 +110,11 @@ export class GestionEleccionComponent implements OnInit {
       return;
     }
 
-    // Solo permitir la actualización si el estado es "Pendiente"
     if (this.isEditMode && (this.eleccionForm.get('estado')?.value !== 'Pendiente' || this.eleccionForm.get('estado')?.disabled)) {
       this.toastr.error('Solo se pueden actualizar elecciones en estado Pendiente.');
       return;
     }
 
-    // Ajusta la fecha para la zona horaria de Colombia (UTC-5)
     const fechaSeleccionada = moment.tz(this.eleccionForm.get('fecha')?.value, 'America/Bogota').startOf('day').toISOString();
     const formValue = { ...this.eleccionForm.value, fecha: fechaSeleccionada };
 
@@ -142,5 +139,9 @@ export class GestionEleccionComponent implements OnInit {
         }
       );
     }
+  }
+
+  volverALista(): void {
+    this.router.navigate(['lista-eleccion']);
   }
 }

@@ -1,62 +1,58 @@
 <section class="content">
     <div class="lista-container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Lista de Usuarios</h2>
-        </div>
-        <!-- Nuevo texto y botón de descarga -->
-        <div class="me-3">
-            <p>Si no tiene la plantilla, descárguela aquí:</p>
-            <a href="../../../assets/Plantilla de Gestion de Usuarios VotaSoft.xlsx" download>
-                <button class="button"><span>Download</span></button>
-            </a>
-        </div>
-        <div class="d-flex align-items-center mb-2">
-            <!-- Buscador y formulario de carga de archivos -->
-            <div class="InputContainer me-3">
-                <input placeholder="Buscar..." id="input" class="input" name="text" type="text"
-                    [(ngModel)]="searchText">
+        <h2 class="title">Lista de Usuarios</h2>
+        <div class="actions-container">
+            <div class="download-section">
+                <p>Si no tiene la plantilla, descárguela aquí:</p>
+                <a href="../../../assets/Plantilla de Gestion de Usuarios VotaSoft.xlsx" download>
+                    <button class="button button-green">
+                        <i class="fas fa-download"></i> Descargar
+                    </button>
+                </a>
             </div>
-
-            <div class="container">
-                <form (ngSubmit)="uploadFile()">
-                    <label for="archivo" class="file-upload-label">
-                        <img width="65" height="80" src="https://img.icons8.com/ios/100/insert-page.png" alt="insert-page" />
-                        <span class="span">Agregar archivo</span>
+            <div class="upload-search-container">
+                <div class="upload-container">
+                    <label for="archivo" class="button button-green">
+                        <i class="fas fa-file-upload"></i> Agregar archivo
                     </label>
                     <input accept=".xlsx" class="input" name="archivo" id="archivo" type="file" (change)="onFileChange($event)" hidden>
-                    <button type="submit" id="send1" class="btn btn-primary">Subir</button>
-                </form>
+                    <button (click)="uploadFile()" class="button button-green">Subir</button>
+                </div>
+                <div class="search-container">
+                    <input placeholder="Buscar..." id="input" class="input" name="text" type="text" [(ngModel)]="searchText">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
             </div>
-        </div>
-        <div class="d-flex align-items-center mb-2">
-            <input type="checkbox" (change)="toggleSelectAll($event)" id="selectAll">
-            <label for="selectAll" class="ms-2">Seleccionar Todos</label>
-            <button class="btn btn-danger btn-sm ms-auto" *ngIf="anySelected()"
-                (click)="eliminarUsuariosSeleccionados()">
-                Eliminar Seleccionados
+            <button class="button button-red" *ngIf="anySelected()" (click)="eliminarUsuariosSeleccionados()">
+                <i class="fas fa-trash-alt"></i> Eliminar Seleccionados
             </button>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Tipo de Documento</th>
-                    <th>Numero de Documento</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    *ngFor="let usuario of usuarios | filter:searchText | paginate: { itemsPerPage: 20, currentPage: p }">
-                    <td><input type="checkbox" [(ngModel)]="usuario.selected"></td>
-                    <td>{{ usuario.nombre }}</td>
-                    <td>{{ usuario.apellidos }}</td>
-                    <td>{{ usuario.tipoDoc }}</td>
-                    <td>{{ usuario.numDoc }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" (change)="toggleSelectAll($event)" id="selectAll">
+                        </th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Tipo de Documento</th>
+                        <th>Numero de Documento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usuario of usuarios | filter:searchText | paginate: { itemsPerPage: 20, currentPage: p }">
+                        <td><input type="checkbox" [(ngModel)]="usuario.selected"></td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.apellidos }}</td>
+                        <td>{{ usuario.tipoDoc }}</td>
+                        <td>{{ usuario.numDoc }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-container">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
     </div>
 </section>

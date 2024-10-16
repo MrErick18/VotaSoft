@@ -92,11 +92,42 @@ exports.loginAdministrador = async (req, res) => {
             return res.status(400).json({ msg: "Error en usuario/contraseña" });
         }
 
-        const token = jwt.sign({ administrador_id: administrador._id, numDoc }, JWT_SECRET, { expiresIn: '1h' });
+        // Extraer nombre y apellido del administrador
+        const { _id, numDoc: adminNumDoc, nombre, apellido } = administrador;
+
+        const token = jwt.sign(
+            {
+                administrador_id: _id,
+                numDoc: adminNumDoc,
+                nombreCompleto: `${nombre} ${apellido}`,
+                nombre,
+                apellido
+            },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
         res.json({ msg: "Login Correcto", token });
     } catch (error) {
         console.error('Error en loginAdministrador:', error);
         res.status(500).json({ error: 'Ocurrió un Error' });
+    }
+};
+
+exports.obtenerDetallesAdministrador = async (req, res) => {
+    try {
+        const { numDoc } = req.params;
+        const administrador = await Administrador.findOne({ numDoc }).select('nombre apellido');
+        if (!administrador) {
+            return res.status(404).json({ mensaje: 'Administrador no encontrado' });
+        }
+        res.json({
+            nombreCompleto: `${administrador.nombre} ${administrador.apellido}`,
+            numDoc: administrador.numDoc
+        });
+    } catch (error) {
+        console.error('Error al obtener detalles del administrador:', error);
+        res.status(500).json({ mensaje: 'Error al obtener detalles del administrador' });
     }
 };
 

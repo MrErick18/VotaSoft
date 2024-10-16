@@ -15,9 +15,8 @@
         <div class="election-info">
             <h3>{{ eleccionActual.nombre }}</h3>
             <p><strong>Estado:</strong> {{ eleccionActual.estado }}</p>
-            <p><strong>Fecha de inicio:</strong> {{ eleccionActual.fechaInicio | date:'dd/MM/yyyy' }}</p>
-            <p><strong>Fecha de fin:</strong> {{ eleccionActual.fechaFin | date:'dd/MM/yyyy' }}</p>
-            <p><strong>Organizador:</strong> {{ organizador }}</p>
+            <p><strong>Fecha:</strong> {{ eleccionActual.fecha | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Organizador:</strong> {{ organizador || 'No disponible' }}</p>
         </div>
 
         <div class="results-summary">

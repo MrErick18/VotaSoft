@@ -43,4 +43,6 @@ export class AdministradorService {
   restablecerContrasena(token: string, nuevaContrasena: string): Observable<any> {
     return this.http.post<any>(`${this.url}restablecerContrasena`, { token, nuevaContrasena });
   }
+
+  
 }

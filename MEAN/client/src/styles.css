@@ -2,23 +2,23 @@
   --primary-color: #007bff;
   --primary-dark: #0056b3;
   --bg-color: #f8f9fa;
-  --text-color: #343a40;
+  --text-color: #212529;  /* Oscurecido para mayor contraste */
   --card-bg: #ffffff;
   --navbar-bg: #ffffff;
-  --border-color: #dee2e6;
+  --border-color: #ced4da;  /* Oscurecido ligeramente */
   --ayuda: #e6e6e6;
   --borde: #000000;
-  --enlace: #007bff;
-  --button-text: #000000;
-  --titulo: #007bff;
+  --enlace: #0056b3;  /* Oscurecido para mayor contraste */
+  --button-text: #ffffff;  /* Cambiado a blanco para mejor contraste en botones */
+  --titulo: #0056b3;  /* Oscurecido para mayor contraste */
   --menuvoto: #2c3e50;
   --colormenu: #ffffff;
   --table-header-bg: #343a40;
   --table-header-text: #ffffff;
   --table-row-even: #f8f9fa;
   --table-row-hover: #e2e2e2;
-  --button-bg: #1875ff;
-  --button-hover: #0056b3;
+  --button-bg: #0056b3;  /* Oscurecido para mayor contraste */
+  --button-hover: #004085;
   --danger-button: #dc3545;
   --danger-button-hover: #c82333;
   --input-bg: #ffffff;
@@ -26,12 +26,12 @@
   --checkbox-bg: #ffffff;
   --transition: all 0.3s ease;
   --input-background-color: #ffffff;
-  --input-border-color: #cccccc;
-  --button-danger-color: #f44336;
+  --input-border-color: #adb5bd;  /* Oscurecido para mayor contraste */
+  --button-danger-color: #dc3545;
   --button-danger-text-color: #ffffff;
   --table-row-background-color: #ffffff;
-  --table-row-text-color: #333333;
-  --pagination-active-background-color: #4caf50;
+  --table-row-text-color: #212529;  /* Oscurecido para mayor contraste */
+  --pagination-active-background-color: #28a745;
   --pagination-active-text-color: #ffffff;
   --botonverde: #28a745;
 }

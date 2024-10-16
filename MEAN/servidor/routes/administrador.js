@@ -29,4 +29,6 @@ router.get('/verificarCorreo/:correo', administradorController.verificarCorreo);
 // Restablecer Contraseña
 router.post('/restablecerContrasena', administradorController.restablecerContrasena);
 
+router.get('/detalles/:numDoc', administradorController.obtenerDetallesAdministrador);
+
 module.exports = router;

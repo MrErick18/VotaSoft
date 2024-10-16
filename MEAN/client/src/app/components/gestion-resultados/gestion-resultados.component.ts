@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
 import { EleccionService } from '../../services/eleccion.service';
 import { VotoService } from '../../services/voto.service';
 import { ResultadosService } from '../../services/resultados.service';
+import { AuthService } from '../../services/auth.service';
 
 Chart.register(...registerables);
 
@@ -13,8 +14,7 @@ interface Eleccion {
   _id: string;
   nombre: string;
   estado: string;
-  fechaInicio: string;
-  fechaFin: string;
+  fecha: string;
 }
 
 interface Voto {
@@ -26,6 +26,11 @@ interface Voto {
 interface Resultado {
   nombre: string;
   votos: number;
+}
+
+interface Administrador {
+  nombreCompleto: string;
+  // Añada otras propiedades según sea necesario
 }
 
 @Component({
@@ -48,19 +53,91 @@ export class GestionResultadosComponent implements OnInit {
   empate: boolean = false;
   empatados: Resultado[] = [];
 
-  organizador: string = 'Nefertari Vivi';
+  organizador: string = '';
 
   private barChartInstance: Chart | null = null;
   private pieChartInstance: Chart | null = null;
+  private themeObserver: MutationObserver | null = null;
 
   constructor(
     private eleccionService: EleccionService,
     private votoService: VotoService,
-    private resultadosService: ResultadosService
+    private resultadosService: ResultadosService,
+    private authService: AuthService,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit() {
+    console.log('ngOnInit iniciado'); // Depuración
     this.cargarElecciones();
+    this.observeThemeChanges();
+    this.cargarNombreAdministrador();
+  }
+
+  ngOnDestroy() {
+    if (this.themeObserver) {
+      this.themeObserver.disconnect();
+    }
+  }
+
+  private observeThemeChanges() {
+    this.themeObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          this.ngZone.run(() => {
+            this.updateChartColors();
+            if (this.resultados.length > 0) {
+              this.actualizarGraficos(this.resultados);
+            }
+          });
+        }
+      });
+    });
+
+    this.themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+  }
+
+  private updateChartColors() {
+    Chart.defaults.color = this.obtenerColorTexto();
+    Chart.defaults.borderColor = this.obtenerColorBorde();
+  }
+
+  cargarNombreAdministrador() {
+    console.log('Iniciando cargarNombreAdministrador');
+    this.authService.getAdministradorLogueado().subscribe({
+      next: (admin) => {
+        console.log('Respuesta de getAdministradorLogueado:', admin);
+        if (admin.nombreCompleto && admin.nombreCompleto !== 'Administrador') {
+          this.organizador = admin.nombreCompleto;
+        } else if (admin.numDoc) {
+          // Si no tenemos el nombre, intentamos obtenerlo del backend
+          this.obtenerNombreAdministrador(admin.numDoc);
+        } else {
+          this.organizador = 'Administrador';
+        }
+        console.log('Nombre del administrador cargado:', this.organizador);
+      },
+      error: (error) => {
+        console.error('Error al cargar el nombre del administrador:', error);
+        this.organizador = 'Administrador';
+      }
+    });
+  }
+  
+  obtenerNombreAdministrador(numDoc: string) {
+    // Suponiendo que tienes un método en tu servicio para obtener los detalles del administrador
+    this.authService.obtenerDetallesAdministrador(numDoc).subscribe({
+      next: (detalles) => {
+        this.organizador = detalles.nombreCompleto || `Administrador (${numDoc})`;
+      },
+      error: (error) => {
+        console.error('Error al obtener detalles del administrador:', error);
+        this.organizador = `Administrador (${numDoc})`;
+      }
+    });
   }
 
   cargarElecciones() {
@@ -146,8 +223,9 @@ export class GestionResultadosComponent implements OnInit {
       this.barChartInstance.destroy();
     }
   
-    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
-    const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+    const textColor = this.obtenerColorTexto();
+    const bgColor = this.obtenerColorFondo();
+    const borderColor = this.obtenerColorBorde();
   
     const config: ChartConfiguration = {
       type: 'bar',
@@ -156,20 +234,8 @@ export class GestionResultadosComponent implements OnInit {
         datasets: [{
           label: 'Votos',
           data: data,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.8)',
-            'rgba(54, 162, 235, 0.8)',
-            'rgba(255, 206, 86, 0.8)',
-            'rgba(75, 192, 192, 0.8)',
-            'rgba(153, 102, 255, 0.8)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)'
-          ],
+          backgroundColor: this.obtenerColoresGrafico(data.length),
+          borderColor: this.obtenerColoresGrafico(data.length, 1),
           borderWidth: 1
         }]
       },
@@ -179,16 +245,25 @@ export class GestionResultadosComponent implements OnInit {
           y: {
             beginAtZero: true,
             ticks: { color: textColor },
-            grid: { color: borderColor }
+            grid: { color: borderColor },
+            border: { color: borderColor }
           },
           x: {
             ticks: { color: textColor },
-            grid: { color: borderColor }
+            grid: { color: borderColor },
+            border: { color: borderColor }
           }
         },
         plugins: {
           legend: {
             labels: { color: textColor }
+          },
+          tooltip: {
+            backgroundColor: bgColor,
+            titleColor: textColor,
+            bodyColor: textColor,
+            borderColor: borderColor,
+            borderWidth: 1
           }
         }
       }
@@ -202,7 +277,9 @@ export class GestionResultadosComponent implements OnInit {
       this.pieChartInstance.destroy();
     }
   
-    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
+    const textColor = this.obtenerColorTexto();
+    const bgColor = this.obtenerColorFondo();
+    const borderColor = this.obtenerColorBorde();
   
     const config: ChartConfiguration = {
       type: 'pie',
@@ -210,20 +287,8 @@ export class GestionResultadosComponent implements OnInit {
         labels: labels,
         datasets: [{
           data: data,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.8)',
-            'rgba(54, 162, 235, 0.8)',
-            'rgba(255, 206, 86, 0.8)',
-            'rgba(75, 192, 192, 0.8)',
-            'rgba(153, 102, 255, 0.8)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)'
-          ],
+          backgroundColor: this.obtenerColoresGrafico(data.length),
+          borderColor: borderColor,
           borderWidth: 1
         }]
       },
@@ -231,7 +296,19 @@ export class GestionResultadosComponent implements OnInit {
         responsive: true,
         plugins: {
           legend: {
-            labels: { color: textColor }
+            labels: { 
+              color: textColor,
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: bgColor,
+            titleColor: textColor,
+            bodyColor: textColor,
+            borderColor: borderColor,
+            borderWidth: 1
           }
         }
       }
@@ -240,14 +317,46 @@ export class GestionResultadosComponent implements OnInit {
     this.pieChartInstance = new Chart(this.pieChart.nativeElement, config);
   }
 
-  // Método para actualizar los gráficos cuando cambia el tema
-  actualizarGraficosPorTema() {
-    if (this.resultados.length > 0) {
-      const labels = this.resultados.map(r => r.nombre);
-      const data = this.resultados.map(r => r.votos);
-      this.actualizarGraficoBarras(labels, data);
-      this.actualizarGraficoCircular(labels, data);
-    }
+  obtenerColorTexto(): string {
+    return getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
+  }
+
+  obtenerColorFondo(): string {
+    return getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
+  }
+
+  obtenerColorBorde(): string {
+    return getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+  }
+
+  obtenerColoresGrafico(cantidad: number, opacidad: number = 0.8): string[] {
+    const coloresBase = [
+      getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim(),
+      getComputedStyle(document.documentElement).getPropertyValue('--danger-button').trim(),
+      getComputedStyle(document.documentElement).getPropertyValue('--botonverde').trim(),
+      '#FFA500', // Naranja
+      '#800080', // Púrpura
+      '#40E0D0', // Turquesa
+      '#FF6347', // Tomate
+      '#6A5ACD', // Azul pizarra
+      '#20B2AA', // Verde mar claro
+      '#FF4500'  // Rojo naranja
+    ];
+
+    return Array.from({ length: cantidad }, (_, i) => {
+      const color = coloresBase[i % coloresBase.length];
+      return this.ajustarOpacidad(color, opacidad);
+    });
+  }
+
+  ajustarOpacidad(color: string, opacidad: number): string {
+    // Convertir el color hexadecimal a RGB
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+    
+    // Devolver el color en formato RGBA
+    return `rgba(${r}, ${g}, ${b}, ${opacidad})`;
   }
 
   descargarPDF() {
@@ -263,8 +372,8 @@ export class GestionResultadosComponent implements OnInit {
         empatados: this.empatados,
         barChartImage,
         pieChartImage,
-        fechaEleccion: this.eleccionActual.fechaFin,
-        lugarEleccion: 'Gran Line', // Asumiendo que este dato es constante
+        fechaEleccion: this.eleccionActual.fecha,
+        lugarEleccion: 'Girardot, Cundinamarca',
         organizador: this.organizador
       };
 

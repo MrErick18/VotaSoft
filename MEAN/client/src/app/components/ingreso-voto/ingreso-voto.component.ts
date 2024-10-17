@@ -93,7 +93,7 @@ export class IngresoVotoComponent implements OnInit, OnDestroy {
       nombreCompleto: 'Voto en Blanco',
       perfil: 'Opción para votar en blanco',
       propuestas: 'Esta opción representa un voto en blanco',
-      foto: '/assets/voto-en-blanco.png'
+      foto: '/assets/votoblanco.png'
     };
     this.candidatos.push(votoEnBlanco);
   }

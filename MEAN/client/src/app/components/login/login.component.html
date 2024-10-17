@@ -3,17 +3,19 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
         <div class="input-group">
             <label for="numDoc">Número de Documento</label>
-            <input type="text" id="numDoc" formControlName="numDoc" placeholder="Ingrese su número de documento">
-            <div *ngIf="loginForm.get('numDoc')?.invalid && loginForm.get('numDoc')?.touched" class="error-message">
-                Número de documento es requerido.
+            <input type="number" id="numDoc" formControlName="numDoc" placeholder="Ingrese su número de documento">
+            <div *ngIf="numDocControl?.invalid && (numDocControl?.dirty || numDocControl?.touched)" class="error-message">
+                <div *ngIf="numDocControl?.errors?.['required']">Número de documento es requerido.</div>
+                <div *ngIf="numDocControl?.errors?.['pattern']">Número de documento debe tener entre 8 y 20 dígitos.</div>
             </div>
         </div>
         <div class="input-group">
             <label for="contrasena">Contraseña</label>
             <input type="password" id="contrasena" formControlName="contrasena" placeholder="Ingrese su contraseña">
-            <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched"
-                class="error-message">
-                Contraseña es requerida (mínimo 6 caracteres).
+            <div *ngIf="contrasenaControl?.invalid && (contrasenaControl?.dirty || contrasenaControl?.touched)" class="error-message">
+                <div *ngIf="contrasenaControl?.errors?.['required']">Contraseña es requerida.</div>
+                <div *ngIf="contrasenaControl?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres.</div>
+                <div *ngIf="contrasenaControl?.errors?.['pattern']">La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial.</div>
             </div>
         </div>
         <div class="forgot">

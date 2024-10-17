@@ -34,11 +34,11 @@ export class GestionCandidatosComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.candidatoForm = this.fb.group({
-      nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
-      perfil: ['', [Validators.required, Validators.minLength(10)]],
-      propuestas: [''], // Optional field
-      foto: ['', Validators.required],
-      eleccion: ['', Validators.required]
+      nombreCompleto: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
+      perfil: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      propuestas: ['', [Validators.maxLength(1000)]],
+      foto: ['', [Validators.required]],
+      eleccion: ['', [Validators.required]]
     });
   }
 
@@ -95,6 +95,11 @@ export class GestionCandidatosComponent implements OnInit {
         return;
       }
 
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        this.toastr.error('El tamaño de la imagen no debe exceder 5MB', 'Error');
+        return;
+      }
+
       const reader = new FileReader();
 
       reader.onload = () => {
@@ -110,7 +115,8 @@ export class GestionCandidatosComponent implements OnInit {
 
   onSubmit(): void {
     if (this.candidatoForm.invalid) {
-      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+      this.toastr.error('Por favor, completa todos los campos requeridos correctamente', 'Error');
+      this.markFormGroupTouched(this.candidatoForm);
       return;
     }
 
@@ -164,5 +170,15 @@ export class GestionCandidatosComponent implements OnInit {
 
   volverALista(): void {
     this.router.navigate(['lista-candidato']);
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

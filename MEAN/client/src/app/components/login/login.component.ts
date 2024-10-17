@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(
@@ -27,16 +27,32 @@ export class LoginComponent {
     private toastr: ToastrService
   ) {
     this.loginForm = this.formBuilder.group({
-      numDoc: ['', [Validators.required]],
-      contrasena: ['', [Validators.required, Validators.minLength(6)]]
+      numDoc: ['', [Validators.required, Validators.pattern(/^\d{8,20}$/)]],
+      contrasena: ['', [
+        Validators.required, 
+        Validators.minLength(6),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
+      ]]
     });
+  }
+
+  ngOnInit(): void {
+    // Additional initialization if needed
+  }
+
+  get numDocControl() {
+    return this.loginForm.get('numDoc');
+  }
+
+  get contrasenaControl() {
+    return this.loginForm.get('contrasena');
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
       const { numDoc, contrasena } = this.loginForm.value;
-      this.authService.login(numDoc, contrasena).subscribe(
-        response => {
+      this.authService.login(numDoc, contrasena).subscribe({
+        next: (response) => {
           if (response.token) {
             if (typeof window !== 'undefined' && window.localStorage) {
               localStorage.setItem('token', response.token);
@@ -47,14 +63,14 @@ export class LoginComponent {
             this.toastr.error('Error de autenticación', 'Inicio de sesión fallido');
           }
         },
-        error => {
+        error: (error) => {
           this.toastr.error('Error de autenticación', 'Inicio de sesión fallido');
           console.error('Error de autenticación', error);
         }
-      );
+      });
     } else {
-      this.toastr.warning('Por favor, completa todos los campos', 'Formulario no válido');
-      console.error('Formulario no válido');
+      this.loginForm.markAllAsTouched();
+      this.toastr.warning('Por favor, completa todos los campos correctamente', 'Formulario no válido');
     }
   }
 }

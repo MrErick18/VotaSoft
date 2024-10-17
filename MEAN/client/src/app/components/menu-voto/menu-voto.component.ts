@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -25,6 +25,11 @@ export class MenuVotoComponent implements OnInit {
   showCodeInput = false;
   usuarioId = '';
   isDarkTheme = false;
+  formErrors = {
+    eleccionId: '',
+    tipoDoc: '',
+    numDoc: ''
+  };
 
   constructor(
     private usuariosService: UsuariosService,
@@ -67,33 +72,59 @@ export class MenuVotoComponent implements OnInit {
 
   onEleccionChange() {
     this.eleccionSeleccionada = !!this.eleccionId;
+    this.formErrors.eleccionId = this.eleccionId ? '' : 'Por favor, seleccione una elección.';
   }
 
-  onSubmit() {
+  validateForm(form: NgForm): boolean {
+    this.formErrors = {
+      eleccionId: '',
+      tipoDoc: '',
+      numDoc: ''
+    };
+
+    let isValid = true;
+
     if (!this.eleccionId) {
-      this.toastr.warning('Por favor, seleccione una elección.');
-      return;
-    }
-    if (!this.tipoDoc || !this.numDoc) {
-      this.toastr.warning('Por favor complete todos los campos.');
-      return;
+      this.formErrors.eleccionId = 'Por favor, seleccione una elección.';
+      isValid = false;
     }
 
-    this.usuariosService.validarUsuario(this.tipoDoc, this.numDoc).subscribe({
-      next: (response) => {
-        if (response && response._id) {
-          this.usuarioId = response._id;
-          this.showCodeInput = true;
-          this.toastr.success('Usuario validado. Por favor, obtenga su código de verificación.');
-        } else {
-          this.toastr.warning('Usuario no encontrado.');
+    if (!this.tipoDoc) {
+      this.formErrors.tipoDoc = 'Por favor, seleccione un tipo de documento.';
+      isValid = false;
+    }
+
+    if (!this.numDoc) {
+      this.formErrors.numDoc = 'Por favor, ingrese su número de documento.';
+      isValid = false;
+    } else if (!/^\d{6,12}$/.test(this.numDoc)) {
+      this.formErrors.numDoc = 'El número de documento debe tener entre 6 y 12 dígitos.';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  onSubmit(form: NgForm) {
+    if (this.validateForm(form)) {
+      this.usuariosService.validarUsuario(this.tipoDoc, this.numDoc).subscribe({
+        next: (response) => {
+          if (response && response._id) {
+            this.usuarioId = response._id;
+            this.showCodeInput = true;
+            this.toastr.success('Usuario validado. Por favor, obtenga su código de verificación.');
+          } else {
+            this.toastr.warning('Usuario no encontrado.');
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          this.toastr.error('Ocurrió un error al validar el usuario.');
         }
-      },
-      error: (error) => {
-        console.error(error);
-        this.toastr.error('Ocurrió un error al validar el usuario.');
-      }
-    });
+      });
+    } else {
+      this.toastr.warning('Por favor, corrija los errores en el formulario.');
+    }
   }
 
   getVerificationCode() {
@@ -154,5 +185,10 @@ export class MenuVotoComponent implements OnInit {
     this.userInputCode = '';
     this.tipoDoc = '';
     this.numDoc = '';
+    this.formErrors = {
+      eleccionId: '',
+      tipoDoc: '',
+      numDoc: ''
+    };
   }
 }

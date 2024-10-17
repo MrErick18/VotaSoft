@@ -2,19 +2,16 @@
     <div class="eleccion-card">
         <div class="eleccion-header">
             <h1 class="eleccion-title">{{ isEditMode ? 'Editar Elección' : 'Registro de Elecciones' }}</h1>
-            <p class="eleccion-description">{{ isEditMode ? 'Modifique la información de la elección.' : 'Complete la
-                información requerida para registrar una nueva elección.' }}</p>
+            <p class="eleccion-description">{{ isEditMode ? 'Modifique la información de la elección.' : 'Complete la información requerida para registrar una nueva elección.' }}</p>
         </div>
         <form [formGroup]="eleccionForm" (ngSubmit)="onSubmit()" class="eleccion-form">
             <div class="form-group">
                 <label for="nombre">
                     <i class="fas fa-file-signature"></i> Nombre de la Elección
                 </label>
-                <input id="nombre" formControlName="nombre" type="text" placeholder="Ej: Elecciones Presidenciales 2024"
-                    required>
-                <div *ngIf="eleccionForm.get('nombre')?.invalid && eleccionForm.get('nombre')?.touched"
-                    class="error-message">
-                    <small *ngIf="eleccionForm.get('nombre')?.hasError('required')">El nombre es requerido.</small>
+                <input id="nombre" formControlName="nombre" type="text" placeholder="Ej: Elecciones Presidenciales 2024" required>
+                <div *ngIf="eleccionForm.get('nombre')?.invalid && (eleccionForm.get('nombre')?.dirty || eleccionForm.get('nombre')?.touched)" class="error-message">
+                    {{ getErrorMessage('nombre') }}
                 </div>
             </div>
 
@@ -35,10 +32,8 @@
                     <option value="Comité de empresa">Comité de Empresa</option>
                     <option value="Vocero">Vocero</option>
                 </select>
-                <div *ngIf="eleccionForm.get('tipo')?.invalid && eleccionForm.get('tipo')?.touched"
-                    class="error-message">
-                    <small *ngIf="eleccionForm.get('tipo')?.hasError('required')">El tipo de elección es
-                        requerido.</small>
+                <div *ngIf="eleccionForm.get('tipo')?.invalid && eleccionForm.get('tipo')?.touched" class="error-message">
+                    {{ getErrorMessage('tipo') }}
                 </div>
             </div>
 
@@ -46,11 +41,9 @@
                 <label for="fecha">
                     <i class="fas fa-calendar-alt"></i> Fecha de la Elección
                 </label>
-                <input id="fecha" formControlName="fecha" type="date" [attr.min]="minDate" [disabled]="isEditMode"
-                    required>
-                <div *ngIf="eleccionForm.get('fecha')?.invalid && eleccionForm.get('fecha')?.touched"
-                    class="error-message">
-                    <small *ngIf="eleccionForm.get('fecha')?.hasError('required')">La fecha es requerida.</small>
+                <input id="fecha" formControlName="fecha" type="date" [attr.min]="minDate" [disabled]="isEditMode" required>
+                <div *ngIf="eleccionForm.get('fecha')?.invalid && (eleccionForm.get('fecha')?.dirty || eleccionForm.get('fecha')?.touched)" class="error-message">
+                    {{ getErrorMessage('fecha') }}
                 </div>
             </div>
 
@@ -64,9 +57,8 @@
                     <option value="En Curso">En Curso</option>
                     <option value="Finalizada">Finalizada</option>
                 </select>
-                <div *ngIf="eleccionForm.get('estado')?.invalid && eleccionForm.get('estado')?.touched"
-                    class="error-message">
-                    <small *ngIf="eleccionForm.get('estado')?.hasError('required')">El estado es requerido.</small>
+                <div *ngIf="eleccionForm.get('estado')?.invalid && eleccionForm.get('estado')?.touched" class="error-message">
+                    {{ getErrorMessage('estado') }}
                 </div>
             </div>
 

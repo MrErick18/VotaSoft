@@ -8,19 +8,20 @@
                 <input type="text" id="nombre" formControlName="nombre" required>
                 <label for="nombre">Nombre</label>
                 <div *ngIf="isInvalid('nombre')" class="error-mensaje">
-                    <span *ngIf="hasError('nombre', 'required')">El nombre es requerido.</span>
+                    {{ getErrorMessage('nombre') }}
                 </div>
             </div>
             <div class="campo">
                 <input type="text" id="apellido" formControlName="apellido" required>
                 <label for="apellido">Apellido</label>
                 <div *ngIf="isInvalid('apellido')" class="error-mensaje">
-                    <span *ngIf="hasError('apellido', 'required')">El apellido es requerido.</span>
+                    {{ getErrorMessage('apellido') }}
                 </div>
             </div>
             <div class="campo">
                 <select id="tipoDoc" formControlName="tipoDoc" required>
                     <option value="" disabled selected>Seleccione su Tipo de Documento...</option>
+                    <!-- Opciones de tipo de documento... -->
                     <option value="CC">Cédula de Ciudadanía</option>
                     <option value="CE">Cédula de Extranjería</option>
                     <option value="TI">Tarjeta de Identidad</option>
@@ -42,35 +43,34 @@
                 </select>
                 <label for="tipoDoc">Tipo de documento</label>
                 <div *ngIf="isInvalid('tipoDoc')" class="error-mensaje">
-                    <span *ngIf="hasError('tipoDoc', 'required')">El tipo de documento es requerido.</span>
+                    {{ getErrorMessage('tipoDoc') }}
                 </div>
             </div>
             <div class="campo">
-                <input type="text" id="numDoc" formControlName="numDoc" required>
+                <input type="number" id="numDoc" formControlName="numDoc" required min="10000" max="9999999999">
                 <label for="numDoc">Número de documento</label>
                 <div *ngIf="isInvalid('numDoc')" class="error-mensaje">
-                    <span *ngIf="hasError('numDoc', 'required')">El número de documento es requerido.</span>
+                    {{ getErrorMessage('numDoc') }}
                 </div>
             </div>
             <div class="campo">
                 <input type="password" id="contrasena" formControlName="contrasena" required>
                 <label for="contrasena">Contraseña</label>
                 <div *ngIf="isInvalid('contrasena')" class="error-mensaje">
-                    <span *ngIf="hasError('contrasena', 'required')">La contraseña es requerida.</span>
-                    <span *ngIf="hasError('contrasena', 'minlength')">La contraseña debe tener al menos 6 caracteres.</span>
+                    {{ getErrorMessage('contrasena') }}
                 </div>
             </div>
             <div class="campo">
                 <input type="email" id="correo" formControlName="correo" required>
                 <label for="correo">Email</label>
                 <div *ngIf="isInvalid('correo')" class="error-mensaje">
-                    <span *ngIf="hasError('correo', 'required')">El email es requerido.</span>
-                    <span *ngIf="hasError('correo', 'email')">Ingrese un email válido.</span>
+                    {{ getErrorMessage('correo') }}
                 </div>
             </div>
             <div class="campo">
                 <select id="cargo" formControlName="cargo" required>
                     <option value="" disabled selected>Seleccione su rol...</option>
+                    <!-- Opciones de cargo... -->
                     <option value="sin_cargo">Sin cargo asignado</option>
                     <option value="organizador">Organizador</option>
                     <option value="supervisor">Supervisor</option>
@@ -94,9 +94,13 @@
                 </select>
                 <label for="cargo">Rol</label>
                 <div *ngIf="isInvalid('cargo')" class="error-mensaje">
-                    <span *ngIf="hasError('cargo', 'required')">El rol es requerido.</span>
+                    {{ getErrorMessage('cargo') }}
                 </div>
             </div>
+        </div>
+
+        <div *ngIf="adminForm.hasError('passwordContainsName')" class="error-mensaje">
+            {{ getErrorMessage('') }}
         </div>
 
         <button type="submit" class="enviar" [disabled]="adminForm.invalid">Registrar</button>

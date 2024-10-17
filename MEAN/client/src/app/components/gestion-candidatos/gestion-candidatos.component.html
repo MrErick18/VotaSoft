@@ -30,6 +30,8 @@
           <div *ngIf="candidatoForm.get('nombreCompleto')?.invalid && (candidatoForm.get('nombreCompleto')?.dirty || candidatoForm.get('nombreCompleto')?.touched)" class="error-message">
             <span *ngIf="candidatoForm.get('nombreCompleto')?.errors?.['required']">El nombre es requerido.</span>
             <span *ngIf="candidatoForm.get('nombreCompleto')?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres.</span>
+            <span *ngIf="candidatoForm.get('nombreCompleto')?.errors?.['maxlength']">El nombre no debe exceder 100 caracteres.</span>
+            <span *ngIf="candidatoForm.get('nombreCompleto')?.errors?.['pattern']">El nombre solo debe contener letras y espacios.</span>
           </div>
         </div>
 
@@ -39,12 +41,16 @@
           <div *ngIf="candidatoForm.get('perfil')?.invalid && (candidatoForm.get('perfil')?.dirty || candidatoForm.get('perfil')?.touched)" class="error-message">
             <span *ngIf="candidatoForm.get('perfil')?.errors?.['required']">El perfil es requerido.</span>
             <span *ngIf="candidatoForm.get('perfil')?.errors?.['minlength']">El perfil debe tener al menos 10 caracteres.</span>
+            <span *ngIf="candidatoForm.get('perfil')?.errors?.['maxlength']">El perfil no debe exceder 500 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
           <label for="propuestas">Propuestas:</label>
           <textarea id="propuestas" formControlName="propuestas" placeholder="Ingrese las Propuestas del Candidato (opcional)"></textarea>
+          <div *ngIf="candidatoForm.get('propuestas')?.invalid && (candidatoForm.get('propuestas')?.dirty || candidatoForm.get('propuestas')?.touched)" class="error-message">
+            <span *ngIf="candidatoForm.get('propuestas')?.errors?.['maxlength']">Las propuestas no deben exceder 1000 caracteres.</span>
+          </div>
         </div>
 
         <div class="form-group">

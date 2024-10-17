@@ -40,8 +40,13 @@ export class OlvideContrasenaComponent implements OnInit, OnDestroy {
     });
 
     this.contrasenaForm = this.fb.group({
-      nuevaContrasena: ['', [Validators.required, Validators.minLength(6)]]
-    });
+      nuevaContrasena: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+      ]],
+      confirmarContrasena: ['', Validators.required]
+    }, { validator: this.checkPasswords });
   }
 
   ngOnInit(): void {
@@ -51,6 +56,24 @@ export class OlvideContrasenaComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  checkPasswords(group: FormGroup) {
+    const pass = group.get('nuevaContrasena')?.value;
+    const confirmPass = group.get('confirmarContrasena')?.value;
+    return pass === confirmPass ? null : { notSame: true };
+  }
+
+  get correoControl() {
+    return this.correoForm.get('correo');
+  }
+
+  get nuevaContrasenaControl() {
+    return this.contrasenaForm.get('nuevaContrasena');
+  }
+
+  get confirmarContrasenaControl() {
+    return this.contrasenaForm.get('confirmarContrasena');
   }
 
   enviarCorreo(): void {
@@ -97,7 +120,7 @@ export class OlvideContrasenaComponent implements OnInit, OnDestroy {
 
   restablecerContrasena(): void {
     if (this.contrasenaForm.invalid) {
-      this.toastr.warning('Por favor, ingrese una nueva contraseña válida (mínimo 6 caracteres)');
+      this.toastr.warning('Por favor, corrija los errores en el formulario');
       return;
     }
 

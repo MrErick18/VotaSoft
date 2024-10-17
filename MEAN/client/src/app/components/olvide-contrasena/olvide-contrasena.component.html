@@ -9,10 +9,14 @@
         <div class="form-group">
           <label for="email">Correo electrónico:</label>
           <input type="email" id="email" formControlName="correo" placeholder="Correo electrónico" required class="form-control">
+          <div *ngIf="correoControl?.invalid && (correoControl?.dirty || correoControl?.touched)" class="alert alert-danger">
+            <div *ngIf="correoControl?.errors?.['required']">El correo electrónico es requerido.</div>
+            <div *ngIf="correoControl?.errors?.['email']">Por favor, ingrese un correo electrónico válido.</div>
+          </div>
         </div>
         <div class="button-group">
           <button type="button" (click)="volverAlInicio()" class="btn btn-secondary">Volver al inicio</button>
-          <button type="submit" class="btn btn-primary">Enviar</button>
+          <button type="submit" [disabled]="correoForm.invalid" class="btn btn-primary">Enviar</button>
         </div>
       </form>
 
@@ -36,9 +40,24 @@
         <div class="form-group">
           <label for="newPassword">Nueva Contraseña:</label>
           <input type="password" id="newPassword" formControlName="nuevaContrasena" required class="form-control">
+          <div *ngIf="nuevaContrasenaControl?.invalid && (nuevaContrasenaControl?.dirty || nuevaContrasenaControl?.touched)" class="alert alert-danger">
+            <div *ngIf="nuevaContrasenaControl?.errors?.['required']">La contraseña es requerida.</div>
+            <div *ngIf="nuevaContrasenaControl?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres.</div>
+            <div *ngIf="nuevaContrasenaControl?.errors?.['pattern']">La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Contraseña:</label>
+          <input type="password" id="confirmPassword" formControlName="confirmarContrasena" required class="form-control">
+          <div *ngIf="confirmarContrasenaControl?.invalid && (confirmarContrasenaControl?.dirty || confirmarContrasenaControl?.touched)" class="alert alert-danger">
+            <div *ngIf="confirmarContrasenaControl?.errors?.['required']">La confirmación de la contraseña es requerida.</div>
+          </div>
+          <div *ngIf="contrasenaForm.errors?.['notSame']" class="alert alert-danger">
+            Las contraseñas no coinciden.
+          </div>
         </div>
         <div class="button-group">
-          <button type="submit" class="btn btn-primary">Restablecer Contraseña</button>
+          <button type="submit" [disabled]="contrasenaForm.invalid" class="btn btn-primary">Restablecer Contraseña</button>
         </div>
       </form>
 

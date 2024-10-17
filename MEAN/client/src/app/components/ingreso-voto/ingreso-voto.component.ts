@@ -38,6 +38,7 @@ export class IngresoVotoComponent implements OnInit, OnDestroy {
   eleccionId: string = '';
   usuarioId: string = '';
   loading: boolean = true;
+  votoEnBlancoId: string = 'voto-en-blanco';
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -68,7 +69,10 @@ export class IngresoVotoComponent implements OnInit, OnDestroy {
     this.candidatoService.getCandidatosPorEleccion(this.eleccionId)
       .pipe(
         takeUntil(this.unsubscribe$),
-        finalize(() => this.loading = false)
+        finalize(() => {
+          this.loading = false;
+          this.agregarVotoEnBlanco();
+        })
       )
       .subscribe({
         next: (candidatos) => {
@@ -83,20 +87,35 @@ export class IngresoVotoComponent implements OnInit, OnDestroy {
       });
   }
 
+  agregarVotoEnBlanco() {
+    const votoEnBlanco: Candidato = {
+      _id: this.votoEnBlancoId,
+      nombreCompleto: 'Voto en Blanco',
+      perfil: 'Opción para votar en blanco',
+      propuestas: 'Esta opción representa un voto en blanco',
+      foto: '/assets/voto-en-blanco.png'
+    };
+    this.candidatos.push(votoEnBlanco);
+  }
+
   onCandidatoSelect(candidatoId: string) {
     this.candidatoSeleccionadoId = candidatoId;
     const candidatoSeleccionado = this.candidatos.find(c => c._id === candidatoId);
     if (candidatoSeleccionado) {
-      this.toastr.info(`Has seleccionado a ${candidatoSeleccionado.nombreCompleto}`, 'Candidato seleccionado');
+      this.toastr.info(`Has seleccionado: ${candidatoSeleccionado.nombreCompleto}`, 'Opción seleccionada');
     }
   }
 
   confirmarVoto() {
     if (this.candidatoSeleccionadoId) {
       const candidatoSeleccionado = this.candidatos.find(c => c._id === this.candidatoSeleccionadoId);
+      const mensajeConfirmacion = this.candidatoSeleccionadoId === this.votoEnBlancoId
+        ? '¿Estás seguro de que quieres emitir un voto en blanco?'
+        : `Vas a votar por <strong>${candidatoSeleccionado?.nombreCompleto}</strong>.<br>Una vez emitido el voto, no podrás cambiarlo.`;
+
       Swal.fire({
         title: '¿Estás seguro?',
-        html: `Vas a votar por <strong>${candidatoSeleccionado?.nombreCompleto}</strong>.<br>Una vez emitido el voto, no podrás cambiarlo.`,
+        html: mensajeConfirmacion,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -109,7 +128,7 @@ export class IngresoVotoComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.toastr.warning('Por favor, selecciona un candidato antes de votar', 'Atención');
+      this.toastr.warning('Por favor, selecciona un candidato o voto en blanco antes de votar', 'Atención');
     }
   }
 
@@ -121,8 +140,9 @@ export class IngresoVotoComponent implements OnInit, OnDestroy {
 
     const voto = {
       Usuarios_id: this.usuarioId,
-      Candidato_id: this.candidatoSeleccionadoId,
-      Eleccion_id: this.eleccionId
+      Candidato_id: this.candidatoSeleccionadoId === this.votoEnBlancoId ? null : this.candidatoSeleccionadoId,
+      Eleccion_id: this.eleccionId,
+      esVotoEnBlanco: this.candidatoSeleccionadoId === this.votoEnBlancoId
     };
 
     Swal.fire({

@@ -3,20 +3,22 @@
 
     <div *ngIf="loading" class="loading-overlay">
         <div class="spinner"></div>
-        <p>Cargando candidatos...</p>
+        <p>Cargando opciones de voto...</p>
     </div>
 
     <div *ngIf="!loading" class="candidates-grid">
         <div *ngFor="let candidato of candidatos; let i = index" class="candidate-card"
-            [class.selected]="candidatoSeleccionadoId === candidato._id">
-            <div class="candidate-number">{{i + 1}}</div>
+            [class.selected]="candidatoSeleccionadoId === candidato._id"
+            [class.voto-en-blanco]="candidato._id === votoEnBlancoId">
+            <div class="candidate-number" *ngIf="candidato._id !== votoEnBlancoId">{{i + 1}}</div>
             <div class="candidate-image">
                 <img [src]="candidato.foto" [alt]="candidato.nombreCompleto">
             </div>
             <div class="candidate-info">
                 <h2 class="candidate-name">{{candidato.nombreCompleto}}</h2>
-                <p class="candidate-profile"><strong>Perfil:</strong> {{candidato.perfil}}</p>
-                <p class="candidate-proposal"><strong>Propuesta:</strong> {{candidato.propuestas}}</p>
+                <p class="candidate-profile" *ngIf="candidato._id !== votoEnBlancoId"><strong>Perfil:</strong> {{candidato.perfil}}</p>
+                <p class="candidate-proposal" *ngIf="candidato._id !== votoEnBlancoId"><strong>Propuesta:</strong> {{candidato.propuestas}}</p>
+                <p class="voto-en-blanco-description" *ngIf="candidato._id === votoEnBlancoId">{{candidato.propuestas}}</p>
             </div>
             <div class="vote-button-container">
                 <button class="vote-button" (click)="onCandidatoSelect(candidato._id)"

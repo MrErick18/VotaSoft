@@ -10,7 +10,7 @@ const handleError = (res, error, message) => {
 
 exports.crearVoto = async (req, res) => {
     try {
-        const { Usuarios_id, Candidato_id, Eleccion_id } = req.body;
+        const { Usuarios_id, Candidato_id, Eleccion_id, esVotoEnBlanco } = req.body;
 
         const eleccion = await Eleccion.findById(Eleccion_id);
         if (!eleccion) {
@@ -20,22 +20,25 @@ exports.crearVoto = async (req, res) => {
             return res.status(400).json({ error: "La elección no está activa" });
         }
 
-        const candidato = await Candidato.findOne({ _id: Candidato_id, eleccion: Eleccion_id });
-        if (!candidato) {
-            return res.status(400).json({ error: "El candidato no pertenece a esta elección" });
-        }
-
         const votoExistente = await Voto.findOne({ Usuarios_id, Eleccion_id });
         if (votoExistente) {
             return res.status(400).json({ error: "El usuario ya ha votado en esta elección" });
         }
 
+        if (!esVotoEnBlanco) {
+            const candidato = await Candidato.findOne({ _id: Candidato_id, eleccion: Eleccion_id });
+            if (!candidato) {
+                return res.status(400).json({ error: "El candidato no pertenece a esta elección" });
+            }
+        }
+
         const fechaEmisionColombia = moment().tz('America/Bogota').toDate();
         const nuevoVoto = new Voto({
             Usuarios_id,
-            Candidato_id,
+            Candidato_id: esVotoEnBlanco ? null : Candidato_id,
             Eleccion_id,
-            fechaEmision: fechaEmisionColombia
+            fechaEmision: fechaEmisionColombia,
+            esVotoEnBlanco
         });
 
         await nuevoVoto.save();
@@ -75,8 +78,12 @@ exports.obtenerEstadisticasVotos = async (req, res) => {
         
         const totalVotos = votos.length;
         const votosPorCandidato = votos.reduce((acc, voto) => {
-            const candidatoNombre = voto.Candidato_id.nombreCompleto;
-            acc[candidatoNombre] = (acc[candidatoNombre] || 0) + 1;
+            if (voto.esVotoEnBlanco) {
+                acc['Voto en Blanco'] = (acc['Voto en Blanco'] || 0) + 1;
+            } else {
+                const candidatoNombre = voto.Candidato_id.nombreCompleto;
+                acc[candidatoNombre] = (acc[candidatoNombre] || 0) + 1;
+            }
             return acc;
         }, {});
 

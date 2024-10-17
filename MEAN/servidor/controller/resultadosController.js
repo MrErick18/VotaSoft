@@ -14,8 +14,12 @@ exports.obtenerResultadosPorEleccion = async (req, res) => {
         const votos = await Voto.find({ Eleccion_id: eleccionId }).populate('Candidato_id', 'nombreCompleto');
 
         const resultados = votos.reduce((acc, voto) => {
-            const candidatoNombre = voto.Candidato_id.nombreCompleto;
-            acc[candidatoNombre] = (acc[candidatoNombre] || 0) + 1;
+            if (voto.Candidato_id === null) {
+                acc['Voto en Blanco'] = (acc['Voto en Blanco'] || 0) + 1;
+            } else {
+                const candidatoNombre = voto.Candidato_id.nombreCompleto;
+                acc[candidatoNombre] = (acc[candidatoNombre] || 0) + 1;
+            }
             return acc;
         }, {});
 
@@ -123,14 +127,19 @@ function generarInformacionGeneral(doc, resultados) {
     doc.font('Helvetica-Bold').fontSize(16).text('1.1 Estadísticas de Participación', { underline: true });
     doc.font('Helvetica').fontSize(14).fillColor('#444444');
     const votosEmitidos = resultados.reduce((sum, { votos }) => sum + votos, 0);
+    const votosEnBlanco = resultados.find(r => r.nombre === 'Voto en Blanco')?.votos || 0;
     doc.text(`Votos emitidos: ${votosEmitidos}`);
+    doc.text(`Votos en blanco: ${votosEnBlanco}`);
+    doc.text(`Votos válidos: ${votosEmitidos - votosEnBlanco}`);
 
     doc.moveDown();
 
     doc.font('Helvetica-Bold').fontSize(16).text('1.2 Candidatos Participantes', { underline: true });
     doc.font('Helvetica').fontSize(14).fillColor('#444444');
     resultados.forEach(({ nombre }, index) => {
-        doc.text(`${index + 1}. ${nombre}`, { bulletRadius: 2, bulletIndent: 10 });
+        if (nombre !== 'Voto en Blanco') {
+            doc.text(`${index + 1}. ${nombre}`, { bulletRadius: 2, bulletIndent: 10 });
+        }
     });
     doc.moveDown();
 
@@ -169,10 +178,11 @@ function generarResultadosPDF(doc, resultados, empate, empatados, ganador) {
     resultados.forEach(({ nombre, votos }, i) => {
         const porcentaje = ((votos / totalVotos) * 100).toFixed(2) + '%';
         const rowHeight = 30;
+        const fillColor = nombre === 'Voto en Blanco' ? '#e0e0e0' : (i % 2 ? '#f9f9f9' : '#ffffff');
         doc.rect(doc.page.margins.left, rowTop, doc.page.width - doc.page.margins.left - doc.page.margins.right, rowHeight)
-            .fillAndStroke(i % 2 ? '#f9f9f9' : '#ffffff', '#e0e0e0');
+            .fillAndStroke(fillColor, '#e0e0e0');
 
-        doc.fillColor('#333333').font('Helvetica').fontSize(12);
+        doc.fillColor('#333333').font(nombre === 'Voto en Blanco' ? 'Helvetica-Bold' : 'Helvetica').fontSize(12);
         doc.text(nombre, doc.page.margins.left + 5, rowTop + 10, { width: colWidth - 10 });
         doc.text(votos.toString(), doc.page.margins.left + colWidth + 5, rowTop + 10, { width: colWidth - 10, align: 'center' });
         doc.text(porcentaje, doc.page.margins.left + (2 * colWidth) + 5, rowTop + 10, { width: colWidth - 10, align: 'right' });

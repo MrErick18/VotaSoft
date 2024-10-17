@@ -20,7 +20,7 @@ interface Eleccion {
 interface Voto {
   Candidato_id: {
     nombreCompleto: string;
-  };
+  } | null; // Permitir null para votos en blanco
 }
 
 interface Resultado {
@@ -68,7 +68,7 @@ export class GestionResultadosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('ngOnInit iniciado'); // Depuración
+    console.log('ngOnInit iniciado');
     this.cargarElecciones();
     this.observeThemeChanges();
     this.cargarNombreAdministrador();
@@ -113,7 +113,6 @@ export class GestionResultadosComponent implements OnInit {
         if (admin.nombreCompleto && admin.nombreCompleto !== 'Administrador') {
           this.organizador = admin.nombreCompleto;
         } else if (admin.numDoc) {
-          // Si no tenemos el nombre, intentamos obtenerlo del backend
           this.obtenerNombreAdministrador(admin.numDoc);
         } else {
           this.organizador = 'Administrador';
@@ -128,7 +127,6 @@ export class GestionResultadosComponent implements OnInit {
   }
   
   obtenerNombreAdministrador(numDoc: string) {
-    // Suponiendo que tienes un método en tu servicio para obtener los detalles del administrador
     this.authService.obtenerDetallesAdministrador(numDoc).subscribe({
       next: (detalles) => {
         this.organizador = detalles.nombreCompleto || `Administrador (${numDoc})`;
@@ -175,10 +173,21 @@ export class GestionResultadosComponent implements OnInit {
 
   procesarVotos(votos: Voto[]): Resultado[] {
     const resultadosMap: { [key: string]: number } = {};
+    let votosEnBlanco = 0;
+
     votos.forEach(voto => {
-      const nombreCandidato = voto.Candidato_id.nombreCompleto;
-      resultadosMap[nombreCandidato] = (resultadosMap[nombreCandidato] || 0) + 1;
+      if (voto.Candidato_id === null) {
+        votosEnBlanco++;
+      } else {
+        const nombreCandidato = voto.Candidato_id.nombreCompleto;
+        resultadosMap[nombreCandidato] = (resultadosMap[nombreCandidato] || 0) + 1;
+      }
     });
+
+    if (votosEnBlanco > 0) {
+      resultadosMap['Voto en Blanco'] = votosEnBlanco;
+    }
+
     return Object.entries(resultadosMap)
       .map(([nombre, votos]) => ({ nombre, votos }))
       .sort((a, b) => b.votos - a.votos);
@@ -192,8 +201,17 @@ export class GestionResultadosComponent implements OnInit {
       return;
     }
 
-    const maxVotos = resultados[0].votos;
-    this.empatados = resultados.filter(r => r.votos === maxVotos);
+    const resultadosSinBlanco = resultados.filter(r => r.nombre !== 'Voto en Blanco');
+    
+    if (resultadosSinBlanco.length === 0) {
+      this.ganador = null;
+      this.empate = false;
+      this.empatados = [];
+      return;
+    }
+
+    const maxVotos = resultadosSinBlanco[0].votos;
+    this.empatados = resultadosSinBlanco.filter(r => r.votos === maxVotos);
 
     if (this.empatados.length > 1) {
       this.empate = true;
@@ -204,7 +222,6 @@ export class GestionResultadosComponent implements OnInit {
       this.empatados = [];
     }
   }
-
   calcularPorcentaje(votos: number): number {
     const totalVotos = this.resultados.reduce((sum, r) => sum + r.votos, 0);
     return totalVotos > 0 ? votos / totalVotos : 0;
@@ -344,7 +361,12 @@ export class GestionResultadosComponent implements OnInit {
     ];
 
     return Array.from({ length: cantidad }, (_, i) => {
-      const color = coloresBase[i % coloresBase.length];
+      let color;
+      if (i === cantidad - 1 && this.resultados[i].nombre === 'Voto en Blanco') {
+        color = '#CCCCCC'; // Gris claro para voto en blanco
+      } else {
+        color = coloresBase[i % coloresBase.length];
+      }
       return this.ajustarOpacidad(color, opacidad);
     });
   }
